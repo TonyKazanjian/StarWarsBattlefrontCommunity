@@ -5,11 +5,4 @@
              android:layout_height="match_parent"
              android:id="@+id/fragment_community">
 
-    <fragment
-        android:name = "com.codementor.android.starwarsbattlefrontcommunity.TopicFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout = "@layout/activity_main">
-
-    </fragment>
 </FrameLayout>

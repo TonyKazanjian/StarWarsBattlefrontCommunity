@@ -4,4 +4,10 @@
              android:layout_height="match_parent"
              android:id="@+id/fragment_topic">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/helloworld"
+        android:text="Hello World" />
+
 </FrameLayout>

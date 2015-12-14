@@ -1,9 +1,8 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,18 @@ import android.view.ViewGroup;
  */
 public class CommunityFragment extends Fragment {
 
+    TopicFragment mTopicFragment;
+
     public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        TopicFragment topicFragment = new TopicFragment();
-        fragmentTransaction.add(R.id.fragment_topic, topicFragment);
-        fragmentTransaction.commit();
+        if(savedInstanceState == null) {
+
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+            mTopicFragment = new TopicFragment();
+            fragmentTransaction.add(R.id.fragment_topic, mTopicFragment);
+            fragmentTransaction.commit();
+        }
     }
 
     @Override

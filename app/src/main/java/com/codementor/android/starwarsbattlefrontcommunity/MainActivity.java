@@ -8,14 +8,9 @@ import android.support.v4.app.FragmentActivity;
  */
 public class MainActivity extends FragmentActivity {
 
-    CommunityFragment mCommunityFragment;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mCommunityFragment = new CommunityFragment();
     }
 }

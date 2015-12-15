@@ -16,20 +16,19 @@ public class CommunityFragment extends Fragment {
 
     public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        if(savedInstanceState == null) {
-
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-            mTopicFragment = new TopicFragment();
-            fragmentTransaction.add(R.id.fragment_topic, mTopicFragment);
-            fragmentTransaction.commit();
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         final View v = inflater.inflate(R.layout.fragment_community, container, false);
+
+        mTopicFragment = new TopicFragment();
+
+            FragmentTransaction fragmentTransaction = this.getChildFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.community_host, mTopicFragment);
+            fragmentTransaction.commit();
+
         return v;
     }
 

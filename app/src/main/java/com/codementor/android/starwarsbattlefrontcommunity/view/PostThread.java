@@ -17,6 +17,8 @@ public class PostThread extends CardView {
 
     private List<Post> mPosts;
 
+    private Post mPost;
+
     public PostThread(Context context) {
         this(context, null);
     }
@@ -33,12 +35,18 @@ public class PostThread extends CardView {
     public List<Post> createThreads(){
         mPosts = new ArrayList<>();
 
-        for (int i = 0; i<0; i++){
+        for (int i = 0; i<3; i++){
             Post post = new Post(R.id.thread_title,R.id.author_name,
                     R.id.post_date, R.id.post_content, R.id.author_photo);
 
+            post.setTitle(R.id.thread_title);
+            post.setAuthor(R.id.author_name);
+            post.setDate(R.id.post_date);
+            post.setContent(R.id.post_content);
+            post.setAuthorPhoto(R.id.author_photo);
+
             mPosts.add(post);
-            post = mPosts.get(i);
+            mPost = mPosts.get(i);
         }
         return mPosts;
     }

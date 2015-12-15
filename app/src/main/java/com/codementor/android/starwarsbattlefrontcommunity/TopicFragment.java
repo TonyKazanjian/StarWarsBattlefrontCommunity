@@ -25,10 +25,12 @@ public class TopicFragment extends Fragment {
 
         PostThread postThread = new PostThread(getParentFragment().getActivity());
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        mViewAdapter = new ThreadViewAdapter(postThread.createThreads());
-        mRecyclerView.setAdapter(mViewAdapter);
+        if (savedInstanceState == null) {
+            mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+            mViewAdapter = new ThreadViewAdapter(postThread.createThreads());
+            mRecyclerView.setAdapter(mViewAdapter);
+        }
         return v;
     }
 }

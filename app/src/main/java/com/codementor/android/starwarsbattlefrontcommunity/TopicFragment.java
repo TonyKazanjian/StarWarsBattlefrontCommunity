@@ -24,12 +24,11 @@ public class TopicFragment extends Fragment {
     private ThreadViewAdapter mViewAdapter;
 
     private PostThreadView mPostThreadView;
+    private List<Post> mPosts;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View v = inflater.inflate(R.layout.fragment_topic,container,false);
-
-        mPostThreadView = new PostThreadView(getParentFragment().getActivity());
 
         List<Post> posts = populateTopic();
 
@@ -44,7 +43,9 @@ public class TopicFragment extends Fragment {
 
     public List<Post> populateTopic(){
 
-        List<Post> mPosts = new ArrayList<>();
+        mPostThreadView = new PostThreadView(getParentFragment().getActivity());
+
+        mPosts = new ArrayList<>();
 
         for (int i = 0; i < 3; i++){
             Post post = mPostThreadView.createPost();

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.view.PostThreadView;
 import com.codementor.android.starwarsbattlefrontcommunity.view.ThreadViewAdapter;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class TopicFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ThreadViewAdapter mViewAdapter;
 
-    private PostThreadView mPostThreadView;
     private List<Post> mPosts;
 
     @Override
@@ -43,15 +41,27 @@ public class TopicFragment extends Fragment {
 
     public List<Post> populateTopic(){
 
-        mPostThreadView = new PostThreadView(getParentFragment().getActivity());
-
         mPosts = new ArrayList<>();
 
         for (int i = 0; i < 3; i++){
-            Post post = mPostThreadView.createPost();
+            Post post = createPost();
             mPosts.add(post);
 //            mPost = mPosts.get(i); -- not sure why this returns out of bounds
         }
         return mPosts;
+    }
+
+    public Post createPost(){
+
+        Post post = new Post(R.id.thread_title,R.id.author_name,
+                R.id.post_date, R.id.post_content, R.id.author_photo);
+
+        post.setTitle(R.string.placeholder_thread_title);
+        post.setAuthor(R.string.placeholder_author_name);
+        post.setDate(R.string.placeholder_date);
+        post.setContent(R.string.placeholder_top_post_content);
+        post.setAuthorPhoto(R.mipmap.ic_launcher);
+
+        return post;
     }
 }

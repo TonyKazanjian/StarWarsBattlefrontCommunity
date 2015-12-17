@@ -34,6 +34,7 @@ public class TopicFragment extends Fragment {
             mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
             mViewAdapter = new ThreadViewAdapter(posts);
+
             mRecyclerView.setAdapter(mViewAdapter);
         }
         return v;

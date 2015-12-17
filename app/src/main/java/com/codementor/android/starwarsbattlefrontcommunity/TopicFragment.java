@@ -61,7 +61,7 @@ public class TopicFragment extends Fragment {
         post.setAuthor(R.string.placeholder_author_name);
         post.setDate(R.string.placeholder_date);
         post.setContent(R.string.placeholder_top_post_content);
-        post.setAuthorPhoto(R.mipmap.ic_launcher);
+        post.setAuthorPhoto(R.drawable.vader);
 
         return post;
     }

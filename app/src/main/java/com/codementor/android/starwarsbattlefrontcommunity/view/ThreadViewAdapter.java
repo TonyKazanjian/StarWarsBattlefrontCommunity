@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +12,8 @@ import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by tonyk_000 on 12/14/2015.
@@ -57,7 +58,7 @@ public class ThreadViewAdapter extends RecyclerView.Adapter<ThreadViewAdapter.Th
         private TextView mAuthorName;
         private TextView mDatePosted;
         private TextView mPostContent;
-        private ImageView mAuthorPhoto;
+        private CircleImageView mAuthorPhoto;
 
         public ThreadHolder(View v) {
             super(v);
@@ -66,7 +67,7 @@ public class ThreadViewAdapter extends RecyclerView.Adapter<ThreadViewAdapter.Th
             mAuthorName = (TextView) v.findViewById(R.id.author_name);
             mDatePosted = (TextView) v.findViewById(R.id.post_date);
             mPostContent = (TextView) v.findViewById(R.id.post_content);
-            mAuthorPhoto = (ImageView) v.findViewById(R.id.author_photo);
+            mAuthorPhoto = (CircleImageView) v.findViewById(R.id.author_photo);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

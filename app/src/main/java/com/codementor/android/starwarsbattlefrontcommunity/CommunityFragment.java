@@ -1,39 +1,34 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+
+import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
 
 /**
  * Created by tonyk_000 on 12/13/2015.
  */
-public class CommunityFragment extends Fragment {
+public class CommunityFragment extends FragmentActivity {
 
-    private TopicFragment mTopicFragment;
-    private RecyclerView mRecyclerView;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
     public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_community);
+
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        TopicPagerAdapter topicPagerAdapter = new TopicPagerAdapter(getSupportFragmentManager());
+        topicPagerAdapter.addFragment(new TopicFragmentHeroHunt(), "Hero Hunt");
+        topicPagerAdapter.addFragment(new TopicFragmentSupremacy(),"Supremacy");
+        topicPagerAdapter.addFragment(new TopicFragmentWalkerAssault(),"Walker Assault");
+        mViewPager.setAdapter(topicPagerAdapter);
+
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState){
-        final View v = inflater.inflate(R.layout.fragment_community, container, false);
-
-        mRecyclerView = (RecyclerView)v.findViewById(R.id.rv_thread_view);
-
-        mTopicFragment = new TopicFragment();
-
-            FragmentTransaction fragmentTransaction = this.getChildFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.community_host, mTopicFragment);
-            fragmentTransaction.commit();
-
-        return v;
-    }
 
 }

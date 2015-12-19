@@ -10,14 +10,4 @@
         android:id="@+id/rv_thread_view"
         />
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="30sp"-->
-        <!--android:textStyle="bold"-->
-        <!--android:textColor="#ffffffff"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:id="@+id/text_child"-->
-        <!--android:text="Topic Fragment"/>-->
-
 </RelativeLayout>

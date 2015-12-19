@@ -29,7 +29,7 @@ public class ThreadViewAdapter extends RecyclerView.Adapter<ThreadViewAdapter.Th
 
     @Override
     public ThreadViewAdapter.ThreadHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.thread_item,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.topic_general,parent,false);
 
         ThreadHolder threadHolder = new ThreadHolder(v);
 

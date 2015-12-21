@@ -56,11 +56,11 @@ public class TopicFragmentWalkerAssault extends TopicFragment {
         Post post = new Post(R.id.thread_title,R.id.author_name,
                 R.id.post_date, R.id.post_content, R.id.author_photo);
 
-        post.setTitle(R.string.placeholder_thread_title);
-        post.setAuthor(R.string.placeholder_author_name);
+        post.setTitle(R.string.walkerassault_thread_title);
+        post.setAuthor(R.string.walkerassault_author_name);
         post.setDate(R.string.placeholder_date);
-        post.setContent(R.string.placeholder_top_post_content);
-        post.setAuthorPhoto(R.drawable.vader);
+        post.setContent(R.string.walkerassault_top_post_content);
+        post.setAuthorPhoto(R.drawable.hansolo);
 
         return post;
     }

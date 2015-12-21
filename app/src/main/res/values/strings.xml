@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">Star Wars Battlefront Community</string>
-    <string name="placeholder_thread_title">Search your feelings</string>
-    <string name="placeholder_author_name">VaderLives420</string>
+    <string name="herohunt_thread_title">Search your feelings</string>
+    <string name="herohunt_author_name">VaderLives420</string>
     <string name="placeholder_date">12/18/15</string>
-    <string name="placeholder_top_post_content">You don\'t know the power of the dark side!</string>
+    <string name="herohunt_top_post_content">You know it to be true. Vader is the best. You don\'t know the power of the dark side!</string>
+    <string name="supremacy_thread_title">Move along</string>
+    <string name="supremacy_author_name">Stormtrooper_Recruit</string>
+    <string name="supremacy_top_post_content">These aren\'t the droids we\'re looking for.</string>
+    <string name="walkerassault_thread_title">I\'ve got a bad feeling about this.</string>
+    <string name="walkerassault_author_name">HanMyBookie</string>
+    <string name="walkerassault_top_post_content">Hokey religons and ancient weapons are no match for a blaster by your side.</string>
 </resources>

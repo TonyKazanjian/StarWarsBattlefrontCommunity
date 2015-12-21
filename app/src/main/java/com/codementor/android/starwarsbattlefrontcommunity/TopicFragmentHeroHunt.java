@@ -56,10 +56,10 @@ public class TopicFragmentHeroHunt extends TopicFragment {
         Post post = new Post(R.id.thread_title,R.id.author_name,
                 R.id.post_date, R.id.post_content, R.id.author_photo);
 
-        post.setTitle(R.string.placeholder_thread_title);
-        post.setAuthor(R.string.placeholder_author_name);
+        post.setTitle(R.string.herohunt_thread_title);
+        post.setAuthor(R.string.herohunt_author_name);
         post.setDate(R.string.placeholder_date);
-        post.setContent(R.string.placeholder_top_post_content);
+        post.setContent(R.string.herohunt_top_post_content);
         post.setAuthorPhoto(R.drawable.vader);
 
         return post;

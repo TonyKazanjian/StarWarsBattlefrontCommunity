@@ -1,6 +1,7 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by tonyk_000 on 12/18/2015.
  */
-public class TopicFragmentDroidRun extends TopicFragment {
+public class TopicFragmentDroidRun extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ThreadViewAdapter mViewAdapter;

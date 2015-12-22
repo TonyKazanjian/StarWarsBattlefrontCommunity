@@ -60,7 +60,7 @@ public class CommunityFragment extends Fragment {
 
             }
         });
-        
+
         return view;
     }
 

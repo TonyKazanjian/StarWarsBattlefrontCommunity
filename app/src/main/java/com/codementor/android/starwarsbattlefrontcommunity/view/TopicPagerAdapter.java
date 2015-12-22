@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.codementor.android.starwarsbattlefrontcommunity.TopicFragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
  * Created by tonyk_000 on 12/18/2015.
  */
 public class TopicPagerAdapter extends FragmentPagerAdapter {
-    private final List<TopicFragment> mTopicFragmentList = new ArrayList<>();
+    private final List<Fragment> mTopicFragmentList = new ArrayList<>();
     private final List<String> mTopicFragmentTitleList = new ArrayList<>();
 
     public TopicPagerAdapter(FragmentManager fm) {
@@ -30,7 +28,7 @@ public class TopicPagerAdapter extends FragmentPagerAdapter {
         return mTopicFragmentList.size();
     }
 
-    public void addFragment(TopicFragment fragment, String title) {
+    public void addFragment(Fragment fragment, String title) {
         mTopicFragmentList.add(fragment);
         mTopicFragmentTitleList.add(title);
     }

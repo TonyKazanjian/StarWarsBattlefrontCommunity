@@ -71,12 +71,25 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_below="@+id/thread_title"
-                      android:layout_alignParentRight="true"
-                      android:layout_alignParentEnd="true"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/thread_title"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_chat_bubble_black_18dp"
                 android:tint="@color/materialIconGrey"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/thread_title"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:text="2"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="4dp"/>
+
 
 
 

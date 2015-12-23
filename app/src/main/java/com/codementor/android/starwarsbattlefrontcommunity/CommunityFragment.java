@@ -1,6 +1,7 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
 
@@ -58,6 +60,14 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),"Adds new topic",Toast.LENGTH_SHORT).show();
             }
         });
 

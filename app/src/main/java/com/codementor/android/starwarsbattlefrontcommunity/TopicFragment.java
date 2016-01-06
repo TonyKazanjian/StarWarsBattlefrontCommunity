@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.ThreadViewAdapter;
 
 import java.util.ArrayList;
@@ -17,12 +18,31 @@ import java.util.List;
 /**
  * Created by tonyk_000 on 12/18/2015.
  */
-public class TopicFragmentWalkerAssault extends Fragment {
+public class TopicFragment extends Fragment {
+
+    private static final String ARGS_TOPIC = "topic";
 
     private RecyclerView mRecyclerView;
     private ThreadViewAdapter mViewAdapter;
 
     private List<Post> mPosts;
+
+    private Topic mTopic;
+
+    public static TopicFragment newInstance(Topic topic){
+        Bundle args = new Bundle();
+        args.putParcelable(ARGS_TOPIC, topic);
+
+        TopicFragment topicFragment = new TopicFragment();
+        topicFragment.setArguments(args);
+        return topicFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mTopic = getArguments().getParcelable(ARGS_TOPIC);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -45,25 +65,12 @@ public class TopicFragmentWalkerAssault extends Fragment {
         mPosts = new ArrayList<>();
 
         for (int i = 0; i < 3; i++){
-            Post post = createPost();
+            Post post = mTopic.getPost();
             mPosts.add(post);
 //            mPost = mPosts.get(i); -- not sure why this returns out of bounds
         }
         return mPosts;
     }
 
-    public Post createPost(){
-
-        Post post = new Post(R.id.thread_title,R.id.author_name,
-                R.id.post_date, R.id.post_content, R.id.author_photo);
-
-        post.setTitle(R.string.walkerassault_thread_title);
-        post.setAuthor(R.string.walkerassault_author_name);
-        post.setDate(R.string.placeholder_date);
-        post.setContent(R.string.walkerassault_top_post_content);
-        post.setAuthorPhoto(R.drawable.hansolo);
-
-        return post;
-    }
 }
 

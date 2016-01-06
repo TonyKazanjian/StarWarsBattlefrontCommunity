@@ -1,9 +1,12 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by tonyk_000 on 12/14/2015.
  */
-public class Post {
+public class Post implements Parcelable {
 
     private int mTitle;
     private int mAuthor;
@@ -58,4 +61,37 @@ public class Post {
     public void setAuthorPhoto(int authorPhoto) {
         mAuthorPhoto = authorPhoto;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mTitle);
+        dest.writeInt(this.mAuthor);
+        dest.writeInt(this.mDate);
+        dest.writeInt(this.mContent);
+        dest.writeInt(this.mAuthorPhoto);
+    }
+
+    protected Post(Parcel in) {
+        this.mTitle = in.readInt();
+        this.mAuthor = in.readInt();
+        this.mDate = in.readInt();
+        this.mContent = in.readInt();
+        this.mAuthorPhoto = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+        public Post createFromParcel(Parcel source) {
+            return new Post(source);
+        }
+
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 }

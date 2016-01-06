@@ -13,6 +13,7 @@ import java.util.List;
 public class TopicPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mTopicFragmentList = new ArrayList<>();
     private final List<String> mTopicFragmentTitleList = new ArrayList<>();
+    private final List<Integer> mBackgroundImageList = new ArrayList<>();
 
     public TopicPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,14 +24,19 @@ public class TopicPagerAdapter extends FragmentPagerAdapter {
         return mTopicFragmentList.get(position);
     }
 
+    public int getBackgroundImage(int position){
+        return mBackgroundImageList.get(position);
+    }
+
     @Override
     public int getCount() {
         return mTopicFragmentList.size();
     }
 
-    public void addFragment(Fragment fragment, String title) {
+    public void addFragment(Fragment fragment, String title, int image) {
         mTopicFragmentList.add(fragment);
         mTopicFragmentTitleList.add(title);
+        mBackgroundImageList.add(image);
     }
 
     @Override

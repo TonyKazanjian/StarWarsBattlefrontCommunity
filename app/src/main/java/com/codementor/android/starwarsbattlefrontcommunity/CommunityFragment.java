@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
 
 /**
@@ -23,24 +25,37 @@ public class CommunityFragment extends Fragment {
     private ViewPager mViewPager;
     private ImageView mBackgroundImage;
     private Toolbar mToolbar;
-    private int[] mImages = new int[]{R.drawable.herohunt,R.drawable.droidrun,R.drawable.walkerassault};
+
+    private Topic droidRun;
+    private Topic heroHunt;
+    private Topic walkerAssault;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
-        //needed an image to start with
-        mBackgroundImage = (ImageView)view.findViewById(R.id.htab_header);
-        mBackgroundImage.setImageResource(R.drawable.herohunt);
+        droidRun = new Topic("Droid Run", R.drawable.droidrun);
+        heroHunt = new Topic("Hero Hunt", R.drawable.herohunt);
+        walkerAssault = new Topic("Walker Assault", R.drawable.walkerassault);
 
-        mToolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        droidRun.setPost(populateDroidRun());
+        heroHunt.setPost(populateHeroHunt());
+        walkerAssault.setPost(populateWalkerAssault());
+
+        mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
+
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mToolbar.setVisibility(View.INVISIBLE);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        TopicPagerAdapter topicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
-        topicPagerAdapter.addFragment(new TopicFragmentHeroHunt(), "Hero Hunt");
-        topicPagerAdapter.addFragment(new TopicFragmentDroidRun(),"Droid Run");
-        topicPagerAdapter.addFragment(new TopicFragmentWalkerAssault(), "Walker Assault");
+        final TopicPagerAdapter topicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
+        topicPagerAdapter.addFragment(TopicFragment.newInstance(droidRun), droidRun.getTopicTitle(),
+                droidRun.getBackgroundImage());
+        topicPagerAdapter.addFragment(TopicFragment.newInstance(heroHunt), heroHunt.getTopicTitle(),
+                heroHunt.getBackgroundImage());
+        topicPagerAdapter.addFragment(TopicFragment.newInstance(walkerAssault),walkerAssault.getTopicTitle(),
+                walkerAssault.getBackgroundImage());
+
         mViewPager.setAdapter(topicPagerAdapter);
 
         mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -54,7 +69,10 @@ public class CommunityFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                mBackgroundImage.setImageResource(mImages[position]);
+
+                mBackgroundImage.setImageResource(topicPagerAdapter.getBackgroundImage(position));
+
+                //you could have the adapter get the topic model at the position
             }
 
             @Override
@@ -63,16 +81,55 @@ public class CommunityFragment extends Fragment {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"Adds new topic",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Adds new topic", Toast.LENGTH_SHORT).show();
             }
         });
 
         return view;
     }
 
+    public Post populateDroidRun(){
+
+        Post post = new Post(R.id.thread_title,R.id.author_name,
+                R.id.post_date, R.id.post_content, R.id.author_photo);
+
+        post.setAuthorPhoto(R.drawable.stormtrooper);
+        post.setAuthor(R.string.droidhunt_author_name);
+        post.setContent(R.string.droidhunt_top_post_content);
+        post.setTitle(R.string.droidhunt_thread_title);
+        post.setDate(R.string.placeholder_date);
+
+        return post;
+    }
+
+    public Post populateHeroHunt(){
+        Post post = new Post(R.id.thread_title,R.id.author_name,
+                R.id.post_date, R.id.post_content, R.id.author_photo);
+
+        post.setAuthorPhoto(R.drawable.vader);
+        post.setAuthor(R.string.herohunt_author_name);
+        post.setContent(R.string.herohunt_top_post_content);
+        post.setTitle(R.string.herohunt_thread_title);
+        post.setDate(R.string.placeholder_date);
+        return post;
+    }
+
+    public Post populateWalkerAssault(){
+        Post post = new Post(R.id.thread_title,R.id.author_name,
+                R.id.post_date, R.id.post_content, R.id.author_photo);
+
+        post.setAuthorPhoto(R.drawable.hansolo);
+        post.setAuthor(R.string.walkerassault_author_name);
+        post.setContent(R.string.walkerassault_top_post_content);
+        post.setTitle(R.string.walkerassault_thread_title);
+        post.setDate(R.string.placeholder_date);
+
+        return post;
+    }
 
 }
+

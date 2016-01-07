@@ -8,11 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context="com.codementor.android.starwarsbattlefrontcommunity.CommunityFragment">
 
-    <!--<FrameLayout-->
-    <!--android:id="@+id/community_host"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

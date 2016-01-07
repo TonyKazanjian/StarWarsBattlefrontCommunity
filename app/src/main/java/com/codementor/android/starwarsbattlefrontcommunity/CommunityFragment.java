@@ -42,8 +42,6 @@ public class CommunityFragment extends Fragment {
         heroHunt.setPost(populateHeroHunt());
         walkerAssault.setPost(populateWalkerAssault());
 
-        mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
-
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mToolbar.setVisibility(View.INVISIBLE);
 
@@ -60,6 +58,9 @@ public class CommunityFragment extends Fragment {
 
         mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
+        mBackgroundImage.setImageResource(topicPagerAdapter.getBackgroundImage(0));
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

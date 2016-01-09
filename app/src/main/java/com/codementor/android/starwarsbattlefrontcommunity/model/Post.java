@@ -3,6 +3,8 @@ package com.codementor.android.starwarsbattlefrontcommunity.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by tonyk_000 on 12/14/2015.
  */
@@ -14,12 +16,16 @@ public class Post implements Parcelable {
     private int mContent;
     private int mAuthorPhoto;
 
-    public Post(int title, int author, int date, int content, int authorPhoto) {
+    private List<Comment> mComments;
+
+    public Post(int title, int author, int date, int content, int authorPhoto, List<Comment> comments) {
         mTitle = title;
         mAuthor = author;
         mDate = date;
         mContent = content;
         mAuthorPhoto = authorPhoto;
+
+        mComments = comments;
     }
 
     public int getTitle() {
@@ -62,6 +68,13 @@ public class Post implements Parcelable {
         mAuthorPhoto = authorPhoto;
     }
 
+    public List<Comment> getComments() {
+        return mComments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        mComments = comments;
+    }
 
     @Override
     public int describeContents() {
@@ -75,6 +88,7 @@ public class Post implements Parcelable {
         dest.writeInt(this.mDate);
         dest.writeInt(this.mContent);
         dest.writeInt(this.mAuthorPhoto);
+        dest.writeTypedList(mComments);
     }
 
     protected Post(Parcel in) {
@@ -83,9 +97,10 @@ public class Post implements Parcelable {
         this.mDate = in.readInt();
         this.mContent = in.readInt();
         this.mAuthorPhoto = in.readInt();
+//        this.mComments = in.createTypedArrayList(Comment.CREATOR);
     }
 
-    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
         public Post createFromParcel(Parcel source) {
             return new Post(source);
         }

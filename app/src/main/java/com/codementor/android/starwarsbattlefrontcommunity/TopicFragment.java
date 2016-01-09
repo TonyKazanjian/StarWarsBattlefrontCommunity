@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
-import com.codementor.android.starwarsbattlefrontcommunity.view.ThreadViewAdapter;
+import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class TopicFragment extends Fragment {
     private static final String ARGS_TOPIC = "topic";
 
     private RecyclerView mRecyclerView;
-    private ThreadViewAdapter mViewAdapter;
+    private PostViewAdapter mViewAdapter;
 
     private List<Post> mPosts;
 
@@ -53,7 +53,7 @@ public class TopicFragment extends Fragment {
         if (savedInstanceState == null) {
             mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-            mViewAdapter = new ThreadViewAdapter(posts);
+            mViewAdapter = new PostViewAdapter(posts);
 
             mRecyclerView.setAdapter(mViewAdapter);
         }

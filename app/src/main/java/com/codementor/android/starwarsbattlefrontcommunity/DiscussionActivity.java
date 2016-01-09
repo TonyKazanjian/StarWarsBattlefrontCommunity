@@ -6,29 +6,38 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.view.ThreadViewAdapter;
+import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
+import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tonyk_000 on 1/6/2016.
  */
 public class DiscussionActivity extends AppCompatActivity {
 
-    private Post mPost;
+    private Post post;
 
     private RecyclerView mTopPostView;
-    private ThreadViewAdapter mTopPost;
+    private PostViewAdapter mTopPost;
+
+    private RecyclerView mCommentView;
+    private CommentViewAdapter mComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discussion);
         Bundle b = getIntent().getExtras();
-        mPost = b.getParcelable(MainActivity.EXTRA_POST);
+        post = b.getParcelable(MainActivity.EXTRA_POST);
+
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
 
         mTopPostView = (RecyclerView)findViewById(R.id.rv_comment_view);
         mTopPostView.setLayoutManager(new LinearLayoutManager(this));
-        mTopPost = new ThreadViewAdapter(mPost);
-        mPost = mTopPost.getItem();
+        mTopPost = new PostViewAdapter(posts);
         mTopPostView.setAdapter(mTopPost);
     }
 

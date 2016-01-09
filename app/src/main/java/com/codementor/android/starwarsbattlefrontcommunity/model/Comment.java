@@ -9,7 +9,7 @@ import android.os.Parcelable;
 public class Comment extends Post {
 
     public Comment( int author, int date, int content, int authorPhoto) {
-        super(0, author, date, content, authorPhoto);
+        super(0, author, date, content, authorPhoto,null);
     }
 
     public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {

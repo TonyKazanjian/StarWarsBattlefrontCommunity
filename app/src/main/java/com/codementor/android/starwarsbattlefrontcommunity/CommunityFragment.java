@@ -96,7 +96,7 @@ public class CommunityFragment extends Fragment {
     public Post populateDroidRun(){
 
         Post post = new Post(R.id.thread_title,R.id.author_name,
-                R.id.post_date, R.id.post_content, R.id.author_photo);
+                R.id.post_date, R.id.post_content, R.id.author_photo, null);
 
         post.setAuthorPhoto(R.drawable.stormtrooper);
         post.setAuthor(R.string.droidhunt_author_name);
@@ -109,7 +109,7 @@ public class CommunityFragment extends Fragment {
 
     public Post populateHeroHunt(){
         Post post = new Post(R.id.thread_title,R.id.author_name,
-                R.id.post_date, R.id.post_content, R.id.author_photo);
+                R.id.post_date, R.id.post_content, R.id.author_photo, null);
 
         post.setAuthorPhoto(R.drawable.vader);
         post.setAuthor(R.string.herohunt_author_name);
@@ -121,7 +121,7 @@ public class CommunityFragment extends Fragment {
 
     public Post populateWalkerAssault(){
         Post post = new Post(R.id.thread_title,R.id.author_name,
-                R.id.post_date, R.id.post_content, R.id.author_photo);
+                R.id.post_date, R.id.post_content, R.id.author_photo, null);
 
         post.setAuthorPhoto(R.drawable.hansolo);
         post.setAuthor(R.string.walkerassault_author_name);

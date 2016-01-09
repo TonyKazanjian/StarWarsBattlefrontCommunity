@@ -23,7 +23,7 @@ public class DiscussionActivity extends AppCompatActivity {
     private PostViewAdapter mTopPost;
 
     private RecyclerView mCommentView;
-    private CommentViewAdapter mComment;
+    private CommentViewAdapter mCommentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -35,10 +35,15 @@ public class DiscussionActivity extends AppCompatActivity {
         List<Post> posts = new ArrayList<>();
         posts.add(post);
 
-        mTopPostView = (RecyclerView)findViewById(R.id.rv_comment_view);
+        mTopPostView = (RecyclerView)findViewById(R.id.top_post);
         mTopPostView.setLayoutManager(new LinearLayoutManager(this));
         mTopPost = new PostViewAdapter(posts);
         mTopPostView.setAdapter(mTopPost);
+
+        mCommentView = (RecyclerView)findViewById(R.id.rv_comment_view);
+        mCommentView.setLayoutManager(new LinearLayoutManager(this));
+        mCommentList = new CommentViewAdapter(post.getComments());
+        mCommentView.setAdapter(mCommentList);
     }
 
     //TODO: get result of clicked post to display in the adapter

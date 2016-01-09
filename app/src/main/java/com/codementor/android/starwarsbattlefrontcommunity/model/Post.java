@@ -97,7 +97,7 @@ public class Post implements Parcelable {
         this.mDate = in.readInt();
         this.mContent = in.readInt();
         this.mAuthorPhoto = in.readInt();
-//        this.mComments = in.createTypedArrayList(Comment.CREATOR);
+        this.mComments = in.createTypedArrayList(Comment.CREATOR);
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {

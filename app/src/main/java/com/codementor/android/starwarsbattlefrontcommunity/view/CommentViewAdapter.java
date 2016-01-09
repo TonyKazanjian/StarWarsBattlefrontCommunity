@@ -37,7 +37,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
     @Override
     public void onBindViewHolder(CommentHolder holder, int position) {
         final Comment comment = mComments.get(position);
-        holder.mThreadTitle.setText(comment.getTitle());
         holder.mAuthorName.setText(comment.getAuthor());
         holder.mDatePosted.setText(comment.getDate());
         holder.mPostContent.setText(comment.getContent());
@@ -51,7 +50,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
     public class CommentHolder extends RecyclerView.ViewHolder{
 
-        private TextView mThreadTitle;
         private TextView mAuthorName;
         private TextView mDatePosted;
         private TextView mPostContent;
@@ -60,7 +58,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         public CommentHolder(View itemView) {
             super(itemView);
 
-            mThreadTitle = (TextView) itemView.findViewById(R.id.thread_title);
             mAuthorName = (TextView) itemView.findViewById(R.id.author_name);
             mDatePosted = (TextView) itemView.findViewById(R.id.post_date);
             mPostContent = (TextView) itemView.findViewById(R.id.post_content);

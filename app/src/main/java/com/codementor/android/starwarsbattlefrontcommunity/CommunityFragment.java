@@ -12,9 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tonyk_000 on 12/13/2015.
@@ -95,14 +99,24 @@ public class CommunityFragment extends Fragment {
 
     public Post populateDroidRun(){
 
+        List<Comment> comments = new ArrayList<>();
+
         Post post = new Post(R.id.thread_title,R.id.author_name,
-                R.id.post_date, R.id.post_content, R.id.author_photo, null);
+                R.id.post_date, R.id.post_content, R.id.author_photo, comments);
 
         post.setAuthorPhoto(R.drawable.stormtrooper);
         post.setAuthor(R.string.droidhunt_author_name);
         post.setContent(R.string.droidhunt_top_post_content);
         post.setTitle(R.string.droidhunt_thread_title);
         post.setDate(R.string.placeholder_date);
+
+        comments.add(new Comment(R.id.author_name,R.id.post_date,R.id.post_content,R.id.author_photo));
+        comments.get(0).setAuthor(R.string.herohunt_author_name);
+        comments.get(0).setAuthorPhoto(R.drawable.hansolo);
+        comments.get(0).setContent(R.string.walkerassault_top_post_content);
+        comments.get(0).setDate(R.string.placeholder_date);
+
+        post.setComments(comments);
 
         return post;
     }

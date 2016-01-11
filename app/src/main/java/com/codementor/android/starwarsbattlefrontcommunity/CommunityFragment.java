@@ -110,10 +110,10 @@ public class CommunityFragment extends Fragment {
         post.setTitle(R.string.droidhunt_thread_title);
         post.setDate(R.string.placeholder_date);
 
-        comments.add(new Comment(R.id.author_name,R.id.post_date,R.id.post_content,R.id.author_photo));
-        comments.get(0).setAuthor(R.string.herohunt_author_name);
-        comments.get(0).setAuthorPhoto(R.drawable.hansolo);
-        comments.get(0).setContent(R.string.walkerassault_top_post_content);
+        comments.add(new Comment(R.id.author_name, R.id.post_date, R.id.post_content, R.id.author_photo));
+        comments.get(0).setAuthor(R.string.BB8_name);
+        comments.get(0).setAuthorPhoto(R.drawable.bb8);
+        comments.get(0).setContent(R.string.BB8_comment);
         comments.get(0).setDate(R.string.placeholder_date);
 
         post.setComments(comments);
@@ -122,6 +122,9 @@ public class CommunityFragment extends Fragment {
     }
 
     public Post populateHeroHunt(){
+
+        List<Comment> comments = new ArrayList<>();
+
         Post post = new Post(R.id.thread_title,R.id.author_name,
                 R.id.post_date, R.id.post_content, R.id.author_photo, null);
 
@@ -130,10 +133,28 @@ public class CommunityFragment extends Fragment {
         post.setContent(R.string.herohunt_top_post_content);
         post.setTitle(R.string.herohunt_thread_title);
         post.setDate(R.string.placeholder_date);
+
+        comments.add(new Comment(R.id.author_name, R.id.post_date, R.id.post_content, R.id.author_photo));
+        comments.get(0).setAuthor(R.string.kyloren_name);
+        comments.get(0).setAuthorPhoto(R.drawable.kyloren);
+        comments.get(0).setContent(R.string.kyloren_comment);
+        comments.get(0).setDate(R.string.placeholder_date);
+
+        comments.add(new Comment(R.id.author_name,R.id.post_date,R.id.post_content,R.id.author_photo));
+        comments.get(1).setAuthor(R.string.rey_name);
+        comments.get(1).setAuthorPhoto(R.drawable.rey);
+        comments.get(1).setContent(R.string.rey_comment);
+        comments.get(1).setDate(R.string.placeholder_date);
+
+        post.setComments(comments);
+
         return post;
     }
 
     public Post populateWalkerAssault(){
+
+        List<Comment> comments = new ArrayList<>();
+
         Post post = new Post(R.id.thread_title,R.id.author_name,
                 R.id.post_date, R.id.post_content, R.id.author_photo, null);
 
@@ -142,6 +163,26 @@ public class CommunityFragment extends Fragment {
         post.setContent(R.string.walkerassault_top_post_content);
         post.setTitle(R.string.walkerassault_thread_title);
         post.setDate(R.string.placeholder_date);
+
+        comments.add(new Comment(R.id.author_name, R.id.post_date, R.id.post_content, R.id.author_photo));
+        comments.get(0).setAuthor(R.string.chewbacca_name);
+        comments.get(0).setAuthorPhoto(R.drawable.choobs);
+        comments.get(0).setContent(R.string.chewbacca_comment);
+        comments.get(0).setDate(R.string.placeholder_date);
+
+        comments.add(new Comment(R.id.author_name,R.id.post_date,R.id.post_content,R.id.author_photo));
+        comments.get(1).setAuthor(R.string.leia_name);
+        comments.get(1).setAuthorPhoto(R.drawable.leia);
+        comments.get(1).setContent(R.string.leia_comment);
+        comments.get(1).setDate(R.string.placeholder_date);
+
+        comments.add(new Comment(R.id.author_name,R.id.post_date,R.id.post_content,R.id.author_photo));
+        comments.get(2).setAuthor(R.string.finn_name);
+        comments.get(2).setAuthorPhoto(R.drawable.finn);
+        comments.get(2).setContent(R.string.finn_comment);
+        comments.get(2).setDate(R.string.placeholder_date);
+
+        post.setComments(comments);
 
         return post;
     }

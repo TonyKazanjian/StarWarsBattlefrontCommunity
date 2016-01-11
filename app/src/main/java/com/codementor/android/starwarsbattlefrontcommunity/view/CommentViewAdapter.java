@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
@@ -41,6 +42,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         holder.mDatePosted.setText(comment.getDate());
         holder.mPostContent.setText(comment.getContent());
         holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
+        holder.mCommentBubble.setVisibility(View.GONE);
     }
 
     @Override
@@ -54,6 +56,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
+        private ImageView mCommentBubble;
 
         public CommentHolder(View itemView) {
             super(itemView);
@@ -62,6 +65,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             mDatePosted = (TextView) itemView.findViewById(R.id.post_date);
             mPostContent = (TextView) itemView.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) itemView.findViewById(R.id.author_photo);
+            mCommentBubble = (ImageView) itemView.findViewById(R.id.comment_bubble);
         }
     }
 

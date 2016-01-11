@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
@@ -47,7 +48,8 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mDatePosted.setText(post.getDate());
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
-
+//        holder.mCommentBubble.setImageResource(R.drawable.chat_bubble);
+        holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +74,8 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
+        private ImageView mCommentBubble;
+        private TextView mCommentCount;
 
         public PostHolder(View v) {
             super(v);
@@ -81,6 +85,8 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             mDatePosted = (TextView) v.findViewById(R.id.post_date);
             mPostContent = (TextView) v.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) v.findViewById(R.id.author_photo);
+//            mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
+            mCommentCount = (TextView) v.findViewById(R.id.comment_count);
         }
     }
 

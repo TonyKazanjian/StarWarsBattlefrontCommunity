@@ -39,18 +39,18 @@ public class DiscussionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         post = b.getParcelable(MainActivity.EXTRA_POST);
 
-        mThreadTitle = (TextView)findViewById(R.id.thread_title);
-        mThreadTitle.setText(post.getTitle());
-        mAuthorName = (TextView)findViewById(R.id.author_name);
-        mAuthorName.setText(post.getAuthor());
-        mDatePosted = (TextView)findViewById(R.id.post_date);
-        mDatePosted.setText(post.getDate());
-        mPostContent = (TextView)findViewById(R.id.post_content);
-        mPostContent.setText(post.getContent());
-        mAuthorPhoto = (CircleImageView)findViewById(R.id.author_photo);
-        mAuthorPhoto.setImageResource(post.getAuthorPhoto());
-        mCommentCount = (TextView) findViewById(R.id.comment_count);
-        mCommentCount.setText(Integer.toString(post.getComments().size()));
+//        mThreadTitle = (TextView)findViewById(R.id.thread_title);
+//        mThreadTitle.setText(post.getTitle());
+//        mAuthorName = (TextView)findViewById(R.id.author_name);
+//        mAuthorName.setText(post.getAuthor());
+//        mDatePosted = (TextView)findViewById(R.id.post_date);
+//        mDatePosted.setText(post.getDate());
+//        mPostContent = (TextView)findViewById(R.id.post_content);
+//        mPostContent.setText(post.getContent());
+//        mAuthorPhoto = (CircleImageView)findViewById(R.id.author_photo);
+//        mAuthorPhoto.setImageResource(post.getAuthorPhoto());
+//        mCommentCount = (TextView) findViewById(R.id.comment_count);
+//        mCommentCount.setText(Integer.toString(post.getComments().size()));
 
 //        List<Post> posts = new ArrayList<>();
 //        posts.add(post);
@@ -64,7 +64,7 @@ public class DiscussionActivity extends AppCompatActivity {
 
         mCommentView = (RecyclerView)findViewById(R.id.rv_comment_view);
         mCommentView.setLayoutManager(new LinearLayoutManager(this));
-        mCommentList = new CommentViewAdapter(post.getComments());
+        mCommentList = new CommentViewAdapter(post.getComments(), post);
         mCommentView.setAdapter(mCommentList);
     }
 

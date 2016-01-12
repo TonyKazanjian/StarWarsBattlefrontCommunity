@@ -32,7 +32,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
     @Override
     public PostViewAdapter.PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_general, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_post_view, parent, false);
 
         PostHolder postHolder = new PostHolder(v);
 
@@ -85,8 +85,11 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             mDatePosted = (TextView) v.findViewById(R.id.post_date);
             mPostContent = (TextView) v.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) v.findViewById(R.id.author_photo);
-//            mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
+            mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
             mCommentCount = (TextView) v.findViewById(R.id.comment_count);
+
+            mCommentBubble.setVisibility(View.VISIBLE);
+            mCommentCount.setVisibility(View.VISIBLE);
         }
     }
 

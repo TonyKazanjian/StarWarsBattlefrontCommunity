@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 
 import java.util.List;
 
@@ -18,31 +19,46 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by tonyk_000 on 1/8/2016.
  */
-public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.CommentHolder> {
+public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.CommunityContentHolder> {
 
     private List<Comment> mComments;
+    private Post mPost;
 
-    public CommentViewAdapter(@NonNull List<Comment> comments) {
+    private static final int POST_TYPE = 0;
+    private static final int COMMENT_TYPE = 1;
+
+    public CommentViewAdapter(@NonNull List<Comment> comments, Post post) {
         mComments = comments;
+        mPost = post;
+    } //this will have to accept a Post
+
+    @Override
+    public CommunityContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {//viewType is the differentiator
+
+        if (viewType == POST_TYPE){
+            return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_post_view, parent, false));
+        } else {
+            return new CommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_general, parent, false));
+        }
     }
 
     @Override
-    public CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_general, parent, false);
+    public void onBindViewHolder(CommunityContentHolder holder, int position) {
 
-        CommentHolder commentHolder = new CommentHolder(v);
+        if (position == getPostPosition()){
 
-        return commentHolder;
-    }
+            //TODO: get the rest of the stuff for a post
+            holder.mAuthorName.setText(mPost.getAuthor());
+            holder.mDatePosted.setText(mPost.getDate());
+            holder.mPostContent.setText(mPost.getContent());
+            holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
+        }
 
-    @Override
-    public void onBindViewHolder(CommentHolder holder, int position) {
         final Comment comment = mComments.get(position);
         holder.mAuthorName.setText(comment.getAuthor());
         holder.mDatePosted.setText(comment.getDate());
         holder.mPostContent.setText(comment.getContent());
         holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
-        holder.mCommentBubble.setVisibility(View.GONE);
     }
 
     @Override
@@ -50,23 +66,59 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         return mComments.size();
     }
 
-    public class CommentHolder extends RecyclerView.ViewHolder{
+    @Override
+    public int getItemViewType(int position){ //this is called by onCreateViewHolder
+            if (position == 0){
+                return POST_TYPE;
+            } else {
+                return COMMENT_TYPE;
+            }
+    }
+
+    public class CommentHolder extends CommunityContentHolder{
+
+        public CommentHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public class PostHolder extends CommunityContentHolder {
+
+        private TextView mThreadTitle;
+        private ImageView mCommentBubble;
+        private TextView mCommentCount;
+
+        public PostHolder(View v) {
+            super(v);
+
+            mThreadTitle = (TextView) v.findViewById(R.id.thread_title);
+            mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
+            mCommentCount = (TextView) v.findViewById(R.id.comment_count);
+
+            mCommentBubble.setVisibility(View.VISIBLE);
+            mCommentCount.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public class CommunityContentHolder extends RecyclerView.ViewHolder{
 
         private TextView mAuthorName;
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
-        private ImageView mCommentBubble;
 
-        public CommentHolder(View itemView) {
+        public CommunityContentHolder(View itemView) {
             super(itemView);
 
             mAuthorName = (TextView) itemView.findViewById(R.id.author_name);
             mDatePosted = (TextView) itemView.findViewById(R.id.post_date);
             mPostContent = (TextView) itemView.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) itemView.findViewById(R.id.author_photo);
-            mCommentBubble = (ImageView) itemView.findViewById(R.id.comment_bubble);
         }
+    }
+
+    private int getPostPosition(){
+        return 0;
     }
 
     @Override

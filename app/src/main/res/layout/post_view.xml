@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    tools:showIn="@layout/card_post_view">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/thread_title"
+        android:layout_alignParentTop="true"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp"
+        android:textColor="#b1b1b1"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/author_photo"
+        android:layout_below="@+id/thread_title"
+        android:layout_marginRight="12dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/author_name"
+        android:layout_toRightOf="@+id/author_photo"
+        android:layout_below="@+id/thread_title"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="#02c581"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/post_date"
+        android:layout_toRightOf="@+id/author_photo"
+        android:layout_below="@+id/author_name"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/post_content"
+        android:layout_below="@+id/post_date"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="30dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment_bubble"
+        android:layout_below="@+id/thread_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_chat_bubble_black_18dp"
+        android:tint="@color/materialIconGrey"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment_count"
+        android:layout_below="@+id/thread_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"/>
+
+
+</RelativeLayout>
+
+    

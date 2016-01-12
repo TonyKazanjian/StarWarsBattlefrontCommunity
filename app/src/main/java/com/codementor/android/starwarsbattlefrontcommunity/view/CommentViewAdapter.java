@@ -30,13 +30,13 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
     public CommentViewAdapter(@NonNull List<Comment> comments, Post post) {
         mComments = comments;
         mPost = post;
-    } //this will have to accept a Post
+    }
 
     @Override
     public CommunityContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {//viewType is the differentiator
 
         if (viewType == POST_TYPE){
-            return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_post_view, parent, false));
+            return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.post_view, parent, false));
         } else {
             return new CommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_general, parent, false));
         }
@@ -47,11 +47,14 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         if (position == getPostPosition()){
 
-            //TODO: get the rest of the stuff for a post
+            //TODO: get the rest of the stuff for a post. How do I get the subclass?
+//            holder.mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(mPost.getAuthor());
             holder.mDatePosted.setText(mPost.getDate());
             holder.mPostContent.setText(mPost.getContent());
             holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
+//            holder.mCommentBubble.setImageResource(R.drawable.chat_bubble);
+//            holder.mCommentCount.setText(Integer.toString(mPost.getComments().size()));
         }
 
         final Comment comment = mComments.get(position);
@@ -84,6 +87,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
     public class PostHolder extends CommunityContentHolder {
 
+        //for PostHolder
         private TextView mThreadTitle;
         private ImageView mCommentBubble;
         private TextView mCommentCount;

@@ -1,5 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity.view;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,26 +48,28 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         if (position == getPostPosition()){
 
-            //TODO: get the rest of the stuff for a post. How do I get the subclass?
-//            holder.mThreadTitle.setText(mPost.getTitle());
-            holder.mAuthorName.setText(mPost.getAuthor());
-            holder.mDatePosted.setText(mPost.getDate());
-            holder.mPostContent.setText(mPost.getContent());
-            holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
-//            holder.mCommentBubble.setImageResource(R.drawable.chat_bubble);
-//            holder.mCommentCount.setText(Integer.toString(mPost.getComments().size()));
-        }
+//            final Post post = mPosts.get(position);
 
-        final Comment comment = mComments.get(position);
-        holder.mAuthorName.setText(comment.getAuthor());
-        holder.mDatePosted.setText(comment.getDate());
-        holder.mPostContent.setText(comment.getContent());
-        holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
+            ((PostHolder)holder).mThreadTitle.setText(mPost.getTitle());
+            holder.mAuthorName.setText(mPost.getAuthor());
+            holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
+            holder.mPostContent.setText(mPost.getContent());
+            ((PostHolder)holder).mCommentBubble.setImageResource(R.drawable.chat_bubble);
+            ((PostHolder)holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
+
+        } else if (position > getPostPosition()){
+
+            final Comment comment = mComments.get(position-1);
+            holder.mAuthorName.setText(comment.getAuthor());
+            holder.mDatePosted.setText(comment.getDate());
+            holder.mPostContent.setText(comment.getContent());
+            holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mComments.size();
+        return mPost.getComments().size()+1;
     }
 
     @Override
@@ -88,12 +91,15 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
     public class PostHolder extends CommunityContentHolder {
 
         //for PostHolder
-        private TextView mThreadTitle;
-        private ImageView mCommentBubble;
-        private TextView mCommentCount;
+        public TextView mThreadTitle;
+        public ImageView mCommentBubble;
+        public TextView mCommentCount;
+
+        Post mPost;
 
         public PostHolder(View v) {
             super(v);
+            v.setBackgroundColor(Color.WHITE);
 
             mThreadTitle = (TextView) v.findViewById(R.id.thread_title);
             mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
@@ -101,6 +107,13 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
             mCommentBubble.setVisibility(View.VISIBLE);
             mCommentCount.setVisibility(View.VISIBLE);
+        }
+
+        public void bindPostHolder(Post post){
+            mPost = post;
+            mThreadTitle.setText(mPost.getTitle());
+            mCommentBubble.setImageResource(R.drawable.chat_bubble);
+            mCommentCount.setText(Integer.toString(mPost.getComments().size()));
         }
     }
 

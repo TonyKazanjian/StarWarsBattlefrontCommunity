@@ -5,7 +5,8 @@
               android:layout_height="match_parent">
 
     <include layout = "@layout/post_view"
-             android:id="@+id/comment"/>
+             android:id="@+id/comment"
+             style="?android:listSeparatorTextViewStyle"/>
 
 
 </LinearLayout>

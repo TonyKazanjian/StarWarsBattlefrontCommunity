@@ -10,6 +10,9 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
 import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -52,8 +55,8 @@ public class DiscussionActivity extends AppCompatActivity {
 //        mCommentCount = (TextView) findViewById(R.id.comment_count);
 //        mCommentCount.setText(Integer.toString(post.getComments().size()));
 
-//        List<Post> posts = new ArrayList<>();
-//        posts.add(post);
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
 
 
 
@@ -62,11 +65,10 @@ public class DiscussionActivity extends AppCompatActivity {
 //        mTopPost = new PostViewAdapter(posts);
 //        mPostView.setAdapter(mTopPost);
 
+
         mCommentView = (RecyclerView)findViewById(R.id.rv_comment_view);
         mCommentView.setLayoutManager(new LinearLayoutManager(this));
-        mCommentList = new CommentViewAdapter(post.getComments(), post);
+        mCommentList = new CommentViewAdapter(post.getComments(),post);
         mCommentView.setAdapter(mCommentList);
     }
-
-    //TODO: get result of clicked post to display in the adapter
 }

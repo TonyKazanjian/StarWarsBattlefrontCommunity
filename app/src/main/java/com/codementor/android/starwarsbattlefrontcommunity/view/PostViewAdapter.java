@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
+import com.codementor.android.starwarsbattlefrontcommunity.DiscussionActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 
@@ -55,7 +55,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-                Intent intent = MainActivity.newIntent(context, mPosts.get(position));
+                Intent intent = DiscussionActivity.newIntent(context, mPosts.get(position));
                 context.startActivity(intent);
             }
         });

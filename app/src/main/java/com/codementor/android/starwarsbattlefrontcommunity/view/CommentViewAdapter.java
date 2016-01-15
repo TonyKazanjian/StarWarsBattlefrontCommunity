@@ -48,14 +48,13 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         if (position == getPostPosition()){
 
-//            final Post post = mPosts.get(position);
-
             ((PostHolder)holder).mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(mPost.getAuthor());
             holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
             holder.mPostContent.setText(mPost.getContent());
-            ((PostHolder)holder).mCommentBubble.setImageResource(R.drawable.chat_bubble);
             ((PostHolder)holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
+            ((PostHolder)holder).mCommentBubble.setVisibility(View.VISIBLE);
+            ((PostHolder)holder).mCommentCount.setVisibility(View.VISIBLE);
 
         } else if (position > getPostPosition()){
 
@@ -95,8 +94,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         public ImageView mCommentBubble;
         public TextView mCommentCount;
 
-        Post mPost;
-
         public PostHolder(View v) {
             super(v);
             v.setBackgroundColor(Color.WHITE);
@@ -104,16 +101,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             mThreadTitle = (TextView) v.findViewById(R.id.thread_title);
             mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
             mCommentCount = (TextView) v.findViewById(R.id.comment_count);
-
-            mCommentBubble.setVisibility(View.VISIBLE);
-            mCommentCount.setVisibility(View.VISIBLE);
-        }
-
-        public void bindPostHolder(Post post){
-            mPost = post;
-            mThreadTitle.setText(mPost.getTitle());
-            mCommentBubble.setImageResource(R.drawable.chat_bubble);
-            mCommentCount.setText(Integer.toString(mPost.getComments().size()));
         }
     }
 

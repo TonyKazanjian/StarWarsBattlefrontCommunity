@@ -2,11 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#C2C2C2"/>
 
     <include layout = "@layout/post_view"
-             android:id="@+id/comment"
-             style="?android:listSeparatorTextViewStyle"/>
+             android:id="@+id/comment"/>
 
 
 </LinearLayout>

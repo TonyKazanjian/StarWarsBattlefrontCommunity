@@ -90,7 +90,7 @@ public class CommunityFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Adds new topic", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Adds new post", Toast.LENGTH_SHORT).show();
             }
         });
 

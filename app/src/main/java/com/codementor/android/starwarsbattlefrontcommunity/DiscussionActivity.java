@@ -1,55 +1,51 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tonyk_000 on 1/6/2016.
  */
-public class DiscussionActivity extends FragmentActivity {
+public class DiscussionActivity extends AppCompatActivity {
 
-    public static final String EXTRA_POST = "top post";
+    private Post post;
+
+    private RecyclerView mCommentView;
+    private CommentViewAdapter mCommentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discussion);
-//        Bundle b = getIntent().getExtras();
-//        post = b.getParcelable(MainActivity.EXTRA_POST);
+        Bundle b = getIntent().getExtras();
+        post = b.getParcelable(MainActivity.EXTRA_POST);
 
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.discussion_activity);
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
 
-        if (fragment == null){
-            fragment = new DiscussionFragment();
-            fm.beginTransaction()
-                    .add(R.id.discussion_host,fragment)
-                    .commit();
-        }
+        mCommentView = (RecyclerView) findViewById(R.id.rv_comment_view);
+        mCommentView.setLayoutManager(new LinearLayoutManager(this));
+        mCommentList = new CommentViewAdapter(post.getComments(),post);
+        mCommentView.setAdapter(mCommentList);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Replies to post", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(),"Replies to post", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    public static Intent newIntent(Context packageContext, Post post){
-        Bundle bundle = new Bundle();
-        Intent intent = new Intent(packageContext, DiscussionActivity.class);
-        bundle.putParcelable(EXTRA_POST, post);
-        intent.putExtras(bundle);
-        return intent;
-    }
 }
+

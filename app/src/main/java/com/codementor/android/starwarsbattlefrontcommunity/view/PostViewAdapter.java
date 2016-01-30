@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.DiscussionActivity;
+import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 
@@ -48,14 +48,13 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mDatePosted.setText(post.getDate());
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
-//        holder.mCommentBubble.setImageResource(R.drawable.chat_bubble);
         holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-                Intent intent = DiscussionActivity.newIntent(context, mPosts.get(position));
+                Intent intent = MainActivity.newIntent(context, mPosts.get(position));
                 context.startActivity(intent);
             }
         });

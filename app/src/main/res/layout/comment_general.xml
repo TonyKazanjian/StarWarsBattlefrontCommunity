@@ -10,7 +10,7 @@
         android:layout_height="1dp"
         android:background="#C2C2C2"/>
 
-    <include layout = "@layout/post_view"
+    <include layout = "@layout/view_post"
              android:id="@+id/comment"/>
 
 

@@ -37,7 +37,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
     public CommunityContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {//viewType is the differentiator
 
         if (viewType == POST_TYPE){
-            return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.post_view, parent, false));
+            return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false));
         } else {
             return new CommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_general, parent, false));
         }
@@ -78,6 +78,13 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             } else {
                 return COMMENT_TYPE;
             }
+    }
+
+    public void addComment(Comment comment) {
+        if(comment != null && mComments != null) {
+            mComments.add(comment);
+            notifyItemInserted(mComments.size() - 1);
+        }
     }
 
     public class CommentHolder extends CommunityContentHolder{

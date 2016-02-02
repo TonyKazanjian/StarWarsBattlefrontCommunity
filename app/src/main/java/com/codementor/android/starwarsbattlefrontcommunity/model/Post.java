@@ -8,17 +8,12 @@ import java.util.List;
 /**
  * Created by tonyk_000 on 12/14/2015.
  */
-public class Post implements Parcelable {
+public class Post extends Content implements Parcelable {
 
-    private int mTitle;
-    private int mAuthor;
-    private int mDate;
-    private int mContent;
-    private int mAuthorPhoto;
 
     private List<Comment> mComments;
 
-    public Post(int title, int author, int date, int content, int authorPhoto, List<Comment> comments) {
+    public Post(String title, String author, int date, String content, int authorPhoto, List<Comment> comments) {
         mTitle = title;
         mAuthor = author;
         mDate = date;
@@ -26,46 +21,6 @@ public class Post implements Parcelable {
         mAuthorPhoto = authorPhoto;
 
         mComments = comments;
-    }
-
-    public int getTitle() {
-        return mTitle;
-    }
-
-    public void setTitle(int title) {
-        mTitle = title;
-    }
-
-    public int getAuthor() {
-        return mAuthor;
-    }
-
-    public void setAuthor(int author) {
-        mAuthor = author;
-    }
-
-    public int getDate() {
-        return mDate;
-    }
-
-    public void setDate(int date) {
-        mDate = date;
-    }
-
-    public int getContent() {
-        return mContent;
-    }
-
-    public void setContent(int content) {
-        mContent = content;
-    }
-
-    public int getAuthorPhoto() {
-        return mAuthorPhoto;
-    }
-
-    public void setAuthorPhoto(int authorPhoto) {
-        mAuthorPhoto = authorPhoto;
     }
 
     public List<Comment> getComments() {
@@ -83,19 +38,19 @@ public class Post implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.mTitle);
-        dest.writeInt(this.mAuthor);
+        dest.writeString(this.mTitle);
+        dest.writeString(this.mAuthor);
         dest.writeInt(this.mDate);
-        dest.writeInt(this.mContent);
+        dest.writeString(this.mContent);
         dest.writeInt(this.mAuthorPhoto);
         dest.writeTypedList(mComments);
     }
 
     protected Post(Parcel in) {
-        this.mTitle = in.readInt();
-        this.mAuthor = in.readInt();
+        this.mTitle = in.readString();
+        this.mAuthor = in.readString();
         this.mDate = in.readInt();
-        this.mContent = in.readInt();
+        this.mContent = in.readString();
         this.mAuthorPhoto = in.readInt();
         this.mComments = in.createTypedArrayList(Comment.CREATOR);
     }

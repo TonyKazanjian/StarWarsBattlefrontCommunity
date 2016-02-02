@@ -32,7 +32,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
     @Override
     public PostViewAdapter.PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_post_view, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_post, parent, false);
 
         PostHolder postHolder = new PostHolder(v);
 
@@ -63,6 +63,13 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
     @Override
     public int getItemCount() {
         return mPosts.size();
+    }
+
+    public void addPost(Post post) {
+        if(post != null && mPosts != null) {
+            mPosts.add(post);
+            notifyItemInserted(mPosts.size() - 1);
+        }
     }
 
 

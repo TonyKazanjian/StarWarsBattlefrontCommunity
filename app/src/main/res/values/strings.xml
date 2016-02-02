@@ -22,5 +22,6 @@
     <string name="rey_comment">You will remove these restraints and leave this cell with the door open.</string>
     <string name="kyloren_name">Kylo Ren</string>
     <string name="kyloren_comment">Show me again, Grandfather, and I will finish what you started.</string>
+    <string name="title_activity_new_content">NewContentActivity</string>
 
 </resources>

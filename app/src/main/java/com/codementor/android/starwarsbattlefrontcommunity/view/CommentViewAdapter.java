@@ -60,7 +60,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
             final Comment comment = mComments.get(position-1);
             holder.mAuthorName.setText(comment.getAuthor());
-            holder.mDatePosted.setText(comment.getDate());
+            holder.mDatePosted.setText((CharSequence) comment.getDate());
             holder.mPostContent.setText(comment.getContent());
             holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
         }

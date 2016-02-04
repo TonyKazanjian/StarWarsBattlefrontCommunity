@@ -3,6 +3,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,10 +14,10 @@ public class Post extends Content implements Parcelable {
 
     private List<Comment> mComments;
 
-    public Post(String title, String author, int date, String content, int authorPhoto, List<Comment> comments) {
+    public Post(String title, String author, String content, int authorPhoto, List<Comment> comments) {
         mTitle = title;
         mAuthor = author;
-        mDate = date;
+//        mDate = date;
         mContent = content;
         mAuthorPhoto = authorPhoto;
 
@@ -40,7 +41,7 @@ public class Post extends Content implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.mTitle);
         dest.writeString(this.mAuthor);
-        dest.writeInt(this.mDate);
+        dest.writeLong(mDate != null ? mDate.getTime() : -1);
         dest.writeString(this.mContent);
         dest.writeInt(this.mAuthorPhoto);
         dest.writeTypedList(mComments);
@@ -49,7 +50,8 @@ public class Post extends Content implements Parcelable {
     protected Post(Parcel in) {
         this.mTitle = in.readString();
         this.mAuthor = in.readString();
-        this.mDate = in.readInt();
+        long tmpMDate = in.readLong();
+        this.mDate = tmpMDate == -1 ? null : new Date(tmpMDate);
         this.mContent = in.readString();
         this.mAuthorPhoto = in.readInt();
         this.mComments = in.createTypedArrayList(Comment.CREATOR);

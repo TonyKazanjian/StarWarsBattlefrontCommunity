@@ -45,7 +45,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         final Post post = mPosts.get(position);
         holder.mThreadTitle.setText(post.getTitle());
         holder.mAuthorName.setText(post.getAuthor());
-        holder.mDatePosted.setText(post.getDate());
+        holder.mDatePosted.setText((CharSequence) post.getDate());
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
         holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));

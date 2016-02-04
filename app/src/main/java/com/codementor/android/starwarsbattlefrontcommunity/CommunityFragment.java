@@ -1,5 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -34,11 +35,20 @@ public class CommunityFragment extends Fragment {
     private Topic heroHunt;
     private Topic walkerAssault;
 
+
+    private Post mNewPost;
+
     private static final int REQUEST_CODE_POST = 0;
+
+    public static final String EXTRA_NEW_POST = "new post";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
+
+        List<Comment> newPostComments = new ArrayList<>();
+
+        mNewPost = new Post("","",null,0,newPostComments);
 
         droidRun = new Topic("Droid Run", R.drawable.droidrun);
         heroHunt = new Topic("Hero Hunt", R.drawable.herohunt);
@@ -92,35 +102,58 @@ public class CommunityFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(getContext(), "Adds new post", Toast.LENGTH_SHORT).show();
-                Intent i = NewContentActivity.newIntent(getActivity(), new Post(null, null, 0, null, 0, null));
-                startActivityForResult(i, REQUEST_CODE_POST);
+                onContentAdd(mNewPost);
             }
         });
 
         return view;
     }
 
-    //TODO: add onActivityResult
+    public void onContentAdd(Post post){
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_NEW_POST, post);
+        Intent i = new Intent(getActivity(), NewContentActivity.class);
+        i.putExtras(b);
+        startActivityForResult(i, REQUEST_CODE_POST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_POST){
+            if (data == null){
+                return;
+            }
+
+            TopicFragment.mViewAdapter.addPost(mNewPost);
+            mNewPost.setAuthorPhoto(R.drawable.bb8);
+            mNewPost.setTitle(data.getParcelableExtra(EXTRA_NEW_POST).toString());
+            mNewPost.setContent(data.getParcelableExtra(EXTRA_NEW_POST).toString());
+            TopicFragment.mViewAdapter.notifyDataSetChanged();
+        }
+    }
 
     public Post populateDroidRun(){
 
         List<Comment> comments = new ArrayList<>();
 
         Post post = new Post(String.valueOf(R.id.thread_title),String.valueOf(R.id.author_name),
-                R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo, comments);
+                String.valueOf(R.id.post_content), R.id.author_photo, comments);
 
         post.setAuthorPhoto(R.drawable.stormtrooper);
-        post.setAuthor(String.valueOf(R.string.droidhunt_author_name));
-        post.setContent(String.valueOf(R.string.droidhunt_top_post_content));
-        post.setTitle(String.valueOf(R.string.droidhunt_thread_title));
-        post.setDate(R.string.placeholder_date);
+        post.setAuthor(getString(R.string.droidhunt_author_name));
+        post.setContent(getString(R.string.droidhunt_top_post_content));
+        post.setTitle(getString(R.string.droidhunt_thread_title));
+//        post.setDate(post.getDate());
 
-        comments.add(new Comment(String.valueOf(R.id.author_name), R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo));
-        comments.get(0).setAuthor(String.valueOf(R.string.BB8_name));
+        comments.add(new Comment(String.valueOf(R.id.author_name), String.valueOf(R.id.post_content), R.id.author_photo));
+        comments.get(0).setAuthor(getString(R.string.BB8_name));
         comments.get(0).setAuthorPhoto(R.drawable.bb8);
-        comments.get(0).setContent(String.valueOf(R.string.BB8_comment));
-        comments.get(0).setDate(R.string.placeholder_date);
+        comments.get(0).setContent(getString(R.string.BB8_comment));
+//        comments.get(0).setDate(comments.get(0).getDate());
 
         post.setComments(comments);
 
@@ -132,25 +165,25 @@ public class CommunityFragment extends Fragment {
         List<Comment> comments = new ArrayList<>();
 
         Post post = new Post(String.valueOf(R.id.thread_title),String.valueOf(R.id.author_name),
-                R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo, comments);
+                String.valueOf(R.id.post_content), R.id.author_photo, comments);
 
         post.setAuthorPhoto(R.drawable.vader);
-        post.setAuthor(String.valueOf(R.string.herohunt_author_name));
-        post.setContent(String.valueOf(R.string.herohunt_top_post_content));
-        post.setTitle(String.valueOf(R.string.herohunt_thread_title));
-        post.setDate(R.string.placeholder_date);
+        post.setAuthor(getString(R.string.herohunt_author_name));
+        post.setContent(getString(R.string.herohunt_top_post_content));
+        post.setTitle(getString(R.string.herohunt_thread_title));
+//        post.setDate(post.getDate());
 
-        comments.add(new Comment(String.valueOf(R.id.author_name), R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo));
-        comments.get(0).setAuthor(String.valueOf(R.string.kyloren_name));
+        comments.add(new Comment(String.valueOf(R.id.author_name), String.valueOf(R.id.post_content), R.id.author_photo));
+        comments.get(0).setAuthor(getString(R.string.kyloren_name));
         comments.get(0).setAuthorPhoto(R.drawable.kyloren);
-        comments.get(0).setContent(String.valueOf(R.string.kyloren_comment));
-        comments.get(0).setDate(R.string.placeholder_date);
+        comments.get(0).setContent(getString(R.string.kyloren_comment));
+//        comments.get(0).setDate(comments.get(0).getDate());
 
-        comments.add(new Comment(String.valueOf(R.id.author_name), R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo));
-        comments.get(1).setAuthor(String.valueOf(R.string.rey_name));
+        comments.add(new Comment(String.valueOf(R.id.author_name), String.valueOf(R.id.post_content), R.id.author_photo));
+        comments.get(1).setAuthor(getString(R.string.rey_name));
         comments.get(1).setAuthorPhoto(R.drawable.rey);
-        comments.get(1).setContent(String.valueOf(R.string.rey_comment));
-        comments.get(1).setDate(R.string.placeholder_date);
+        comments.get(1).setContent(getString(R.string.rey_comment));
+//        comments.get(0).setDate(comments.get(0).getDate());
 
         post.setComments(comments);
 
@@ -162,31 +195,31 @@ public class CommunityFragment extends Fragment {
         List<Comment> comments = new ArrayList<>();
 
         Post post = new Post(String.valueOf(R.id.thread_title),String.valueOf(R.id.author_name),
-                R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo, comments);
+                String.valueOf(R.id.post_content), R.id.author_photo, comments);
 
         post.setAuthorPhoto(R.drawable.hansolo);
-        post.setAuthor(String.valueOf(R.string.walkerassault_author_name));
-        post.setContent(String.valueOf(R.string.walkerassault_top_post_content));
-        post.setTitle(String.valueOf(R.string.walkerassault_thread_title));
-        post.setDate(R.string.placeholder_date);
+        post.setAuthor(getString(R.string.walkerassault_author_name));
+        post.setContent(getString(R.string.walkerassault_top_post_content));
+        post.setTitle(getString(R.string.walkerassault_thread_title));
+//        post.setDate(post.getDate());
 
-        comments.add(new Comment(String.valueOf(R.id.author_name), R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo));
-        comments.get(0).setAuthor(String.valueOf(R.string.chewbacca_name));
+        comments.add(new Comment(String.valueOf(R.id.author_name), String.valueOf(R.id.post_content), R.id.author_photo));
+        comments.get(0).setAuthor(getString(R.string.chewbacca_name));
         comments.get(0).setAuthorPhoto(R.drawable.choobs);
-        comments.get(0).setContent(String.valueOf(R.string.chewbacca_comment));
-        comments.get(0).setDate(R.string.placeholder_date);
+        comments.get(0).setContent(getString(R.string.chewbacca_comment));
+//        comments.get(0).setDate(comments.get(0).getDate());
 
-        comments.add(new Comment(String.valueOf(R.id.author_name), R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo));
-        comments.get(1).setAuthor(String.valueOf(R.string.leia_name));
+        comments.add(new Comment(String.valueOf(R.id.author_name), String.valueOf(R.id.post_content), R.id.author_photo));
+        comments.get(1).setAuthor(getString(R.string.leia_name));
         comments.get(1).setAuthorPhoto(R.drawable.leia);
-        comments.get(1).setContent(String.valueOf(R.string.leia_comment));
-        comments.get(1).setDate(R.string.placeholder_date);
+        comments.get(1).setContent(getString(R.string.leia_comment));
+//        comments.get(0).setDate(comments.get(0).getDate());
 
-        comments.add(new Comment(String.valueOf(R.id.author_name), R.id.post_date, String.valueOf(R.id.post_content), R.id.author_photo));
-        comments.get(2).setAuthor(String.valueOf(R.string.finn_name));
+        comments.add(new Comment(String.valueOf(R.id.author_name), String.valueOf(R.id.post_content), R.id.author_photo));
+        comments.get(2).setAuthor(getString(R.string.finn_name));
         comments.get(2).setAuthorPhoto(R.drawable.finn);
-        comments.get(2).setContent(String.valueOf(R.string.finn_comment));
-        comments.get(2).setDate(R.string.placeholder_date);
+        comments.get(2).setContent(getString(R.string.finn_comment));
+//        comments.get(0).setDate(comments.get(0).getDate());
 
         post.setComments(comments);
 

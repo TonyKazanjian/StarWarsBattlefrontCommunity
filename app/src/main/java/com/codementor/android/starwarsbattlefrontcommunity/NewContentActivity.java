@@ -1,6 +1,5 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +13,10 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
 
 
 public class NewContentActivity extends AppCompatActivity {
 
-    public static final String EXTRA_NEW_POST = "new post";
 
     private Toolbar mToolbar;
     private Spinner mSpinner;
@@ -40,7 +37,7 @@ public class NewContentActivity extends AppCompatActivity {
 //        setToolbar();
 
         Bundle b = getIntent().getExtras();
-        mNewPost = b.getParcelable(EXTRA_NEW_POST);
+        mNewPost = b.getParcelable(CommunityFragment.EXTRA_NEW_POST);
 
         mSpinner = (Spinner)findViewById(R.id.topic_dropdown);
         mTitle = (EditText)findViewById(R.id.new_post_title);
@@ -85,20 +82,14 @@ public class NewContentActivity extends AppCompatActivity {
         mPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PostViewAdapter adapter = new PostViewAdapter(null);
-                adapter.addPost(mNewPost);
+                Intent newPostData = new Intent();
+                newPostData.putExtra(CommunityFragment.EXTRA_NEW_POST, mNewPost);
+                setResult(RESULT_OK, newPostData);
+                finish();
             }
         });
 
 
-    }
-
-    public static Intent newIntent(Context packageContext, Post post){
-        Bundle bundle = new Bundle();
-        Intent intent = new Intent(packageContext, DiscussionActivity.class);
-        bundle.putParcelable(EXTRA_NEW_POST, post);
-        intent.putExtras(bundle);
-        return intent;
     }
 
 

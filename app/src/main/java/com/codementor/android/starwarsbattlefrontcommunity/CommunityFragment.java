@@ -128,10 +128,15 @@ public class CommunityFragment extends Fragment {
                 return;
             }
 
+            Bundle extras = data.getExtras();
+            if(extras == null){
+                return;
+            }
+
+            mNewPost = extras.getParcelable(EXTRA_NEW_POST);
             TopicFragment.mViewAdapter.addPost(mNewPost);
             mNewPost.setAuthorPhoto(R.drawable.bb8);
-            mNewPost.setTitle(data.getParcelableExtra(EXTRA_NEW_POST).toString());
-            mNewPost.setContent(data.getParcelableExtra(EXTRA_NEW_POST).toString());
+            mNewPost.setAuthor("AndroidPadawan");
             TopicFragment.mViewAdapter.notifyDataSetChanged();
         }
     }

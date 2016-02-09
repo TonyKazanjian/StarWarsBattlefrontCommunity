@@ -23,7 +23,7 @@ public class TopicFragment extends Fragment {
     private static final String ARGS_TOPIC = "topic";
 
     private RecyclerView mRecyclerView;
-    public static PostViewAdapter mViewAdapter;
+    private PostViewAdapter mViewAdapter;
 
     private List<Post> mPosts;
 
@@ -61,7 +61,6 @@ public class TopicFragment extends Fragment {
         return v;
     }
 
-
     public List<Post> populateTopic(){
 
         mPosts = new ArrayList<>();
@@ -74,5 +73,8 @@ public class TopicFragment extends Fragment {
         return mPosts;
     }
 
+    public void addPostToList(Post post){
+        mViewAdapter.addPost(post);
+    }
 }
 

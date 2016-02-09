@@ -3,6 +3,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +12,13 @@ import java.util.List;
  */
 public class Post extends Content implements Parcelable {
 
+    public static final String EXTRA_NEW_POST = "new post";
 
-    private List<Comment> mComments;
+
+    private List<Comment> mComments = new ArrayList<>();
+
+    public Post(){
+    }
 
     public Post(String title, String author, String content, int authorPhoto, List<Comment> comments) {
         mTitle = title;

@@ -35,20 +35,32 @@ public class CommunityFragment extends Fragment {
     private Topic heroHunt;
     private Topic walkerAssault;
 
+    private TopicFragment droidRunFragment;
+    private TopicFragment heroHuntFragment;
+    private TopicFragment walkerAssaultFragment;
 
-    private Post mNewPost;
+    private TopicPagerAdapter mTopicPagerAdapter;
 
-    private static final int REQUEST_CODE_POST = 0;
+    private int mCurrentPage;
 
-    public static final String EXTRA_NEW_POST = "new post";
+    public static final int REQUEST_CODE_POST = 0;
+
+    public static final String EXTRA_CURRENT_PAGE = "current page";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // check to see if savedInstanceState exists, and if it does, then restore state
+
+        if (savedInstanceState != null){
+            mCurrentPage = (int) savedInstanceState.get(EXTRA_CURRENT_PAGE);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
-
-        List<Comment> newPostComments = new ArrayList<>();
-
-        mNewPost = new Post("","",null,0,newPostComments);
 
         droidRun = new Topic("Droid Run", R.drawable.droidrun);
         heroHunt = new Topic("Hero Hunt", R.drawable.herohunt);
@@ -62,21 +74,26 @@ public class CommunityFragment extends Fragment {
         mToolbar.setVisibility(View.INVISIBLE);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        final TopicPagerAdapter topicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
-        topicPagerAdapter.addFragment(TopicFragment.newInstance(droidRun), droidRun.getTopicTitle(),
+        mTopicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
+
+        droidRunFragment = TopicFragment.newInstance(droidRun);
+        heroHuntFragment = TopicFragment.newInstance(heroHunt);
+        walkerAssaultFragment = TopicFragment.newInstance(walkerAssault);
+
+        mTopicPagerAdapter.addFragment(droidRunFragment, droidRun.getTopicTitle(),
                 droidRun.getBackgroundImage());
-        topicPagerAdapter.addFragment(TopicFragment.newInstance(heroHunt), heroHunt.getTopicTitle(),
+        mTopicPagerAdapter.addFragment(heroHuntFragment, heroHunt.getTopicTitle(),
                 heroHunt.getBackgroundImage());
-        topicPagerAdapter.addFragment(TopicFragment.newInstance(walkerAssault),walkerAssault.getTopicTitle(),
+        mTopicPagerAdapter.addFragment(walkerAssaultFragment, walkerAssault.getTopicTitle(),
                 walkerAssault.getBackgroundImage());
 
-        mViewPager.setAdapter(topicPagerAdapter);
+        mViewPager.setAdapter(mTopicPagerAdapter);
 
         mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
 
         mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
-        mBackgroundImage.setImageResource(topicPagerAdapter.getBackgroundImage(0));
+        mBackgroundImage.setImageResource(mTopicPagerAdapter.getBackgroundImage(0));
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -87,9 +104,8 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
 
-                mBackgroundImage.setImageResource(topicPagerAdapter.getBackgroundImage(position));
-
-                //you could have the adapter get the topic model at the position
+                mBackgroundImage.setImageResource(mTopicPagerAdapter.getBackgroundImage(position));
+                mCurrentPage = mViewPager.getCurrentItem();
             }
 
             @Override
@@ -102,19 +118,23 @@ public class CommunityFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onContentAdd(mNewPost);
+                onContentAdd();
             }
         });
 
         return view;
     }
 
-    public void onContentAdd(Post post){
-        Bundle b = new Bundle();
-        b.putParcelable(EXTRA_NEW_POST, post);
+    public void onContentAdd(){
         Intent i = new Intent(getActivity(), NewContentActivity.class);
-        i.putExtras(b);
         startActivityForResult(i, REQUEST_CODE_POST);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // save custom state information to outState
+        outState.putInt(EXTRA_CURRENT_PAGE, mCurrentPage);
     }
 
     @Override
@@ -129,15 +149,16 @@ public class CommunityFragment extends Fragment {
             }
 
             Bundle extras = data.getExtras();
-            if(extras == null){
+            if(extras == null) {
                 return;
             }
 
-            mNewPost = extras.getParcelable(EXTRA_NEW_POST);
-            TopicFragment.mViewAdapter.addPost(mNewPost);
-            mNewPost.setAuthorPhoto(R.drawable.bb8);
-            mNewPost.setAuthor("AndroidPadawan");
-            TopicFragment.mViewAdapter.notifyDataSetChanged();
+            Post newPost = extras.getParcelable(Post.EXTRA_NEW_POST);
+            TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mCurrentPage);
+
+            newPost.setAuthorPhoto(R.drawable.bb8);
+            newPost.setAuthor("AndroidPadawan");
+            updatedFragment.addPostToList(newPost);
         }
     }
 

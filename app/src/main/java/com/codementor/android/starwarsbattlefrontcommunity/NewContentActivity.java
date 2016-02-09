@@ -36,8 +36,7 @@ public class NewContentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_content);
 //        setToolbar();
 
-        Bundle b = getIntent().getExtras();
-        mNewPost = b.getParcelable(CommunityFragment.EXTRA_NEW_POST);
+        mNewPost = new Post();
 
         mSpinner = (Spinner)findViewById(R.id.topic_dropdown);
         mTitle = (EditText)findViewById(R.id.new_post_title);
@@ -83,13 +82,11 @@ public class NewContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent newPostData = new Intent();
-                newPostData.putExtra(CommunityFragment.EXTRA_NEW_POST, mNewPost);
+                newPostData.putExtra(Post.EXTRA_NEW_POST, mNewPost);
                 setResult(RESULT_OK, newPostData);
                 finish();
             }
         });
-
-
     }
 
 

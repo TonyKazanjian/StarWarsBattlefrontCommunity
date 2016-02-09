@@ -67,11 +67,10 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
     public void addPost(Post post) {
         if(post != null && mPosts != null) {
-            mPosts.add(post);
-            notifyItemInserted(mPosts.size() - 1);
+            mPosts.add(0, post);
+            notifyItemInserted(0);
         }
     }
-
 
     public class PostHolder extends RecyclerView.ViewHolder {
 

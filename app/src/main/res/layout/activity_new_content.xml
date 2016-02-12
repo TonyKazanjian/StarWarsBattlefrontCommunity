@@ -5,15 +5,15 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:theme="@style/Theme.AppCompat.Light.NoActionBar">-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <!--</android.support.v7.widget.Toolbar>-->
+    </android.support.v7.widget.Toolbar>
 
-    <include layout="@layout/spinner_new_post"/>
+    <include layout="@layout/include_spinner_topic"/>
 
     <EditText
         android:id="@+id/new_post_title"
@@ -23,7 +23,8 @@
         android:textSize="25sp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/new_post_content"
@@ -37,6 +38,7 @@
         android:layout_weight="1"
         android:gravity="start"/>
 
-    <include layout="@layout/view_add_post"/>
+    <include layout="@layout/include_add_content"/>
+
 
 </LinearLayout>

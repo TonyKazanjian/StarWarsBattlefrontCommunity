@@ -39,7 +39,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         if (viewType == POST_TYPE){
             return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false));
         } else {
-            return new CommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_general, parent, false));
+            return new CommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_comment, parent, false));
         }
     }
 
@@ -84,6 +84,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         if(comment != null && mComments != null) {
             mComments.add(comment);
             notifyItemInserted(mComments.size() - 1);
+            notifyDataSetChanged();
         }
     }
 

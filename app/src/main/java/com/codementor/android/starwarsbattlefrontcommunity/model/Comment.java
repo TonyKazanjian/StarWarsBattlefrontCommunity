@@ -10,6 +10,12 @@ import java.util.Date;
  */
 public class Comment extends Content implements Parcelable {
 
+    public static final String EXTRA_NEW_COMMENT = "new comment";
+
+    public Comment(){
+
+    }
+
 
     public Comment(String author, String content, int authorPhoto) {
         mAuthor = author;

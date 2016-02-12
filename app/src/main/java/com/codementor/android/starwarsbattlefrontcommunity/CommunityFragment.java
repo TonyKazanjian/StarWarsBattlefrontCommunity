@@ -41,11 +41,12 @@ public class CommunityFragment extends Fragment {
 
     private TopicPagerAdapter mTopicPagerAdapter;
 
-    private int mCurrentPage;
+    private int mTopicPage;
 
     public static final int REQUEST_CODE_POST = 0;
 
-    public static final String EXTRA_CURRENT_PAGE = "current page";
+    public static final String EXTRA_TOPIC_PAGE_POSITION = "topic page";
+    public static final String EXTRA_CONTENT_TYPE_POST = "post";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class CommunityFragment extends Fragment {
         // check to see if savedInstanceState exists, and if it does, then restore state
 
         if (savedInstanceState != null){
-            mCurrentPage = (int) savedInstanceState.get(EXTRA_CURRENT_PAGE);
+            mTopicPage = (int) savedInstanceState.get(EXTRA_TOPIC_PAGE_POSITION);
         }
     }
 
@@ -105,7 +106,7 @@ public class CommunityFragment extends Fragment {
             public void onPageSelected(int position) {
 
                 mBackgroundImage.setImageResource(mTopicPagerAdapter.getBackgroundImage(position));
-                mCurrentPage = mViewPager.getCurrentItem();
+                mTopicPage = mViewPager.getCurrentItem();
             }
 
             @Override
@@ -126,7 +127,11 @@ public class CommunityFragment extends Fragment {
     }
 
     public void onContentAdd(){
+        Bundle b = new Bundle();
         Intent i = new Intent(getActivity(), NewContentActivity.class);
+        b.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
+        b.putBoolean(EXTRA_CONTENT_TYPE_POST, true);
+        i.putExtras(b);
         startActivityForResult(i, REQUEST_CODE_POST);
     }
 
@@ -134,7 +139,7 @@ public class CommunityFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // save custom state information to outState
-        outState.putInt(EXTRA_CURRENT_PAGE, mCurrentPage);
+        outState.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
     }
 
     @Override
@@ -154,7 +159,9 @@ public class CommunityFragment extends Fragment {
             }
 
             Post newPost = extras.getParcelable(Post.EXTRA_NEW_POST);
-            TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mCurrentPage);
+            mTopicPage = extras.getInt(EXTRA_TOPIC_PAGE_POSITION);
+            mViewPager.setCurrentItem(mTopicPage);
+            TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
 
             newPost.setAuthorPhoto(R.drawable.bb8);
             newPost.setAuthor("AndroidPadawan");

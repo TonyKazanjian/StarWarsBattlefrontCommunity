@@ -1,13 +1,15 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
+import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
 
@@ -23,6 +25,11 @@ public class DiscussionActivity extends AppCompatActivity {
 
     private RecyclerView mCommentView;
     private CommentViewAdapter mCommentList;
+
+    private Comment mComment;
+
+    public static final String EXTRA_CONTENT_TYPE_COMMENT = "comment";
+    private static final int REQUEST_CODE_COMMENT = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -43,9 +50,41 @@ public class DiscussionActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(),"Replies to post", Toast.LENGTH_SHORT).show();
+                onContentAdd();
             }
         });
+    }
+
+    public void onContentAdd(){
+        Bundle b = new Bundle();
+        Intent i = new Intent(this, NewContentActivity.class);
+        b.putBoolean(EXTRA_CONTENT_TYPE_COMMENT, false);
+        i.putExtras(b);
+        startActivityForResult(i, REQUEST_CODE_COMMENT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_COMMENT){
+            if (data == null){
+                return;
+            }
+
+            Bundle extras = data.getExtras();
+            if(extras == null) {
+                return;
+            }
+
+            Comment newComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
+
+            newComment.setAuthorPhoto(R.drawable.bb8);
+            newComment.setAuthor("AndroidPadawan");
+            mCommentList.addComment(newComment);
+        }
     }
 }
 

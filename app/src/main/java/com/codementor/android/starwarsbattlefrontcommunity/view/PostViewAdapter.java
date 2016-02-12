@@ -69,6 +69,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         if(post != null && mPosts != null) {
             mPosts.add(0, post);
             notifyItemInserted(0);
+            notifyDataSetChanged();
         }
     }
 

@@ -50,13 +50,11 @@ public class TopicFragment extends Fragment {
 
         List<Post> posts = populateTopic();
 
-        if (savedInstanceState == null) {
-            mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-            mViewAdapter = new PostViewAdapter(posts);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        mViewAdapter = new PostViewAdapter(posts);
 
-            mRecyclerView.setAdapter(mViewAdapter);
-        }
+        mRecyclerView.setAdapter(mViewAdapter);
 
         return v;
     }

@@ -235,6 +235,9 @@ public class NewContentActivity extends AppCompatActivity {
                 if (mIsPost){
                     Post post = new Post();
                     post.setContentImageUri(uri);
+                } else {
+                    Comment comment = new Comment();
+                    comment.setContentImageUri(uri);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

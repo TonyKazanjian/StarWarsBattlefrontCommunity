@@ -73,7 +73,7 @@ public abstract class Content implements Parcelable {
 
     // TODO create helper method that converts the mFileUri into a Bitmap
     public Bitmap getContentImageFromFileSystem() {
-        // TODO
+        
         return null;
     }
 }

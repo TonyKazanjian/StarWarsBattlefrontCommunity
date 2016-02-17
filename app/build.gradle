@@ -28,4 +28,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.android.support:design:23.1.1'
     compile fileTree(dir:'libs', include:['android-linear-layout-manager-master'])
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

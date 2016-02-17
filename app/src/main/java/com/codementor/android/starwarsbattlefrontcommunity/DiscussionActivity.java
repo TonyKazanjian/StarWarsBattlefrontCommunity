@@ -86,5 +86,6 @@ public class DiscussionActivity extends AppCompatActivity {
             mCommentList.addComment(newComment);
         }
     }
+
 }
 

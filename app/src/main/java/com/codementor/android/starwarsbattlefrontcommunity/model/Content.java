@@ -1,5 +1,7 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Parcelable;
 
 import java.util.Calendar;
@@ -15,6 +17,8 @@ public abstract class Content implements Parcelable {
      Date mDate;
      String mContent;
      int mAuthorPhoto;
+
+     Uri mContentImageUri;
 
     public String getAuthor() {
         return mAuthor;
@@ -59,4 +63,17 @@ public abstract class Content implements Parcelable {
         mTitle = title;
     }
 
+    public Uri getContentImageUri() {
+        return mContentImageUri;
+    }
+
+    public void setContentImageUri(Uri contentImageUri) {
+        this.mContentImageUri = contentImageUri;
+    }
+
+    // TODO create helper method that converts the mFileUri into a Bitmap
+    public Bitmap getContentImageFromFileSystem() {
+        // TODO
+        return null;
+    }
 }

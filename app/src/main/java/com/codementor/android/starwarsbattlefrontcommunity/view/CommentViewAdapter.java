@@ -63,6 +63,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mDatePosted.setText((CharSequence) comment.getDate());
             holder.mPostContent.setText(comment.getContent());
             holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
+            holder.mAttachedImage.setImageBitmap(comment.getContentImageFromFileSystem());
         }
     }
 
@@ -118,6 +119,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
+        public ImageView mAttachedImage;
 
         public CommunityContentHolder(View itemView) {
             super(itemView);
@@ -126,6 +128,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             mDatePosted = (TextView) itemView.findViewById(R.id.post_date);
             mPostContent = (TextView) itemView.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) itemView.findViewById(R.id.author_photo);
+            mAttachedImage = (ImageView) itemView.findViewById(R.id.attached_image);
         }
     }
 

@@ -11,7 +11,7 @@
         android:id="@+id/view"/>
 
     <ImageButton
-        android:id="@+id/camera_button"
+        android:id="@+id/photo_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_camera_alt_24dp"

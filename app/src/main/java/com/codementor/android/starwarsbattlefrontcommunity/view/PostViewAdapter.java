@@ -48,6 +48,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mDatePosted.setText((CharSequence) post.getDate());
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
+        holder.mAttachedImage.setImageBitmap(post.getContentImageFromFileSystem()); //TODO here's where you set the bitmap
         holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +81,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
+        private ImageView mAttachedImage;
         private ImageView mCommentBubble;
         private TextView mCommentCount;
 
@@ -91,6 +93,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             mDatePosted = (TextView) v.findViewById(R.id.post_date);
             mPostContent = (TextView) v.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) v.findViewById(R.id.author_photo);
+            mAttachedImage = (ImageView) v.findViewById(R.id.attached_image);
             mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
             mCommentCount = (TextView) v.findViewById(R.id.comment_count);
 

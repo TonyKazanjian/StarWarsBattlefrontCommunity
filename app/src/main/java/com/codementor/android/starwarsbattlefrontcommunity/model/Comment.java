@@ -1,5 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,11 +18,12 @@ public class Comment extends Content implements Parcelable {
     }
 
 
-    public Comment(String author, String content, int authorPhoto) {
+    public Comment(String author, String content, int authorPhoto, Uri uri) {
         mAuthor = author;
 //        mDate = date;
         mContent = content;
         mAuthorPhoto = authorPhoto;
+        mContentImageUri = uri;
     }
 
 
@@ -36,6 +38,7 @@ public class Comment extends Content implements Parcelable {
         dest.writeLong(mDate != null ? mDate.getTime() : -1);
         dest.writeString(this.mContent);
         dest.writeInt(this.mAuthorPhoto);
+        dest.writeParcelable(this.mContentImageUri, 0);
     }
 
     protected Comment(Parcel in) {
@@ -44,6 +47,7 @@ public class Comment extends Content implements Parcelable {
         this.mDate = tmpMDate == -1 ? null : new Date(tmpMDate);
         this.mContent = in.readString();
         this.mAuthorPhoto = in.readInt();
+        this.mContentImageUri = in.readParcelable(Uri.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {

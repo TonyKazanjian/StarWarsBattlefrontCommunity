@@ -2,6 +2,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +30,6 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         mPosts = posts;
     }
 
-
     @Override
     public PostViewAdapter.PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_post, parent, false);
@@ -48,7 +48,12 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mDatePosted.setText((CharSequence) post.getDate());
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
-        holder.mAttachedImage.setImageBitmap(post.getContentImageFromFileSystem()); //TODO here's where you set the bitmap
+        //get bitmap
+        Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+        if(bitmap != null) {
+            holder.mAttachedImage.setImageBitmap(bitmap);
+            holder.mAttachedImage.setVisibility(View.VISIBLE);
+        }
         holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity.view;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +57,12 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             ((PostHolder)holder).mCommentBubble.setVisibility(View.VISIBLE);
             ((PostHolder)holder).mCommentCount.setVisibility(View.VISIBLE);
 
+            Bitmap bitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+            if(bitmap != null) {
+                holder.mAttachedImage.setImageBitmap(bitmap);
+                holder.mAttachedImage.setVisibility(View.VISIBLE);
+            }
+
         } else if (position > getPostPosition()){
 
             final Comment comment = mComments.get(position-1);
@@ -63,7 +70,12 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mDatePosted.setText((CharSequence) comment.getDate());
             holder.mPostContent.setText(comment.getContent());
             holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
-            holder.mAttachedImage.setImageBitmap(comment.getContentImageFromFileSystem());
+
+            Bitmap bitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+            if(bitmap != null) {
+                holder.mAttachedImage.setImageBitmap(bitmap);
+                holder.mAttachedImage.setVisibility(View.VISIBLE);
+            }
         }
     }
 

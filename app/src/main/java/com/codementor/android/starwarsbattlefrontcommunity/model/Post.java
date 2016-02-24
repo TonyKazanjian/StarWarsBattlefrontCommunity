@@ -1,5 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class Post extends Content implements Parcelable {
 
     public static final String EXTRA_NEW_POST = "new post";
+    private int mTopicSection;
 
 
     private List<Comment> mComments = new ArrayList<>();
@@ -20,14 +22,22 @@ public class Post extends Content implements Parcelable {
     public Post(){
     }
 
-    public Post(String title, String author, String content, int authorPhoto, List<Comment> comments) {
+    public Post(String title, String author, String content, int authorPhoto, Uri uri, List<Comment> comments) {
         mTitle = title;
         mAuthor = author;
 //        mDate = date;
         mContent = content;
         mAuthorPhoto = authorPhoto;
-
+        mContentImageUri = uri;
         mComments = comments;
+    }
+
+    public int getTopicSection() {
+        return mTopicSection;
+    }
+
+    public void setTopicSection(int topicSection) {
+        this.mTopicSection = topicSection;
     }
 
     public List<Comment> getComments() {
@@ -50,6 +60,8 @@ public class Post extends Content implements Parcelable {
         dest.writeLong(mDate != null ? mDate.getTime() : -1);
         dest.writeString(this.mContent);
         dest.writeInt(this.mAuthorPhoto);
+        dest.writeInt(this.mTopicSection);
+        dest.writeParcelable(this.mContentImageUri, 0);
         dest.writeTypedList(mComments);
     }
 
@@ -60,6 +72,8 @@ public class Post extends Content implements Parcelable {
         this.mDate = tmpMDate == -1 ? null : new Date(tmpMDate);
         this.mContent = in.readString();
         this.mAuthorPhoto = in.readInt();
+        this.mTopicSection = in.readInt();
+        this.mContentImageUri = in.readParcelable(Uri.class.getClassLoader());
         this.mComments = in.createTypedArrayList(Comment.CREATOR);
     }
 

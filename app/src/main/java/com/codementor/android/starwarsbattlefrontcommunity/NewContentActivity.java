@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 
 import java.io.File;
@@ -44,10 +45,13 @@ public class NewContentActivity extends AppCompatActivity {
     private Button mCreateContentButton;
 
     private File mPhotoFile;
-    String mCurrentPhotoPath;
+    private String mCurrentPhotoPath;
+
+    private Uri mUri;
 
     boolean mIsPost = false;
     private static final int REQUEST_TAKE_PHOTO = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +59,6 @@ public class NewContentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_content);
         Bundle b = getIntent().getExtras(); //getting position of currently selected topic fragment
         setToolbar();
-
-//        //created new Post and Comment objects outside of createContentButton's onClick because I needed the mPhotoFile to return something
-//        Post newPost = new Post();
 
         mIsPost = b.getBoolean(CommunityFragment.EXTRA_CONTENT_TYPE_POST); // if true, then new content will be a Post, else content will be a Comment
 
@@ -108,20 +109,21 @@ public class NewContentActivity extends AppCompatActivity {
         mCreateContentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (mIsPost) {
-                    Post newPost = new Post();
-                    newPost.setTitle(mTitle.getText().toString());
+                    Post post = new Post();
+                    post.setTitle(mTitle.getText().toString());
+                    post.setTopicSection(mSpinner.getSelectedItemPosition());
+                    populateContent(post);
                     Intent newPostData = new Intent();
-                    newPostData.putExtra(Post.EXTRA_NEW_POST, newPost);
+                    newPostData.putExtra(Post.EXTRA_NEW_POST, post);
                     newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, mSpinner.getSelectedItemPosition());
                     setResult(RESULT_OK, newPostData);
                     finish();
                 } else {
-                    Comment newComment = new Comment();
-                    newComment.setContent(mContent.getText().toString());
+                    Comment comment = new Comment();
+                    populateContent(comment);
                     Intent newCommentData = new Intent();
-                    newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, newComment);
+                    newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, comment);
                     setResult(RESULT_OK, newCommentData);
                     finish();
                 }
@@ -155,6 +157,14 @@ public class NewContentActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void populateContent(Content content) {
+        if (mPhotoFile != null){
+            mUri = Uri.fromFile(mPhotoFile);
+            content.setContentImageUri(mUri);
+        }
+        content.setContent(mContent.getText().toString());
     }
 
     private File createImageFile() throws IOException {
@@ -231,14 +241,6 @@ public class NewContentActivity extends AppCompatActivity {
             // storing imageBitmap as a File, and saving its URI to a Content object
             try {
                 storeImageAsFile(imageBitmap);
-                Uri uri = Uri.fromFile(mPhotoFile);
-                if (mIsPost){
-                    Post post = new Post();
-                    post.setContentImageUri(uri);
-                } else {
-                    Comment comment = new Comment();
-                    comment.setContentImageUri(uri);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

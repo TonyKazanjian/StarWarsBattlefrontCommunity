@@ -1,9 +1,12 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -72,8 +75,15 @@ public abstract class Content implements Parcelable {
     }
 
     // TODO create helper method that converts the mFileUri into a Bitmap
-    public Bitmap getContentImageFromFileSystem() {
-        
-        return null;
+    public Bitmap getContentImageFromFileSystem(ContentResolver contentResolver) {
+        Bitmap bitmap = null;
+        try {
+            if (mContentImageUri != null) {
+                bitmap = MediaStore.Images.Media.getBitmap(contentResolver, mContentImageUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }

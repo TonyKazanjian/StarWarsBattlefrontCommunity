@@ -54,9 +54,13 @@
         android:layout_marginTop="30dp"/>
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:id="@+id/attached_image"/>
+        android:id="@+id/attached_image"
+        android:layout_below="@+id/post_content"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        tools:src="@drawable/droidrun"/>
 
     <ImageView
         android:layout_width="wrap_content"

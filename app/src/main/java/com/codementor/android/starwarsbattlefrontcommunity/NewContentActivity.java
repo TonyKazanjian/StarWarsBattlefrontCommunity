@@ -75,12 +75,10 @@ public class NewContentActivity extends AppCompatActivity {
             topicList.add(0, "Droid Run");
             topicList.add(1, "Hero Hunt");
             topicList.add(2, "Walker Assault");
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, topicList);
             // Specify the layout to use when the list of choices appears
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             // Apply the adapter to the spinner
-            mSpinner.setAdapter(spinnerAdapter);
+            mSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.topic_spinner_item, topicList));
             mSpinner.setSelection(b.getInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION));
         }
 

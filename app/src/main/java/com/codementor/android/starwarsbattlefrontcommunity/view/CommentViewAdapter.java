@@ -1,7 +1,10 @@
 package com.codementor.android.starwarsbattlefrontcommunity.view;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
+import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImageActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 
 import java.util.List;
@@ -57,10 +62,22 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             ((PostHolder)holder).mCommentBubble.setVisibility(View.VISIBLE);
             ((PostHolder)holder).mCommentCount.setVisibility(View.VISIBLE);
 
-            Bitmap bitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+           final Bitmap bitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
             if(bitmap != null) {
                 holder.mAttachedImage.setImageBitmap(bitmap);
                 holder.mAttachedImage.setVisibility(View.VISIBLE);
+
+                holder.mAttachedImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, FullScreenImageActivity.class);
+                        Bundle b = new Bundle();
+                        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, bitmap);
+                        intent.putExtras(b);
+                        context.startActivity(intent);
+                    }
+                });
             }
 
         } else if (position > getPostPosition()){
@@ -71,10 +88,22 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mPostContent.setText(comment.getContent());
             holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
 
-            Bitmap bitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+           final Bitmap bitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
             if(bitmap != null) {
                 holder.mAttachedImage.setImageBitmap(bitmap);
                 holder.mAttachedImage.setVisibility(View.VISIBLE);
+
+                holder.mAttachedImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, FullScreenImageActivity.class);
+                        Bundle b = new Bundle();
+                        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, bitmap);
+                        intent.putExtras(b);
+                        context.startActivity(intent);
+                    }
+                });
             }
         }
     }

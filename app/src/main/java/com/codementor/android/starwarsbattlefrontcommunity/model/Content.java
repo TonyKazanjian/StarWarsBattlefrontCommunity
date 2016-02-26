@@ -23,6 +23,8 @@ public abstract class Content implements Parcelable {
 
      Uri mContentImageUri;
 
+    public static final String FULLSCREEN_IMAGE_EXTRA = "fullscreenImage";
+
     public String getAuthor() {
         return mAuthor;
     }

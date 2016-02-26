@@ -22,10 +22,10 @@ public class Post extends Content implements Parcelable {
     public Post(){
     }
 
-    public Post(String title, String author, String content, int authorPhoto, Uri uri, List<Comment> comments) {
+    public Post(String title, String author, Date date, String content, int authorPhoto, Uri uri, List<Comment> comments) {
         mTitle = title;
         mAuthor = author;
-//        mDate = date;
+        mDate = date;
         mContent = content;
         mAuthorPhoto = authorPhoto;
         mContentImageUri = uri;

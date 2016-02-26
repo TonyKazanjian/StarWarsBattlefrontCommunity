@@ -18,9 +18,9 @@ public class Comment extends Content implements Parcelable {
     }
 
 
-    public Comment(String author, String content, int authorPhoto, Uri uri) {
+    public Comment(String author, Date date, String content, int authorPhoto, Uri uri) {
         mAuthor = author;
-//        mDate = date;
+        mDate = date;
         mContent = content;
         mAuthorPhoto = authorPhoto;
         mContentImageUri = uri;

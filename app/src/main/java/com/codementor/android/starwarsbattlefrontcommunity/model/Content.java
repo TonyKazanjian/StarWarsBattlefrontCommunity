@@ -54,7 +54,6 @@ public abstract class Content implements Parcelable {
     }
 
     public void setDate(Date date) {
-
         mDate = date;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

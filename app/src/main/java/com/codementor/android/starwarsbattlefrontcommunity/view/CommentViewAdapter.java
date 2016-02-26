@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             ((PostHolder)holder).mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(mPost.getAuthor());
             holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
+            holder.mDatePosted.setText(DateFormat.format("EEE, MMM dd, h:mm a", mPost.getDate()));
             holder.mPostContent.setText(mPost.getContent());
             ((PostHolder)holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
             ((PostHolder)holder).mCommentBubble.setVisibility(View.VISIBLE);
@@ -70,12 +72,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 holder.mAttachedImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, FullScreenImageActivity.class);
-                        Bundle b = new Bundle();
-                        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, bitmap);
-                        intent.putExtras(b);
-                        context.startActivity(intent);
+                        fullScreenIntent(v, bitmap);
                     }
                 });
             }
@@ -84,7 +81,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
             final Comment comment = mComments.get(position-1);
             holder.mAuthorName.setText(comment.getAuthor());
-            holder.mDatePosted.setText((CharSequence) comment.getDate());
+            holder.mDatePosted.setText(DateFormat.format("EEE, MMM dd, h:mm a", comment.getDate()));
             holder.mPostContent.setText(comment.getContent());
             holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
 
@@ -96,16 +93,20 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 holder.mAttachedImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, FullScreenImageActivity.class);
-                        Bundle b = new Bundle();
-                        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, bitmap);
-                        intent.putExtras(b);
-                        context.startActivity(intent);
+                        fullScreenIntent(v, bitmap);
                     }
                 });
             }
         }
+    }
+
+    public void fullScreenIntent(View v, Bitmap bitmap){
+        Context context = v.getContext();
+        Intent intent = new Intent(context, FullScreenImageActivity.class);
+        Bundle b = new Bundle();
+        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, bitmap);
+        intent.putExtras(b);
+        context.startActivity(intent);
     }
 
     @Override

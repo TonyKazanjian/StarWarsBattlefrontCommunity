@@ -162,6 +162,7 @@ public class NewContentActivity extends AppCompatActivity {
             mUri = Uri.fromFile(mPhotoFile);
             content.setContentImageUri(mUri);
         }
+        content.setDate(new Date());
         content.setContent(mContent.getText().toString());
     }
 

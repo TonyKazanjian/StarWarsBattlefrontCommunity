@@ -32,7 +32,8 @@
         <activity
             android:name=".NewContentActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:name=".image.FullScreenImageActivity"/>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for

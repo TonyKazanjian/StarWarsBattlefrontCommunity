@@ -18,7 +18,6 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +43,6 @@ public class CommunityFragment extends Fragment {
     private TopicPagerAdapter mTopicPagerAdapter;
 
     private int mTopicPage;
-
-    private DateFormat mDateFormat;
 
     public static final int REQUEST_CODE_POST = 0;
 

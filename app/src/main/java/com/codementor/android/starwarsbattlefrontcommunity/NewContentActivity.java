@@ -12,12 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
@@ -34,7 +36,6 @@ import java.util.List;
 
 public class NewContentActivity extends AppCompatActivity {
 
-
     private Toolbar mToolbar;
     private EditText mContent;
     private Spinner mSpinner;
@@ -43,6 +44,8 @@ public class NewContentActivity extends AppCompatActivity {
 
     private ImageButton mPhotoButton;
     private Button mCreateContentButton;
+
+    private TextView mTextCounter;
 
     private File mPhotoFile;
     private String mCurrentPhotoPath;
@@ -58,6 +61,7 @@ public class NewContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_content);
         Bundle b = getIntent().getExtras(); //getting position of currently selected topic fragment
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setToolbar();
 
         mIsPost = b.getBoolean(CommunityFragment.EXTRA_CONTENT_TYPE_POST); // if true, then new content will be a Post, else content will be a Comment
@@ -86,6 +90,8 @@ public class NewContentActivity extends AppCompatActivity {
         mAttachedImage = (ImageView) findViewById(R.id.attached_image);
 
         mCreateContentButton = (Button) findViewById(R.id.post_button);
+        mTextCounter = (TextView)findViewById(R.id.text_counter);
+        mTextCounter.setText(String.valueOf(2000));
 
         mContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,7 +106,7 @@ public class NewContentActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                mTextCounter.setText(String.valueOf(2000 - editable.toString().length()));
             }
         });
 

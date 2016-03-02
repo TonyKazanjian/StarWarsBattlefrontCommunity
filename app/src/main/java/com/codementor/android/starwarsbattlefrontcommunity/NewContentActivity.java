@@ -1,6 +1,8 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFragment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
@@ -34,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class NewContentActivity extends AppCompatActivity {
+public class NewContentActivity extends AppCompatActivity implements PictureDialogFragment.InputListener {
 
     private Toolbar mToolbar;
     private EditText mContent;
@@ -54,6 +57,7 @@ public class NewContentActivity extends AppCompatActivity {
 
     boolean mIsPost = false;
     private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_SELECT_PHOTO = 0;
 
 
     @Override
@@ -99,9 +103,12 @@ public class NewContentActivity extends AppCompatActivity {
 
         mContent.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -134,32 +141,14 @@ public class NewContentActivity extends AppCompatActivity {
         });
 
         mPhotoButton = (ImageButton) findViewById(R.id.photo_button);
-
-        //implicit intent asks for the new picture to be put into the locatino saved in mPhotoFile
-        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //querying PackageManager checks to see if there are any apps available that can respond to the intent
-        final boolean canTakePhoto = captureImage.resolveActivity(getPackageManager()) != null;
-        mPhotoButton.setEnabled(canTakePhoto);
-
-        if (canTakePhoto) {
-
-            mPhotoButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mPhotoFile = null;
-                    try {
-                        mPhotoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-                    }
-                    // Continue only if the File was successfully created
-                    if (mPhotoFile != null) {
-                        startActivityForResult(captureImage, REQUEST_TAKE_PHOTO);
-                    }
-                }
-            });
-        }
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PictureDialogFragment pictureDialogFragment = new PictureDialogFragment();
+                pictureDialogFragment.setListener(NewContentActivity.this);
+                pictureDialogFragment.show(getSupportFragmentManager(), PictureDialogFragment.class.getSimpleName());
+            }
+        });
     }
 
     private void populateContent(Content content) {
@@ -201,6 +190,40 @@ public class NewContentActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void pictureIntent(){
+        //implicit intent asks for the new picture to be put into the locatino saved in mPhotoFile
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+//        //querying PackageManager checks to see if there are any apps available that can respond to the intent
+//        final boolean canTakePhoto = captureImage.resolveActivity(getPackageManager()) != null;
+//        mPhotoButton.setEnabled(canTakePhoto);
+
+//        if (canTakePhoto) {
+
+//            mPhotoButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mPhotoFile = null;
+                    try {
+                        mPhotoFile = createImageFile();
+                    } catch (IOException ex) {
+                        // Error occurred while creating the File
+                    }
+                    // Continue only if the File was successfully created
+                    if (mPhotoFile != null) {
+                        startActivityForResult(captureImage, REQUEST_TAKE_PHOTO);
+                    }
+//                }
+//            });
+//        }
+    }
+
+    private void choosePhotoIntent(){
+        Intent galleryIntent = new Intent( Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, REQUEST_SELECT_PHOTO);
     }
 
     private void setPic() {
@@ -249,6 +272,31 @@ public class NewContentActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             setPic();
+
+        } else  if (requestCode == REQUEST_SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            mCurrentPhotoPath = cursor.getString(columnIndex);
+            cursor.close();
+            File photoFile = new File(mCurrentPhotoPath);
+            if (photoFile.exists()){
+                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                mAttachedImage.setImageBitmap(bitmap);
+                setPic();
+            }
         }
+    }
+
+    @Override
+    public void onTakePhotoSelected() {
+        pictureIntent();
+    }
+
+    @Override
+    public void onChoosePhotoSelected() {
+        choosePhotoIntent();
     }
 }

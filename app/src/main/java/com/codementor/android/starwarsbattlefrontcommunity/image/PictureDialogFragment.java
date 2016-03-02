@@ -2,10 +2,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.image;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -19,6 +16,17 @@ import com.codementor.android.starwarsbattlefrontcommunity.R;
  */
 public class PictureDialogFragment extends DialogFragment {
 
+    private InputListener mInputListener;
+
+    public interface InputListener {
+        void onTakePhotoSelected();
+        void onChoosePhotoSelected();
+    }
+
+    public void setListener(InputListener inputListener) {
+        mInputListener = inputListener;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -29,34 +37,21 @@ public class PictureDialogFragment extends DialogFragment {
         final TextView takePhoto = (TextView) dialogLayout.findViewById(R.id.take_picture);
         final TextView choosePhoto = (TextView) dialogLayout.findViewById(R.id.choose_picture);
 
-//        builder.setView(dialogLayout)
-//                .setPositiveButton(takePhoto, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if (mNameInputListener != null){
-//                            mNameInputListener.onOkayClicked(new Name(firstNameInput.getText().toString(),
-//                                    lastNameInput.getText().toString()));
-//                        }
-//                    }
-//                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        NameInputDialogFragment.this.getDialog().cancel();
-//                    }
-//                });
+        builder.setView(dialogLayout);
 
-        int[] textViews = {R.id.take_picture,R.id.choose_picture};
-
-        builder.setView(dialogLayout).setSingleChoiceItems(textViews.length, 0, new DialogInterface.OnClickListener() {
+        takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivity(captureImage);
+            public void onClick(View v) {
+                mInputListener.onTakePhotoSelected();
+            }
+        });
+
+        choosePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mInputListener.onChoosePhotoSelected();
             }
         });
         return builder.create();
-
     }
-
 }

@@ -80,6 +80,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         }
     }
 
+
     public class PostHolder extends RecyclerView.ViewHolder {
 
         private TextView mThreadTitle;

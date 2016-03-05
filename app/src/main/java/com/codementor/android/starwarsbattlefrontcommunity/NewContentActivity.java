@@ -2,10 +2,10 @@ package com.codementor.android.starwarsbattlefrontcommunity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +26,12 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFr
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,7 +69,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         Bundle b = getIntent().getExtras();
 
         //for trying to get the include_add_content layout to move with the keyboard
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         setToolbar();
 
@@ -226,32 +227,12 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         startActivityForResult(galleryIntent, REQUEST_SELECT_PHOTO);
     }
 
-    private void setPic() {
-        // Get the dimensions of the View
-        mAttachedImage.setVisibility(View.VISIBLE);
-        int targetW = mAttachedImage.getWidth();
-        int targetH = mAttachedImage.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-    }
-
     //to store bitmap image as a file
     private void storeImageAsFile(Bitmap image) throws IOException {
 
         try {
             FileOutputStream fos = new FileOutputStream(mPhotoFile);
+            //this is why the image looks shitty
             image.compress(Bitmap.CompressFormat.JPEG,90,fos);
             fos.close();
         } catch (IOException e) {
@@ -264,29 +245,39 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mAttachedImage.setImageBitmap(imageBitmap);
             // storing imageBitmap as a File, and saving its URI to a Content object
             try {
                 storeImageAsFile(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            setPic();
+            updatePhotoView(imageBitmap);
 
         } else  if (requestCode == REQUEST_SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            mCurrentPhotoPath = cursor.getString(columnIndex);
-            cursor.close();
+//            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+//            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+//            cursor.moveToFirst();
+//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//            mCurrentPhotoPath = cursor.getString(columnIndex);
+//            cursor.close();
+            //TODO: convert Uri to file
             File photoFile = new File(mCurrentPhotoPath);
             if (photoFile.exists()){
                 Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                mAttachedImage.setImageBitmap(bitmap);
-                setPic();
+                updatePhotoView(bitmap);
             }
+        }
+    }
+
+    //To load the Bitmap into the ImageView
+    private void updatePhotoView(Bitmap bitmap){
+        if(mPhotoFile == null || !mPhotoFile.exists()){
+            mAttachedImage.setImageDrawable(null);
+        } else {
+            bitmap = PictureUtils.decodeBitmapFromFile(mPhotoFile.getPath(), this);
+//            Bitmap.createScaledBitmap(bitmap,mAttachedImage.getWidth(), mAttachedImage.getHeight(),false);
+            mAttachedImage.setImageBitmap(bitmap);
         }
     }
 
@@ -298,5 +289,39 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     @Override
     public void onChoosePhotoSelected() {
         choosePhotoIntent();
+    }
+
+    public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+
+        int bitmapWidth = mAttachedImage.getWidth();
+        int bitmapHeight = mAttachedImage.getHeight();
+
+        private final WeakReference<ImageView> imageViewReference;
+        private int data = 0;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<ImageView>(imageView);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Integer... params) {
+            data = params[0];
+            //Create a custom Application class in order to return the context to get resources
+            return PictureUtils.decodeBitmapFromFile(mPhotoFile.getPath(), bitmapWidth,bitmapHeight);
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+
+
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
     }
 }

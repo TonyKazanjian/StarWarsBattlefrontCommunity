@@ -24,5 +24,7 @@
     <string name="kyloren_comment">Show me again, Grandfather, and I will finish what you started.</string>
     <string name="title_activity_new_content">NewContentActivity</string>
     <string name="content_hint">What\'s on your mind?</string>
+    <string name="contentHint">What\'s on your mind?</string>
+    <string name="titleHint">Post Title</string>
 
 </resources>

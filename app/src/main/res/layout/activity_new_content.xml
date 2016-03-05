@@ -1,51 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:layout_height="match_parent"
+        android:paddingBottom="?attr/actionBarSize"
+        android:clipToPadding="false">
 
-    </android.support.v7.widget.Toolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <include layout="@layout/include_spinner_topic"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <EditText
-        android:id="@+id/new_post_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Post Title"
-        android:textSize="25sp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:paddingBottom="16dp"
-        android:visibility="gone"/>
+            </android.support.v7.widget.Toolbar>
 
-    <EditText
-        android:id="@+id/new_post_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="What's on your mind?"
-        android:background="@android:color/transparent"
-        android:maxLength="2000"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_weight="1"
-        android:gravity="start"/>
+            <include layout="@layout/include_spinner_topic"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/attached_image"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_weight="6"/>
+            <EditText
+                android:id="@+id/new_post_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/titleHint"
+                android:textSize="25sp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:paddingBottom="16dp"
+                android:visibility="gone"/>
+
+            <!--<FrameLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content">-->
+
+            <EditText
+                android:id="@+id/new_post_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/contentHint"
+                android:background="@android:color/transparent"
+                android:maxLength="2000"
+                android:paddingBottom="60dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="start"
+                />
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:id="@+id/attached_image"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"/>
+
+            <!--</FrameLayout>-->
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <include layout="@layout/include_add_content"/>
 
-</LinearLayout>
+</RelativeLayout>

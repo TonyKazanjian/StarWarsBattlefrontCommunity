@@ -80,7 +80,8 @@ public abstract class Content implements Parcelable {
         Bitmap bitmap = null;
         try {
             if (mContentImageUri != null) {
-                bitmap = MediaStore.Images.Media.getBitmap(contentResolver, mContentImageUri);
+                bitmap = MediaStore.Images.Media.getBitmap(contentResolver,
+                        mContentImageUri);
             }
         } catch (IOException e) {
             e.printStackTrace();

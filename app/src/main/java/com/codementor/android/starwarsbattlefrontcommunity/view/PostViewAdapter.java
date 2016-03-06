@@ -52,19 +52,17 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
         if(bitmap != null) {
             // Using an AsyncTask to load the slow images in a background thread
-            new AsyncTask<RecyclerView.ViewHolder, Void, Bitmap>() {
-                private RecyclerView.ViewHolder v;
+            new AsyncTask<PostHolder, Void, Bitmap>() {
 
                 @Override
-                protected Bitmap doInBackground(RecyclerView.ViewHolder... params) {
-                    v = params[0];
+                protected Bitmap doInBackground(PostHolder... params) {
                     return bitmap;
                 }
 
                 @Override
                 protected void onPostExecute(Bitmap result) {
                     super.onPostExecute(result);
-                    if (v.getAdapterPosition() == position) {
+                    if (holder.getAdapterPosition() == position) {
                         // If this item hasn't been recycled already, hide the
                         // progress and set and show the image
 //                    v.progress.setVisibility(View.GONE);

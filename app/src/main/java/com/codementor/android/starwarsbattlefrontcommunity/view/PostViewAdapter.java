@@ -3,6 +3,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -35,13 +36,11 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
     public PostViewAdapter.PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_post, parent, false);
 
-        PostHolder postHolder = new PostHolder(v);
-
-        return postHolder;
+        return new PostHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(PostViewAdapter.PostHolder holder, final int position) {
+    public void onBindViewHolder(final PostViewAdapter.PostHolder holder, final int position) {
 
         final Post post = mPosts.get(position);
         holder.mThreadTitle.setText(post.getTitle());
@@ -52,9 +51,30 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         //get bitmap
         final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
         if(bitmap != null) {
-            holder.mAttachedImage.setImageBitmap(bitmap);
-            holder.mAttachedImage.setVisibility(View.VISIBLE);
+            // Using an AsyncTask to load the slow images in a background thread
+            new AsyncTask<RecyclerView.ViewHolder, Void, Bitmap>() {
+                private RecyclerView.ViewHolder v;
+
+                @Override
+                protected Bitmap doInBackground(RecyclerView.ViewHolder... params) {
+                    v = params[0];
+                    return bitmap;
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    super.onPostExecute(result);
+                    if (v.getAdapterPosition() == position) {
+                        // If this item hasn't been recycled already, hide the
+                        // progress and set and show the image
+//                    v.progress.setVisibility(View.GONE);
+//                    v.icon.setVisibility(View.VISIBLE);
+                        holder.mAttachedImage.setImageBitmap(result);
+                    }
+                }
+            }.execute(holder);
         }
+
         holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -113,4 +133,5 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
 }

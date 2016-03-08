@@ -1,6 +1,7 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -15,11 +16,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -40,6 +43,8 @@ import java.util.List;
 
 
 public class NewContentActivity extends AppCompatActivity implements PictureDialogFragment.InputListener {
+
+    private LinearLayout mLinearLayout;
 
     private Toolbar mToolbar;
     private EditText mContent;
@@ -75,8 +80,17 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         setToolbar();
 
         mIsPost = b.getBoolean(CommunityFragment.EXTRA_CONTENT_TYPE_POST); // if true, then new content will be a Post, else content will be a Comment
+        mLinearLayout = (LinearLayout)findViewById(R.id.newContentLayout);
 
-        if (mIsPost) {
+        mLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContent.requestFocus();
+                showKeyboard(mContent);
+            }
+        });
+
+    if (mIsPost) {
 
             mSpinner = (Spinner) findViewById(R.id.topic_dropdown);
             mTitle = (EditText) findViewById(R.id.new_post_title);
@@ -194,6 +208,13 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         }
     }
 
+    public static void showKeyboard(EditText editText) {
+        final InputMethodManager inputMethodManager = (InputMethodManager) editText.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+
     public void pictureIntent(){
         //implicit intent asks for the new picture to be put into the locatino saved in mPhotoFile
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -261,7 +282,6 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 //            mPhotoFile = new File(data.getDataString());
 //            Uri selectedImage = Uri.fromFile(mPhotoFile);
             if (mPhotoFile.exists()){
-                mAttachedImage.setImageURI(mUri);
                 updatePhotoView();
             } else {
                 Log.i("NewContent","could not load file");
@@ -284,7 +304,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         if(mPhotoFile == null || !mPhotoFile.exists()){
             mAttachedImage.setImageDrawable(null);
         } else {
-
+            mAttachedImage.setVisibility(View.VISIBLE);
             loadBitmap(mPhotoFile.getAbsolutePath(), mAttachedImage);
         }
     }

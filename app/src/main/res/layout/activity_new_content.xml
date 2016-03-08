@@ -11,6 +11,7 @@
         android:clipToPadding="false">
 
         <LinearLayout
+            android:id="@+id/newContentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -36,31 +37,27 @@
                 android:paddingBottom="16dp"
                 android:visibility="gone"/>
 
-            <!--<FrameLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content">-->
-
-            <EditText
-                android:id="@+id/new_post_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/contentHint"
-                android:background="@android:color/transparent"
-                android:maxLength="2000"
-                android:paddingBottom="60dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="start"
-                />
-
-            <ImageView
+                <EditText
+                    android:id="@+id/new_post_content"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:id="@+id/attached_image"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/contentHint"
+                    android:background="@android:color/transparent"
+                    android:maxLength="2000"
+                    android:paddingBottom="60dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"/>
+                    android:layout_marginRight="16dp"
+                    android:gravity="start"
+                    />
 
-            <!--</FrameLayout>-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp"
+                    android:id="@+id/attached_image"
+                    android:scaleType="centerCrop"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    />
 
         </LinearLayout>
 

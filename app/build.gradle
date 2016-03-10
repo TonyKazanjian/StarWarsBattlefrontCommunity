@@ -27,6 +27,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.android.support:design:23.1.1'
-    compile fileTree(dir:'libs', include:['android-linear-layout-manager-master'])
+    compile fileTree(include: ['android-linear-layout-manager-master'], dir: 'libs')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

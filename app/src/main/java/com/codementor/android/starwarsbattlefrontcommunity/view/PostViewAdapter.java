@@ -2,8 +2,6 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,28 +48,15 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
         //get bitmap
-        final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
-        if(bitmap != null) {
-            // Using an AsyncTask to load the slow images in a background thread
-            new AsyncTask<PostHolder, Void, Bitmap>() {
+//        final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 
-                @Override
-                protected Bitmap doInBackground(PostHolder... params) {
-                    return bitmap;
-                }
+        if(post.getContentImageUri() != null) {
+            holder.mAttachedImage.setVisibility(View.VISIBLE);
 
-                @Override
-                protected void onPostExecute(Bitmap result) {
-                    super.onPostExecute(result);
-                    if (holder.getAdapterPosition() == position) {
-                        // If this item hasn't been recycled already, hide the
-                        // progress and set and show the image
-//                    v.progress.setVisibility(View.GONE);
-//                    v.icon.setVisibility(View.VISIBLE);
-                        holder.mAttachedImage.setImageBitmap(result);
-                    }
-                }
-            }.execute(holder);
+            Picasso.with(holder.itemView.getContext()).load(
+                    post.getContentImageUri())
+                    .fit()
+                    .into(holder.mAttachedImage);
         }
 
         holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
@@ -79,7 +65,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-                Intent intent = MainActivity.newIntent(context, mPosts.get(position));
+                Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
                 context.startActivity(intent);
             }
         });

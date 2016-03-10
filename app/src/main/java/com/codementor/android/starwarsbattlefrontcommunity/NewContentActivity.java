@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -30,12 +29,11 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFr
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,7 +187,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = "file:/" + image.getAbsolutePath();
         return image;
     }
 
@@ -219,16 +217,6 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         //implicit intent asks for the new picture to be put into the locatino saved in mPhotoFile
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-//        //querying PackageManager checks to see if there are any apps available that can respond to the intent
-//        final boolean canTakePhoto = captureImage.resolveActivity(getPackageManager()) != null;
-//        mPhotoButton.setEnabled(canTakePhoto);
-
-//        if (canTakePhoto) {
-
-//            mPhotoButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mPhotoFile = null;
                     try {
                         mPhotoFile = createImageFile();
                     } catch (IOException ex) {
@@ -236,11 +224,10 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
                     }
                     // Continue only if the File was successfully created
                     if (mPhotoFile != null) {
+                        captureImage.putExtra(MediaStore.EXTRA_OUTPUT,
+                                Uri.fromFile(mPhotoFile));
                         startActivityForResult(captureImage, REQUEST_TAKE_PHOTO);
                     }
-//                }
-//            });
-//        }
     }
 
     private void choosePhotoIntent(){
@@ -265,14 +252,15 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            mUri = data.getData();
+//            mPhotoFile = new File(mCurrentPhotoPath);
+
             // storing imageBitmap as a File, and saving its URI to a Content object
-            try {
-                storeImageAsFile(imageBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                storeImageAsFile(imageBitmap);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
             updatePhotoView();
 
         } else  if (requestCode == REQUEST_SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -305,7 +293,8 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             mAttachedImage.setImageDrawable(null);
         } else {
             mAttachedImage.setVisibility(View.VISIBLE);
-            loadBitmap(mPhotoFile.getAbsolutePath(), mAttachedImage);
+            Picasso.with(this).load(mPhotoFile).fit()
+                    .into(mAttachedImage);
         }
     }
 
@@ -319,38 +308,38 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         choosePhotoIntent();
     }
 
-    public void loadBitmap(String filePath, ImageView imageView) {
-        BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-        task.execute(filePath);
-    }
+//    public void loadBitmap(String filePath, ImageView imageView) {
+//        BitmapWorkerTask task = new BitmapWorkerTask(imageView);
+//        task.execute(filePath);
+//    }
 
-    public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-
-        int bitmapWidth = mAttachedImage.getWidth();
-        int bitmapHeight = mAttachedImage.getHeight();
-
-        private final WeakReference<ImageView> imageViewReference;
-
-        public BitmapWorkerTask(ImageView imageView) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            imageViewReference = new WeakReference<ImageView>(imageView);
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            return PictureUtils.decodeBitmapFromFile(mPhotoFile.getPath(), bitmapWidth,bitmapHeight);
-        }
-
-        // Once complete, see if ImageView is still around and set bitmap.
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (imageViewReference != null && bitmap != null) {
-
-                final ImageView imageView = imageViewReference.get();
-                if (imageView != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
-    }
+//    public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+//
+//        int bitmapWidth = mAttachedImage.getWidth();
+//        int bitmapHeight = mAttachedImage.getHeight();
+//
+//        private final WeakReference<ImageView> imageViewReference;
+//
+//        public BitmapWorkerTask(ImageView imageView) {
+//            // Use a WeakReference to ensure the ImageView can be garbage collected
+//            imageViewReference = new WeakReference<ImageView>(imageView);
+//        }
+//
+//        @Override
+//        protected Bitmap doInBackground(String... params) {
+//            return PictureUtils.decodeBitmapFromFile(mPhotoFile.getPath(), bitmapWidth,bitmapHeight);
+//        }
+//
+//        // Once complete, see if ImageView is still around and set bitmap.
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            if (imageViewReference != null && bitmap != null) {
+//
+//                final ImageView imageView = imageViewReference.get();
+//                if (imageView != null) {
+//                    imageView.setImageBitmap(bitmap);
+//                }
+//            }
+//        }
+//    }
 }

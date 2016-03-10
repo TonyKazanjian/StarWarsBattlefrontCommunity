@@ -20,7 +20,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public static Intent newIntent(Context packageContext, Post post){
+    public static Intent discussionIntent(Context packageContext, Post post){
         Bundle bundle = new Bundle();
         Intent intent = new Intent(packageContext, DiscussionActivity.class);
         bundle.putParcelable(EXTRA_POST, post);

@@ -1,15 +1,25 @@
 package com.codementor.android.starwarsbattlefrontcommunity.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 /**
  * Created by tonyk_000 on 2/13/2016.
  */
 public class PictureUtils {
+
+    //for getting Uri from bitmap
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
+        return Uri.parse(path);
+//        return MediaStore.Images.Media.getContentUri(path);
+    }
 
     //This checks to see how big the screen is, then scales the image down to that size
     public static Bitmap decodeBitmapFromFile(String path, Activity activity){

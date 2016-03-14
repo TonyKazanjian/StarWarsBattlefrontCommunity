@@ -2,6 +2,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -48,14 +50,15 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mPostContent.setText(post.getContent());
         holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
         //get bitmap
-//        final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+        final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 
-        if(post.getContentImageUri() != null) {
+        if(bitmap != null) {
             holder.mAttachedImage.setVisibility(View.VISIBLE);
 
-            Picasso.with(holder.itemView.getContext()).load(
-                    post.getContentImageUri())
-                    .fit()
+            Context context = holder.itemView.getContext();
+
+            Picasso.with(context).load(PictureUtils.getImageUri(context, bitmap))
+                    .resize(200,200).centerCrop().onlyScaleDown()
                     .into(holder.mAttachedImage);
         }
 

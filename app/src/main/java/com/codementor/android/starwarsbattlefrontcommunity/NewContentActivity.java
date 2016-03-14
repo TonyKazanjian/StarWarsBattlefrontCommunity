@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,7 +31,6 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -236,43 +234,21 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         startActivityForResult(galleryIntent, REQUEST_SELECT_PHOTO);
     }
 
-    //to store bitmap image as a file
-    private void storeImageAsFile(Bitmap image) throws IOException {
-
-        try {
-            FileOutputStream fos = new FileOutputStream(mPhotoFile);
-            //this is why the image looks shitty
-            image.compress(Bitmap.CompressFormat.JPEG,90,fos);
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-//            mUri = data.getData();
-//            mPhotoFile = new File(mCurrentPhotoPath);
 
-            // storing imageBitmap as a File, and saving its URI to a Content object
-//            try {
-//                storeImageAsFile(imageBitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
             updatePhotoView();
 
         } else  if (requestCode == REQUEST_SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
             mUri = data.getData();
 
             mPhotoFile = new File(getRealPathFromURI(mUri));
-//            mPhotoFile = new File(data.getDataString());
-//            Uri selectedImage = Uri.fromFile(mPhotoFile);
+
             if (mPhotoFile.exists()){
                 updatePhotoView();
             } else {
-                Log.i("NewContent","could not load file");
+                Log.i("NewContentActivity","could not load file");
             }
         }
     }
@@ -293,7 +269,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             mAttachedImage.setImageDrawable(null);
         } else {
             mAttachedImage.setVisibility(View.VISIBLE);
-            Picasso.with(this).load(mPhotoFile).fit()
+            Picasso.with(this).load(mPhotoFile)
                     .into(mAttachedImage);
         }
     }

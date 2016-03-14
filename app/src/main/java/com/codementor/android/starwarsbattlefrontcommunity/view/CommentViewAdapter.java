@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Bundle;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -19,7 +19,10 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImage
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -66,13 +69,20 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
            final Bitmap bitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
             if(bitmap != null) {
-                holder.mAttachedImage.setImageBitmap(bitmap);
                 holder.mAttachedImage.setVisibility(View.VISIBLE);
+
+                Context context = holder.itemView.getContext();
+                Uri bitmapUri = PictureUtils.getImageUri(context, bitmap);
+                final File photoFile = new File(bitmapUri.getPath());
+
+                Picasso.with(context).load(bitmapUri)
+                        .resize(200,200).centerCrop().onlyScaleDown()
+                        .into(holder.mAttachedImage);
 
                 holder.mAttachedImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fullScreenIntent(v, bitmap);
+                        fullScreenIntent(v, photoFile);
                     }
                 });
             }
@@ -87,25 +97,30 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
            final Bitmap bitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
             if(bitmap != null) {
-                holder.mAttachedImage.setImageBitmap(bitmap);
                 holder.mAttachedImage.setVisibility(View.VISIBLE);
+
+                Context context = holder.itemView.getContext();
+                Uri bitmapUri = PictureUtils.getImageUri(context, bitmap);
+                final File photoFile = new File(bitmapUri.getPath());
+
+                Picasso.with(context).load(bitmapUri)
+                        .resize(200,200).centerCrop().onlyScaleDown()
+                        .into(holder.mAttachedImage);
 
                 holder.mAttachedImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fullScreenIntent(v, bitmap);
+                        fullScreenIntent(v, photoFile);
                     }
                 });
             }
         }
     }
 
-    public void fullScreenIntent(View v, Bitmap bitmap){
+    public void fullScreenIntent(View v, File photoFile){
         Context context = v.getContext();
         Intent intent = new Intent(context, FullScreenImageActivity.class);
-        Bundle b = new Bundle();
-        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, bitmap);
-        intent.putExtras(b);
+        intent.putExtra(Content.FULLSCREEN_IMAGE_EXTRA, photoFile.getAbsolutePath());
         context.startActivity(intent);
     }
 

@@ -284,38 +284,4 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         choosePhotoIntent();
     }
 
-//    public void loadBitmap(String filePath, ImageView imageView) {
-//        BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-//        task.execute(filePath);
-//    }
-
-//    public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
-//
-//        int bitmapWidth = mAttachedImage.getWidth();
-//        int bitmapHeight = mAttachedImage.getHeight();
-//
-//        private final WeakReference<ImageView> imageViewReference;
-//
-//        public BitmapWorkerTask(ImageView imageView) {
-//            // Use a WeakReference to ensure the ImageView can be garbage collected
-//            imageViewReference = new WeakReference<ImageView>(imageView);
-//        }
-//
-//        @Override
-//        protected Bitmap doInBackground(String... params) {
-//            return PictureUtils.decodeBitmapFromFile(mPhotoFile.getPath(), bitmapWidth,bitmapHeight);
-//        }
-//
-//        // Once complete, see if ImageView is still around and set bitmap.
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            if (imageViewReference != null && bitmap != null) {
-//
-//                final ImageView imageView = imageViewReference.get();
-//                if (imageView != null) {
-//                    imageView.setImageBitmap(bitmap);
-//                }
-//            }
-//        }
-//    }
 }

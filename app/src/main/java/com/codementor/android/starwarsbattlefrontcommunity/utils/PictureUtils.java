@@ -18,7 +18,6 @@ public class PictureUtils {
     public static Uri getImageUri(Context inContext, Bitmap inImage) {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
-//        return MediaStore.Images.Media.getContentUri(path);
     }
 
     //This checks to see how big the screen is, then scales the image down to that size

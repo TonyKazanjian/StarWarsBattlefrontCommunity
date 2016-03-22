@@ -75,7 +75,7 @@ public abstract class Content implements Parcelable {
         this.mContentImageUri = contentImageUri;
     }
 
-    // TODO create helper method that converts the mFileUri into a Bitmap
+    //helper method that converts the mFileUri into a Bitmap
     public Bitmap getContentImageFromFileSystem(ContentResolver contentResolver) {
         Bitmap bitmap = null;
         try {

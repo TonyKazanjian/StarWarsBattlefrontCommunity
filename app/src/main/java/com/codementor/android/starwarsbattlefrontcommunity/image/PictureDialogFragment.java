@@ -34,8 +34,8 @@ public class PictureDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.dialog_photo_select, null);
-        final TextView takePhoto = (TextView) dialogLayout.findViewById(R.id.take_picture);
-        final TextView choosePhoto = (TextView) dialogLayout.findViewById(R.id.choose_picture);
+        TextView takePhoto = (TextView) dialogLayout.findViewById(R.id.take_picture);
+        TextView choosePhoto = (TextView) dialogLayout.findViewById(R.id.choose_picture);
 
         builder.setView(dialogLayout);
 

@@ -30,4 +30,5 @@ dependencies {
     compile fileTree(include: ['android-linear-layout-manager-master'], dir: 'libs')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.googlecode.android-query:android-query:0.25.9'
 }

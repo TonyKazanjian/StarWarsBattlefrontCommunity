@@ -1,7 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
+import com.androidquery.AQuery;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -63,42 +60,9 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
                 ((ImagePostHolder) holder).mAttachedImage.setVisibility(View.VISIBLE);
 
                 final Context context = holder.itemView.getContext();
-                
-                Picasso.with(context).load(PictureUtils.getImageUri(context, localBitmap))
-                        .resize(200,200)
-                        .centerCrop()
-                        .config(Bitmap.Config.RGB_565)
-//                        .into(new Target() {
-//                            @Override
-//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                                bitmap = localBitmap;
-//                                ((ImagePostHolder) holder).mAttachedImage.setImageBitmap(bitmap);
-//                            }
-//
-//                            @Override
-//                            public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                                placeHolderDrawable = ((ImagePostHolder) holder).itemView.getResources().getDrawable(R.drawable.bb8);
-//                                ((ImagePostHolder) holder).mAttachedImage.setImageDrawable(placeHolderDrawable);
-//                            }
-//                        });
-                        .into(((ImagePostHolder) holder).mAttachedImage);
+                AQuery query = new AQuery(context);
+                query.id(((ImagePostHolder) holder).mAttachedImage).image(localBitmap);
             }
-
-            holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
-                    context.startActivity(intent);
-                }
-            });
     }
 
     @Override

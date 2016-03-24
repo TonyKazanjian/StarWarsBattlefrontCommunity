@@ -54,9 +54,8 @@
         android:layout_marginTop="30dp"/>
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="240dp"
-        android:maxHeight="500dp"
         android:adjustViewBounds="true"
         android:id="@+id/attached_image"
         android:layout_below="@+id/post_content"
@@ -71,7 +70,7 @@
         android:layout_below="@+id/thread_title"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_chat_bubble_black_18dp"
+        android:src="@drawable/ic_chat_bubble"
         android:tint="@color/materialIconGrey"
         android:visibility="gone"/>
 

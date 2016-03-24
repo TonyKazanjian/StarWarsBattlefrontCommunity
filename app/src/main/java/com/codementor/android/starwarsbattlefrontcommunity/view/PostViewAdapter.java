@@ -46,6 +46,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         }
     }
 
+    //TODO - need to cache bitmap before RecyclerView starts??
     @Override
     public void onBindViewHolder(final PostViewAdapter.PostHolder holder, final int position) {
 
@@ -56,15 +57,35 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             holder.mPostContent.setText(post.getContent());
             holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
             //get bitmap
-            final Bitmap bitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+            final Bitmap localBitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 
-            if (bitmap != null) {
+            if (localBitmap != null) {
                 ((ImagePostHolder) holder).mAttachedImage.setVisibility(View.VISIBLE);
 
-                Context context = holder.itemView.getContext();
-
-                Picasso.with(context).load(PictureUtils.getImageUri(context, bitmap))
-                        .resize(200, 200).centerCrop().onlyScaleDown()
+                final Context context = holder.itemView.getContext();
+                
+                Picasso.with(context).load(PictureUtils.getImageUri(context, localBitmap))
+                        .resize(200,200)
+                        .centerCrop()
+                        .config(Bitmap.Config.RGB_565)
+//                        .into(new Target() {
+//                            @Override
+//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                                bitmap = localBitmap;
+//                                ((ImagePostHolder) holder).mAttachedImage.setImageBitmap(bitmap);
+//                            }
+//
+//                            @Override
+//                            public void onBitmapFailed(Drawable errorDrawable) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                                placeHolderDrawable = ((ImagePostHolder) holder).itemView.getResources().getDrawable(R.drawable.bb8);
+//                                ((ImagePostHolder) holder).mAttachedImage.setImageDrawable(placeHolderDrawable);
+//                            }
+//                        });
                         .into(((ImagePostHolder) holder).mAttachedImage);
             }
 
@@ -141,6 +162,13 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    public boolean isImageType(){
+        if (this.getItemViewType(0) == IMAGE_TYPE){
+            return true;
+        }
+        return false;
     }
 
 }

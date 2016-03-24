@@ -78,7 +78,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 final Uri bitmapUri = PictureUtils.getImageUri(context, bitmap);
 
                 Picasso.with(context).load(bitmapUri)
-                        .resize(200,200).centerCrop().onlyScaleDown()
+                        .fit().centerCrop()
                         .into(((PostHolder)holder).mAttachedImage);
 
                 ((PostHolder)holder).mAttachedImage.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +105,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 final Uri bitmapUri = PictureUtils.getImageUri(context, bitmap);
 
                 Picasso.with(context).load(bitmapUri)
-                        .resize(200,200).centerCrop().onlyScaleDown()
+                        .fit().centerCrop()
                         .into(((ImageCommentHolder)holder).mAttachedImage);
 
                 ((ImageCommentHolder)holder).mAttachedImage.setOnClickListener(new View.OnClickListener() {

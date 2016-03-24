@@ -56,6 +56,11 @@ public class TopicFragment extends Fragment {
 
         mRecyclerView.setAdapter(mViewAdapter);
 
+        //trying to reduce the lag when loading local files in the recyclerview. Doesn't work
+        if (mViewAdapter.isImageType()){
+            mViewAdapter.setHasStableIds(true);
+        }
+
         return v;
     }
 

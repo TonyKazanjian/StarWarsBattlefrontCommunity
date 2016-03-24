@@ -17,6 +17,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +96,8 @@ public class CommunityFragment extends Fragment {
         mTabLayout.setupWithViewPager(mViewPager);
 
         mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
-        mBackgroundImage.setImageResource(mTopicPagerAdapter.getBackgroundImage(0));
+//        mBackgroundImage.setImageResource(mTopicPagerAdapter.getBackgroundImage(0));
+        Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(0)).into(mBackgroundImage);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

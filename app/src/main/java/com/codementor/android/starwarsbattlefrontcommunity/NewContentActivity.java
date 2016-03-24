@@ -317,10 +317,12 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         }
     }
 
+    //called by the fragment after the permissions dialog disappears, so we will need to open the PictureDialog here
     @Override
     protected void onPostResume() {
         super.onPostResume();
         if (showPictureDialog){
+            //resetting the boolean
             showPictureDialog = false;
             PictureDialogFragment pictureDialogFragment = new PictureDialogFragment();
             pictureDialogFragment.setListener(NewContentActivity.this);

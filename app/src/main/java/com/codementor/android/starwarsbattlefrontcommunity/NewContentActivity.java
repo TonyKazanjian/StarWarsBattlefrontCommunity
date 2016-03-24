@@ -34,7 +34,8 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
-import com.squareup.picasso.Picasso;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -232,8 +233,9 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             mAttachedImage.setImageDrawable(null);
         } else {
             mAttachedImage.setVisibility(View.VISIBLE);
-            Picasso.with(this).load(mPhotoFile)
-                    .into(mAttachedImage);
+            ImageLoader loader = ImageLoader.getInstance();
+            loader.init(ImageLoaderConfiguration.createDefault(this));
+            loader.displayImage(mUri.toString(),mAttachedImage);
         }
     }
 

@@ -61,6 +61,16 @@ public class TopicFragment extends Fragment {
             mViewAdapter.setHasStableIds(true);
         }
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+                if (mViewAdapter.isImageType() && newState == RecyclerView.SCROLL_STATE_DRAGGING){
+                    mViewAdapter.getLoader().stop();
+                }
+            }
+        });
+
         return v;
     }
 

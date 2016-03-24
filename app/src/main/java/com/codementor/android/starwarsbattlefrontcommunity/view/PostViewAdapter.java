@@ -11,9 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidquery.AQuery;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHolder> {
 
     private List<Post> mPosts;
+    private ImageLoader mLoader;
 
     private static final int IMAGE_TYPE = 0;
     private static final int NO_IMAGE_TYPE = 1;
@@ -60,9 +62,14 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
                 ((ImagePostHolder) holder).mAttachedImage.setVisibility(View.VISIBLE);
 
                 final Context context = holder.itemView.getContext();
-                AQuery query = new AQuery(context);
-                query.id(((ImagePostHolder) holder).mAttachedImage).image(localBitmap);
+                mLoader = ImageLoader.getInstance();
+                mLoader.init(ImageLoaderConfiguration.createDefault(context));
+                ImageLoader.getInstance().displayImage(String.valueOf(post.getContentImageUri()),((ImagePostHolder) holder).mAttachedImage);
             }
+    }
+
+    public ImageLoader getLoader(){
+        return mLoader;
     }
 
     @Override

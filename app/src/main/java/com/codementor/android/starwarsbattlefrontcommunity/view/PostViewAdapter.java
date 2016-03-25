@@ -3,6 +3,8 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -26,6 +28,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by tonyk_000 on 12/14/2015.
  */
 public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHolder> {
+
+    public interface OnTaskCompleted {
+        void onTaskCompleted();
+    }
 
     private List<Post> mPosts;
 
@@ -61,32 +67,30 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
             if (localBitmap != null) {
                 ((ImagePostHolder) holder).mAttachedImage.setVisibility(View.VISIBLE);
+                final int width = ((ImagePostHolder) holder).mAttachedImage.getWidth();
+                final int height = ((ImagePostHolder) holder).mAttachedImage.getHeight();
 
                 final Context context = holder.itemView.getContext();
-                
-                Picasso.with(context).load(PictureUtils.getImageUri(context, localBitmap))
-                        .resize(200,200)
-                        .centerCrop()
-                        .config(Bitmap.Config.RGB_565)
-//                        .into(new Target() {
-//                            @Override
-//                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                                bitmap = localBitmap;
-//                                ((ImagePostHolder) holder).mAttachedImage.setImageBitmap(bitmap);
-//                            }
-//
-//                            @Override
-//                            public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                                placeHolderDrawable = ((ImagePostHolder) holder).itemView.getResources().getDrawable(R.drawable.bb8);
-//                                ((ImagePostHolder) holder).mAttachedImage.setImageDrawable(placeHolderDrawable);
-//                            }
-//                        });
-                        .into(((ImagePostHolder) holder).mAttachedImage);
+
+                // Using an AsyncTask to load the slow images in a background thread
+               new AsyncTask<PostHolder, Void, Bitmap>() {
+
+                    @Override
+                    protected Bitmap doInBackground(PostHolder... params) {
+                        Uri bitmapUri = PictureUtils.getImageUri(context,localBitmap);
+                        return PictureUtils.decodeBitmapFromFile(bitmapUri.getPath(),width,height);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bitmap result) {
+                        super.onPostExecute(result);
+                        if (holder.getAdapterPosition() == position) {
+                            Picasso.with(context).load(post.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+                                    .into(((ImagePostHolder) holder).mAttachedImage);
+                        }
+
+                    }
+                }.execute(holder);
             }
 
             holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
@@ -99,6 +103,13 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
                     context.startActivity(intent);
                 }
             });
+    }
+
+    public Uri getScaledBitmapUri(Context context, Bitmap bitmap, int width, int height){
+
+        bitmap = PictureUtils.decodeBitmapFromFile(String.valueOf(mPosts.get(0).getContentImageUri()),width,height);
+
+        return PictureUtils.getImageUri(context, bitmap);
     }
 
     @Override

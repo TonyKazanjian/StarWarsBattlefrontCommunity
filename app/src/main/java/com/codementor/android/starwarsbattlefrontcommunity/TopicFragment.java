@@ -79,5 +79,7 @@ public class TopicFragment extends Fragment {
     public void addPostToList(Post post){
         mViewAdapter.addPost(post);
     }
+
+
 }
 

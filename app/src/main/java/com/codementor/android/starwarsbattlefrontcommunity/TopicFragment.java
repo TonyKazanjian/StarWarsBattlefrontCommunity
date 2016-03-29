@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,16 @@ import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by tonyk_000 on 12/18/2015.
  */
 public class TopicFragment extends Fragment {
+
+    private static final String TAG = "TopicFragment";
 
     private static final String ARGS_TOPIC = "topic";
 
@@ -42,6 +49,26 @@ public class TopicFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mTopic = getArguments().getParcelable(ARGS_TOPIC);
+
+        //creates a REST adaper which points to the Battlefront API endpoint
+        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
+        Call<List<Topic>> call = client.getTopics();
+
+        call.enqueue(new Callback<List<Topic>>() {
+            @Override
+            public void onResponse(Call<List<Topic>> call, Response<List<Topic>> response) {
+                if (response.isSuccessful()){
+                    Log.i((TAG), response.body().toString());
+                } else {
+                    Log.i(TAG, "fuck");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Topic>> call, Throwable t) {
+                Log.i(TAG, "downloading topic failed");
+            }
+        });
     }
 
     @Override

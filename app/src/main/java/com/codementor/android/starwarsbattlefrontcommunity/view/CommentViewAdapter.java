@@ -21,6 +21,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImage
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -94,7 +95,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 attachPostImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fullScreenIntent(v, mPost.getContentImageUri());
+                        fullScreenIntent(v, PictureUtils.getImageUri(context,localBitmap));
                     }
                 });
             }
@@ -120,7 +121,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
                     @Override
                     public void onBitmapDecoded(Bitmap bitmap) {
-                        Picasso.with(context).load(mPost.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+                        Picasso.with(context).load(comment.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
                                 .placeholder(R.drawable.bb8).into(attachCommentImage);
                     }
                 };
@@ -128,11 +129,11 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                 decoderListener.onBitmapDecoded(localBitmap);
                 BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
                 bitmapDecoderAsyncTask.execute();
-                
+
                 attachCommentImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fullScreenIntent(v, comment.getContentImageUri());
+                        fullScreenIntent(v, PictureUtils.getImageUri(context,localBitmap));
                     }
                 });
             }

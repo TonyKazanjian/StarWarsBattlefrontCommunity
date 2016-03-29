@@ -33,9 +33,9 @@ public class CommunityFragment extends Fragment {
     private ImageView mBackgroundImage;
     private Toolbar mToolbar;
 
-    private Topic droidRun;
-    private Topic heroHunt;
     private Topic walkerAssault;
+    private Topic blast;
+    private Topic heroesVsVillains;
 
     private TopicFragment droidRunFragment;
     private TopicFragment heroHuntFragment;
@@ -65,13 +65,13 @@ public class CommunityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
-        droidRun = new Topic("Droid Run", R.drawable.droidrun);
-        heroHunt = new Topic("Hero Hunt", R.drawable.herohunt);
-        walkerAssault = new Topic("Walker Assault", R.drawable.walkerassault);
+        walkerAssault = new Topic();
+        blast = new Topic();
+        heroesVsVillains = new Topic();
 
-        droidRun.setPost(populateDroidRun());
-        heroHunt.setPost(populateHeroHunt());
         walkerAssault.setPost(populateWalkerAssault());
+        blast.setPost(populateBlast());
+        heroesVsVillains.setPost(populateHeroesVsVillains());
 
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mToolbar.setVisibility(View.INVISIBLE);
@@ -79,16 +79,16 @@ public class CommunityFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mTopicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
 
-        droidRunFragment = TopicFragment.newInstance(droidRun);
-        heroHuntFragment = TopicFragment.newInstance(heroHunt);
-        walkerAssaultFragment = TopicFragment.newInstance(walkerAssault);
+        droidRunFragment = TopicFragment.newInstance(walkerAssault);
+        heroHuntFragment = TopicFragment.newInstance(blast);
+        walkerAssaultFragment = TopicFragment.newInstance(heroesVsVillains);
 
-        mTopicPagerAdapter.addFragment(droidRunFragment, droidRun.getTopicTitle(),
-                droidRun.getBackgroundImage());
-        mTopicPagerAdapter.addFragment(heroHuntFragment, heroHunt.getTopicTitle(),
-                heroHunt.getBackgroundImage());
-        mTopicPagerAdapter.addFragment(walkerAssaultFragment, walkerAssault.getTopicTitle(),
-                walkerAssault.getBackgroundImage());
+        mTopicPagerAdapter.addFragment(droidRunFragment, walkerAssault.getTitle(),
+                walkerAssault.getImage_url());
+        mTopicPagerAdapter.addFragment(heroHuntFragment, blast.getTitle(),
+                blast.getImage_url());
+        mTopicPagerAdapter.addFragment(walkerAssaultFragment, heroesVsVillains.getTitle(),
+                heroesVsVillains.getImage_url());
 
         mViewPager.setAdapter(mTopicPagerAdapter);
 
@@ -108,7 +108,7 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
 
-                mBackgroundImage.setImageResource(mTopicPagerAdapter.getBackgroundImage(position));
+                mBackgroundImage.setImageResource(Integer.parseInt(mTopicPagerAdapter.getBackgroundImage(position)));
                 mTopicPage = mViewPager.getCurrentItem();
             }
 
@@ -172,7 +172,7 @@ public class CommunityFragment extends Fragment {
         }
     }
 
-    public Post populateDroidRun(){
+    public Post populateWalkerAssault(){
 
         List<Comment> comments = new ArrayList<>();
 
@@ -196,7 +196,7 @@ public class CommunityFragment extends Fragment {
         return post;
     }
 
-    public Post populateHeroHunt(){
+    public Post populateBlast(){
 
         List<Comment> comments = new ArrayList<>();
 
@@ -226,7 +226,7 @@ public class CommunityFragment extends Fragment {
         return post;
     }
 
-    public Post populateWalkerAssault(){
+    public Post populateHeroesVsVillains(){
 
         List<Comment> comments = new ArrayList<>();
 
@@ -261,10 +261,6 @@ public class CommunityFragment extends Fragment {
 
         return post;
     }
-
-//    private Date getDateFormat(Date date){
-//        mDateFormat = new DateFormat();
-//    }
 
 }
 

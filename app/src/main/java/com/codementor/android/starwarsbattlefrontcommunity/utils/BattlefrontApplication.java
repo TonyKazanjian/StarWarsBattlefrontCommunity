@@ -5,11 +5,11 @@ import android.content.Context;
 /**
  * Created by tonyk_000 on 3/3/2016.
  */
-public class Application extends android.app.Application {
+public class BattlefrontApplication extends android.app.Application {
 
-    private static Application singleton;
+    private static BattlefrontApplication singleton;
 
-    public static Application getSingleton(){
+    public static BattlefrontApplication getSingleton(){
         return singleton;
     }
 

@@ -3,7 +3,6 @@ package com.codementor.android.starwarsbattlefrontcommunity.image;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,6 +14,7 @@ import android.widget.ImageView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 
 /**
  * Created by tonyk_000 on 2/25/2016.
@@ -40,7 +40,9 @@ public class FullScreenImageActivity extends AppCompatActivity {
             throw new IllegalAccessError("There needs to be a valid image URI passed to this Activity");
         }
 
-        Bitmap bitmap = BitmapFactory.decodeFile(getRealPathFromURI(imageFile));
+        String imageUri = getRealPathFromURI(imageFile);
+
+        Bitmap bitmap = PictureUtils.decodeBitmapFromFile(imageUri,this);
 
         fullscreenImage.setImageBitmap(bitmap);
         //make sure that we are setting the activity up so that it is in immersive mode

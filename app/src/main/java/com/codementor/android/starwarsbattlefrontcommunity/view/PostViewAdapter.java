@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codementor.android.starwarsbattlefrontcommunity.BitmapDecoderAsyncTask;
 import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
@@ -28,10 +28,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by tonyk_000 on 12/14/2015.
  */
 public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHolder> {
-
-    public interface OnTaskCompleted {
-        void onTaskCompleted();
-    }
 
     private List<Post> mPosts;
 
@@ -66,31 +62,24 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             final Bitmap localBitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 
             if (localBitmap != null) {
-                ((ImagePostHolder) holder).mAttachedImage.setVisibility(View.VISIBLE);
-                final int width = ((ImagePostHolder) holder).mAttachedImage.getWidth();
-                final int height = ((ImagePostHolder) holder).mAttachedImage.getHeight();
+                final ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
+                attachedImage.setVisibility(View.VISIBLE);
+                final int width = attachedImage.getWidth();
+                final int height = attachedImage.getHeight();
 
                 final Context context = holder.itemView.getContext();
 
-                // Using an AsyncTask to load the slow images in a background thread
-               new AsyncTask<PostHolder, Void, Bitmap>() {
-
+                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
                     @Override
-                    protected Bitmap doInBackground(PostHolder... params) {
-                        Uri bitmapUri = PictureUtils.getImageUri(context,localBitmap);
-                        return PictureUtils.decodeBitmapFromFile(bitmapUri.getPath(),width,height);
+                    public void onBitmapDecoded(Bitmap bitmap) {
+                        Picasso.with(context).load(post.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+                                .placeholder(R.drawable.bb8).into(attachedImage);
                     }
+                };
 
-                    @Override
-                    protected void onPostExecute(Bitmap result) {
-                        super.onPostExecute(result);
-                        if (holder.getAdapterPosition() == position) {
-                            Picasso.with(context).load(post.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
-                                    .into(((ImagePostHolder) holder).mAttachedImage);
-                        }
-
-                    }
-                }.execute(holder);
+                decoderListener.onBitmapDecoded(localBitmap);
+                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
+                bitmapDecoderAsyncTask.execute();
             }
 
             holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));

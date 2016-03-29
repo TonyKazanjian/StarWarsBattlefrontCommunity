@@ -52,7 +52,6 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     private EditText mTitle;
     private ImageView mAttachedImage;
 
-    private ImageButton mPhotobutton;
     private TextView mTextCounter;
 
     private File mPhotoFile;
@@ -64,9 +63,10 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     private static final int REQUEST_SELECT_PHOTO = 0;
 
     //for permissions
-    private final static int PHOTO_REQUEST = 100;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     public boolean showPictureDialog = false;
+
+    PictureDialogFragment mPictureDialogFragment;
 
 
     @Override
@@ -143,12 +143,12 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             });
         }
 
-        mPhotobutton = (ImageButton) findViewById(R.id.photo_button);
-        if (mPhotobutton != null) {
-            mPhotobutton.setOnClickListener(new View.OnClickListener() {
+        ImageButton photobutton = (ImageButton) findViewById(R.id.photo_button);
+        if (photobutton != null) {
+            photobutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkPermissions()){
+                    if (checkPermissions()) {
                         PictureDialogFragment pictureDialogFragment = new PictureDialogFragment();
                         pictureDialogFragment.setListener(NewContentActivity.this);
                         pictureDialogFragment.show(getSupportFragmentManager(), PictureDialogFragment.class.getSimpleName());
@@ -213,6 +213,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 
             updatePhotoView();
 
+
         } else  if (requestCode == REQUEST_SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
             mUri = data.getData();
 
@@ -235,6 +236,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             Picasso.with(this).load(mPhotoFile)
                     .into(mAttachedImage);
         }
+//        mPictureDialogFragment.isDetached();
     }
 
     @Override
@@ -324,9 +326,9 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         if (showPictureDialog){
             //resetting the boolean
             showPictureDialog = false;
-            PictureDialogFragment pictureDialogFragment = new PictureDialogFragment();
-            pictureDialogFragment.setListener(NewContentActivity.this);
-            pictureDialogFragment.show(getSupportFragmentManager(), PictureDialogFragment.class.getSimpleName());
+            mPictureDialogFragment = new PictureDialogFragment();
+            mPictureDialogFragment.setListener(NewContentActivity.this);
+            mPictureDialogFragment.show(getSupportFragmentManager(), PictureDialogFragment.class.getSimpleName());
         }
     }
 

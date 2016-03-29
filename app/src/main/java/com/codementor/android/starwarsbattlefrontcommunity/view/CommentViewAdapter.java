@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codementor.android.starwarsbattlefrontcommunity.BitmapDecoderAsyncTask;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImageActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -59,32 +59,42 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
     @Override
     public void onBindViewHolder(CommunityContentHolder holder, int position) {
 
-        if (position == getPostPosition()){
+        if (position == getPostPosition()) {
 
-            ((PostHolder)holder).mThreadTitle.setText(mPost.getTitle());
+            ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(mPost.getAuthor());
             holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
             holder.mDatePosted.setText(DateFormat.format("EEE, MMM dd, h:mm a", mPost.getDate()));
             holder.mPostContent.setText(mPost.getContent());
-            ((PostHolder)holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
-            ((PostHolder)holder).mCommentBubble.setVisibility(View.VISIBLE);
-            ((PostHolder)holder).mCommentCount.setVisibility(View.VISIBLE);
+            ((PostHolder) holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
+            ((PostHolder) holder).mCommentBubble.setVisibility(View.VISIBLE);
+            ((PostHolder) holder).mCommentCount.setVisibility(View.VISIBLE);
 
-           final Bitmap bitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
-            if(bitmap != null) {
-                ((PostHolder)holder).mAttachedImage.setVisibility(View.VISIBLE);
+            final Bitmap localBitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+            if (localBitmap != null) {
+                final ImageView attachPostImage = ((PostHolder) holder).mAttachedImage;
+                attachPostImage.setVisibility(View.VISIBLE);
 
-                Context context = holder.itemView.getContext();
-                final Uri bitmapUri = PictureUtils.getImageUri(context, bitmap);
+                final int width = attachPostImage.getWidth();
+                final int height = attachPostImage.getHeight();
 
-                Picasso.with(context).load(bitmapUri)
-                        .fit().centerCrop()
-                        .into(((PostHolder)holder).mAttachedImage);
+                final Context context = holder.itemView.getContext();
 
-                ((PostHolder)holder).mAttachedImage.setOnClickListener(new View.OnClickListener() {
+                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
+                    @Override
+                    public void onBitmapDecoded(Bitmap bitmap) {
+                        Picasso.with(context).load(mPost.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+                                .placeholder(R.drawable.bb8).into(attachPostImage);
+                    }
+                };
+
+                decoderListener.onBitmapDecoded(localBitmap);
+                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
+                bitmapDecoderAsyncTask.execute();
+                attachPostImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fullScreenIntent(v, bitmapUri);
+                        fullScreenIntent(v, mPost.getContentImageUri());
                     }
                 });
             }
@@ -97,21 +107,32 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mPostContent.setText(comment.getContent());
             holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
 
-           final Bitmap bitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
-            if(bitmap != null) {
-                ((ImageCommentHolder)holder).mAttachedImage.setVisibility(View.VISIBLE);
+           final Bitmap localBitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+            if(localBitmap != null) {
+                final ImageView attachCommentImage = ((ImageCommentHolder)holder).mAttachedImage;
+                attachCommentImage.setVisibility(View.VISIBLE);
 
-                Context context = holder.itemView.getContext();
-                final Uri bitmapUri = PictureUtils.getImageUri(context, bitmap);
+                final int width = attachCommentImage.getWidth();
+                final int height = attachCommentImage.getHeight();
 
-                Picasso.with(context).load(bitmapUri)
-                        .fit().centerCrop()
-                        .into(((ImageCommentHolder)holder).mAttachedImage);
+                final Context context = holder.itemView.getContext();
 
-                ((ImageCommentHolder)holder).mAttachedImage.setOnClickListener(new View.OnClickListener() {
+                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
+                    @Override
+                    public void onBitmapDecoded(Bitmap bitmap) {
+                        Picasso.with(context).load(mPost.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+                                .placeholder(R.drawable.bb8).into(attachCommentImage);
+                    }
+                };
+
+                decoderListener.onBitmapDecoded(localBitmap);
+                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
+                bitmapDecoderAsyncTask.execute();
+                
+                attachCommentImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        fullScreenIntent(v, bitmapUri);
+                        fullScreenIntent(v, comment.getContentImageUri());
                     }
                 });
             }

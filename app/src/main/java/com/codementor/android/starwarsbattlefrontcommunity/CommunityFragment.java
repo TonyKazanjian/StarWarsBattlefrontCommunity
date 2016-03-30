@@ -37,6 +37,7 @@ public class CommunityFragment extends Fragment {
     private static final String TAG = "CommunityFragment";
 
     private Topic mTopic;
+    private List<Topic> mTopics = new ArrayList<>();
     private TopicFragment mTopicFragment;
 
     private ViewPager mViewPager;
@@ -45,6 +46,8 @@ public class CommunityFragment extends Fragment {
     private TopicPagerAdapter mTopicPagerAdapter;
 
     private int mTopicPage;
+
+    private String mImageUrl;
 
     public static final int REQUEST_CODE_POST = 0;
 
@@ -65,7 +68,7 @@ public class CommunityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_community, container, false);
+        final View view = inflater.inflate(R.layout.fragment_community, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setVisibility(View.INVISIBLE);
@@ -73,30 +76,9 @@ public class CommunityFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mTopicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
 
-        mViewPager.setAdapter(mTopicPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
 
         mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
-
-        final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.i(TAG, "Page was scrolled");
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mBackgroundImage.setImageURI(Uri.parse(mTopicPagerAdapter.getBackgroundImage(position)));
-                mTopicPage = mViewPager.getCurrentItem();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        };
 
         //creates a REST adaper which points to the Battlefront API endpoint
         BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
@@ -104,39 +86,42 @@ public class CommunityFragment extends Fragment {
 
         call.enqueue(new Callback<List<Topic>>() {
             @Override
-            public void onResponse(Call<List<Topic>> call, Response<List<Topic>> response) {
+            public void onResponse(Call<List<Topic>> call, final Response<List<Topic>> response) {
                 if (response.isSuccessful()) {
-                    Log.i((TAG), response.body().toString());
+                    Picasso.with(getActivity()).load(response.body().get(0).getImage_url()).into(mBackgroundImage);
                     for (int i = 0; i < response.body().size(); i++) {
                         mTopic = response.body().get(i);
                         mTopicFragment = TopicFragment.newInstance(mTopic);
                         mTopicPagerAdapter.addFragment(mTopicFragment, mTopic.getTitle(), mTopic.getImage_url());
-                        Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(i)).into(mBackgroundImage);
+                        mImageUrl = mTopicPagerAdapter.getBackgroundImage(i);
                         mTopic.setPost(populateWalkerAssault());
+
+                        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                            }
+
+                            @Override
+                            public void onPageSelected(int position) {
+                                mBackgroundImage.setImageURI(Uri.parse(mImageUrl));
+                                Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(position)).into(mBackgroundImage);
+                                mTopicPage = mViewPager.getCurrentItem();
+                                Log.i(TAG, "new page was selected");
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
+
                         mTopicPagerAdapter.notifyDataSetChanged();
-                        mViewPager.addOnPageChangeListener(pageChangeListener);
-                        pageChangeListener.onPageSelected(response.body().indexOf(mTopic));
                     }
                 }
 
-//                mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//                    @Override
-//                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPageSelected(int position) {
-//
-//                        mBackgroundImage.setImageResource(Integer.parseInt(mTopicPagerAdapter.getBackgroundImage(position)));
-//                        mTopicPage = mViewPager.getCurrentItem();
-//                    }
-//
-//                    @Override
-//                    public void onPageScrollStateChanged(int state) {
-//
-//                    }
-//                });
+                mViewPager.setAdapter(mTopicPagerAdapter);
+                tabLayout.setupWithViewPager(mViewPager);
             }
 
             @Override

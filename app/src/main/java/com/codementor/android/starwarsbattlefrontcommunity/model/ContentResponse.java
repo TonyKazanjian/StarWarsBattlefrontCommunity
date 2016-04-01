@@ -61,4 +61,6 @@ public abstract class ContentResponse {
     public void setPer_page(int per_page) {
         this.per_page = per_page;
     }
+
+
 }

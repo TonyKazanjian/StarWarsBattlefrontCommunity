@@ -15,14 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -151,8 +148,6 @@ public class CommunityFragment extends Fragment {
                         mTopicFragment = TopicFragment.newInstance(mTopic);
                         mTopicPagerAdapter.addFragment(mTopicFragment, mTopic.getTitle(), mTopic.getImage_url());
                         mImageUrl = mTopicPagerAdapter.getBackgroundImage(i);
-//                        mTopic.setPost(populateWalkerAssault());
-//                        mTopicFragment.populateTopic();
 
                         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                             @Override
@@ -188,30 +183,6 @@ public class CommunityFragment extends Fragment {
             }
         });
 
-    }
-
-    public Post populateWalkerAssault(){
-
-        List<Comment> comments = new ArrayList<>();
-
-        Post post = new Post(String.valueOf(R.id.thread_title),String.valueOf(R.id.author_name), new Date(),
-                String.valueOf(R.id.post_content), R.id.author_photo, null, comments);
-
-        post.setAuthorPhoto(R.drawable.stormtrooper);
-        post.setAuthor(getString(R.string.droidhunt_author_name));
-        post.setContent(getString(R.string.droidhunt_top_post_content));
-        post.setTitle(getString(R.string.droidhunt_thread_title));
-        post.setDate(post.getDate());
-
-        comments.add(new Comment(String.valueOf(R.id.author_name),new Date(), String.valueOf(R.id.post_content), R.id.author_photo, null));
-        comments.get(0).setAuthor(getString(R.string.BB8_name));
-        comments.get(0).setAuthorPhoto(R.drawable.bb8);
-        comments.get(0).setContent(getString(R.string.BB8_comment));
-        comments.get(0).setDate(comments.get(0).getDate());
-
-        post.setComments(comments);
-
-        return post;
     }
 }
 

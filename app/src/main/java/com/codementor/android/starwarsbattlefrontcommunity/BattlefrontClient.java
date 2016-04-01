@@ -1,5 +1,6 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
+import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 
@@ -20,5 +21,11 @@ public interface BattlefrontClient {
     @GET("/{topic_id}/posts")
     Call<PostResponse> getPosts(
             @Path("topic_id") int topicId
+    );
+
+    //getting the comments that belong to the [post_id}
+    @GET("/{post_id}/comments")
+    Call<CommentResponse> getComments(
+            @Path("post_id") int postId
     );
 }

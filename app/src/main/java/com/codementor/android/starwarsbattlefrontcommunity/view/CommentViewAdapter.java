@@ -2,26 +2,22 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.BitmapDecoderAsyncTask;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImageActivity;
-import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
+import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
-import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -33,14 +29,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.CommunityContentHolder> {
 
-    private List<Comment> mComments;
-    private Post mPost;
+    private List<CommentObject> mComments;
+    private PostObject mPost;
 
     private static final int POST_TYPE = 0;
     private static final int COMMENT_TYPE = 1;
     private static final int IMAGE_TYPE = 2;
 
-    public CommentViewAdapter(@NonNull List<Comment> comments, Post post) {
+    public CommentViewAdapter(@NonNull List<CommentObject> comments, PostObject post) {
         mComments = comments;
         mPost = post;
     }
@@ -62,81 +58,89 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         if (position == getPostPosition()) {
 
+            PostObject.AuthorEntity author = mPost.getAuthor();
+            PostObject.ContentEntity content = mPost.getContent();
+            PostObject.ContentEntity.Image image = content.getImages().get(position);
+
             ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
-            holder.mAuthorName.setText(mPost.getAuthor());
-            holder.mAuthorPhoto.setImageResource(mPost.getAuthorPhoto());
-            holder.mDatePosted.setText(DateFormat.format("EEE, MMM dd, h:mm a", mPost.getDate()));
-            holder.mPostContent.setText(mPost.getContent());
+            holder.mAuthorName.setText(author.getName());
+            Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+            holder.mDatePosted.setText(mPost.getCreated_at());
+            holder.mPostContent.setText(content.getBody());
             ((PostHolder) holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
             ((PostHolder) holder).mCommentBubble.setVisibility(View.VISIBLE);
             ((PostHolder) holder).mCommentCount.setVisibility(View.VISIBLE);
 
-            final Bitmap localBitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
-            if (localBitmap != null) {
-                final ImageView attachPostImage = ((PostHolder) holder).mAttachedImage;
-                attachPostImage.setVisibility(View.VISIBLE);
-
-                final int width = attachPostImage.getWidth();
-                final int height = attachPostImage.getHeight();
-
-                final Context context = holder.itemView.getContext();
-
-                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
-                    @Override
-                    public void onBitmapDecoded(Bitmap bitmap) {
-                        Picasso.with(context).load(mPost.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
-                                .placeholder(R.drawable.bb8).into(attachPostImage);
-                    }
-                };
-
-                decoderListener.onBitmapDecoded(localBitmap);
-                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
-                bitmapDecoderAsyncTask.execute();
-                attachPostImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        fullScreenIntent(v, PictureUtils.getImageUri(context,localBitmap));
-                    }
-                });
-            }
+//            final Bitmap localBitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+//            if (localBitmap != null) {
+//                final ImageView attachPostImage = ((PostHolder) holder).mAttachedImage;
+//                attachPostImage.setVisibility(View.VISIBLE);
+//
+//                final int width = attachPostImage.getWidth();
+//                final int height = attachPostImage.getHeight();
+//
+//                final Context context = holder.itemView.getContext();
+//
+//                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
+//                    @Override
+//                    public void onBitmapDecoded(Bitmap bitmap) {
+//                        Picasso.with(context).load(mPost.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+//                                .placeholder(R.drawable.bb8).into(attachPostImage);
+//                    }
+//                };
+//
+//                decoderListener.onBitmapDecoded(localBitmap);
+//                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
+//                bitmapDecoderAsyncTask.execute();
+//                attachPostImage.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        fullScreenIntent(v, PictureUtils.getImageUri(context,localBitmap));
+//                    }
+//                });
+//            }
 
         } else if (position > getPostPosition()){
 
-            final Comment comment = mComments.get(position-1);
-            holder.mAuthorName.setText(comment.getAuthor());
-            holder.mDatePosted.setText(DateFormat.format("EEE, MMM dd, h:mm a", comment.getDate()));
-            holder.mPostContent.setText(comment.getContent());
-            holder.mAuthorPhoto.setImageResource(comment.getAuthorPhoto());
+            final CommentObject comment = mComments.get(position-1);
+            CommentObject.AuthorEntity author = comment.getAuthor();
+            CommentObject.ContentEntity content = comment.getContent();
+            CommentObject.ContentEntity.Image image = content.getImages().get(position);
+            holder.mAuthorName.setText(author.getName());
+            holder.mDatePosted.setText(comment.getCreated_at());
+            holder.mPostContent.setText(content.getBody());
+            Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 
-           final Bitmap localBitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
-            if(localBitmap != null) {
-                final ImageView attachCommentImage = ((ImageCommentHolder)holder).mAttachedImage;
-                attachCommentImage.setVisibility(View.VISIBLE);
 
-                final int width = attachCommentImage.getWidth();
-                final int height = attachCommentImage.getHeight();
-
-                final Context context = holder.itemView.getContext();
-
-                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
-                    @Override
-                    public void onBitmapDecoded(Bitmap bitmap) {
-                        Picasso.with(context).load(comment.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
-                                .placeholder(R.drawable.bb8).into(attachCommentImage);
-                    }
-                };
-
-                decoderListener.onBitmapDecoded(localBitmap);
-                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
-                bitmapDecoderAsyncTask.execute();
-
-                attachCommentImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        fullScreenIntent(v, PictureUtils.getImageUri(context,localBitmap));
-                    }
-                });
-            }
+//            final Bitmap localBitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+//            if(localBitmap != null) {
+//                final ImageView attachCommentImage = ((ImageCommentHolder)holder).mAttachedImage;
+//                attachCommentImage.setVisibility(View.VISIBLE);
+//
+//                final int width = attachCommentImage.getWidth();
+//                final int height = attachCommentImage.getHeight();
+//
+//                final Context context = holder.itemView.getContext();
+//
+//                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
+//                    @Override
+//                    public void onBitmapDecoded(Bitmap bitmap) {
+//                        Picasso.with(context).load(comment.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+//                                .placeholder(R.drawable.bb8).into(attachCommentImage);
+//                    }
+//                };
+//
+//                decoderListener.onBitmapDecoded(localBitmap);
+//                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
+//                bitmapDecoderAsyncTask.execute();
+//
+//                attachCommentImage.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        fullScreenIntent(v, PictureUtils.getImageUri(context,localBitmap));
+//                    }
+//                });
+//            }
         }
     }
 
@@ -158,19 +162,19 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
     public int getItemViewType(int position){ //this is called by onCreateViewHolder
             if (position == 0){
                 return POST_TYPE;
-            } else if (mComments.get(position-1).getContentImageUri()!= null){
-                return IMAGE_TYPE;
+//            } else if (mComments.get(position-1).getContentImageUri()!= null){
+//                return IMAGE_TYPE;
             } else {
                 return COMMENT_TYPE;
             }
     }
 
-    public void addComment(Comment comment) {
-        if(comment != null && mComments != null) {
-            mComments.add(comment);
-            notifyItemInserted(mComments.size() - 1);
-        }
-    }
+//    public void addComment(Comment comment) {
+//        if(comment != null && mComments != null) {
+//            mComments.add(comment);
+//            notifyItemInserted(mComments.size() - 1);
+//        }
+//    }
 
     public class ImageCommentHolder extends CommunityContentHolder{
 

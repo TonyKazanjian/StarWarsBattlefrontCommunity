@@ -1,11 +1,13 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by tonyk_000 on 3/31/2016.
  */
-public abstract class ContentObject {
+public abstract class ContentObject implements Parcelable {
 
 
     /**
@@ -13,7 +15,7 @@ public abstract class ContentObject {
      * post_id : 2
      * created_at : 2016-03-29T12:02:31.013Z
      * updated_at : 2016-03-29T12:02:31.013Z
-     * content : {"body":"Haha, nope. Sorry to break it to you, Han.","image_urls":[]}
+     * content : {"body":"Haha, nope. Sorry to break it to you, Han.","image":[]}
      * author : {"name":"Greedo","profile_image_url":"https://pbs.twimg.com/profile_images/1233929440/greedo2.jpg"}
      */
 
@@ -23,7 +25,7 @@ public abstract class ContentObject {
     private String updated_at;
     /**
      * body : Haha, nope. Sorry to break it to you, Han.
-     * image_urls : []
+     * image : []
      */
 
     private ContentEntity content;
@@ -33,6 +35,7 @@ public abstract class ContentObject {
      */
 
     private AuthorEntity author;
+
 
     public int getId() {
         return id;
@@ -84,7 +87,7 @@ public abstract class ContentObject {
 
     public static class ContentEntity {
         private String body;
-        private List<?> image_urls;
+        private List<Image> image_urls;
 
         public String getBody() {
             return body;
@@ -94,12 +97,24 @@ public abstract class ContentObject {
             this.body = body;
         }
 
-        public List<?> getImage_urls() {
+        public List<Image> getImages(){
             return image_urls;
         }
 
-        public void setImage_urls(List<?> image_urls) {
+        public void setImage_urls(List<Image> image_urls) {
             this.image_urls = image_urls;
+        }
+
+        public static class Image{
+            String image_url;
+
+            public String getImage_url(){
+                return image_url;
+            }
+
+            public void setImage_url(String url){
+                this.image_url = url;
+            }
         }
     }
 

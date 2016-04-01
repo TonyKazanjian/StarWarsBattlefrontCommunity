@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
+import com.codementor.android.starwarsbattlefrontcommunity.model.ContentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.squareup.picasso.Picasso;
 
@@ -56,9 +57,19 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
         Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 
-        //TODO - get image for the post
+        List<ContentObject.ContentEntity.Image> images = content.getImages();
 
-            //get bitmap
+        if (!images.isEmpty()){
+            ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
+            attachedImage.setVisibility(View.VISIBLE);
+            for (int i = 0; i < images.size(); i++){
+                String imageUrl = images.get(i).getImage_url();
+                Picasso.with(holder.itemView.getContext()).load(imageUrl)
+                        .into(attachedImage);
+            }
+        }
+
+        //get bitmap
 //            final Bitmap localBitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 
 //            if (localBitmap != null) {
@@ -84,14 +95,14 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 //
 //            holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
-                    context.startActivity(intent);
-                }
-            });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
+                context.startActivity(intent);
+            }
+        });
     }
 
 //    public Uri getScaledBitmapUri(Context context, Bitmap bitmap, int width, int height){

@@ -10,7 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
-import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
 
 import java.util.ArrayList;
@@ -21,12 +22,12 @@ import java.util.List;
  */
 public class DiscussionActivity extends AppCompatActivity {
 
-    private Post post;
+    private PostObject post;
 
     private RecyclerView mCommentView;
     private CommentViewAdapter mCommentList;
 
-    private Comment mComment;
+    private CommentObject mComment;
 
     public static final String EXTRA_CONTENT_TYPE_COMMENT = "comment";
     private static final int REQUEST_CODE_COMMENT = 0;
@@ -38,7 +39,7 @@ public class DiscussionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         post = b.getParcelable(MainActivity.EXTRA_POST);
 
-        List<Post> posts = new ArrayList<>();
+        List<PostObject> posts = new ArrayList<>();
         posts.add(post);
 
         mCommentView = (RecyclerView) findViewById(R.id.rv_comment_view);
@@ -83,7 +84,7 @@ public class DiscussionActivity extends AppCompatActivity {
 
             newComment.setAuthorPhoto(R.drawable.bb8);
             newComment.setAuthor("AndroidPadawan");
-            mCommentList.addComment(newComment);
+//            mCommentList.addComment(newComment);
         }
     }
 

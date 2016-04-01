@@ -24,7 +24,7 @@ public class Topic implements Parcelable {
     }
 
     //leave this in for getting the post
-        private Post mPost;
+        private ContentResponse mPost;
 
     public String getTitle() {
         return title;
@@ -38,76 +38,13 @@ public class Topic implements Parcelable {
         return image_url;
     }
 
-    public Post getPost() {
+    public ContentResponse getPost() {
         return mPost;
     }
 
-    public void setPost(Post post) {
+    public void setPost(ContentResponse post) {
         mPost = post;
     }
-
-
-
-//    private String mTopicTitle;
-//    private int mBackgroundImage;
-//    private Post mPost;
-//
-//    public String getTopicTitle() {
-//        return mTopicTitle;
-//    }
-//
-//    public void setTopicTitle(String title) {
-//        mTopicTitle = title;
-//    }
-//
-//    public int getBackgroundImage() {
-//        return mBackgroundImage;
-//    }
-//
-//    public void setBackgroundImage(int backgroundImage) {
-//        mBackgroundImage = backgroundImage;
-//    }
-//
-//    public Post getPost() {
-//        return mPost;
-//    }
-//
-//    public void setPost(Post post) {
-//        mPost = post;
-//    }
-//
-//    public Topic(String title, int backgroundImage) {
-//        mTopicTitle = title;
-//        mBackgroundImage = backgroundImage;
-//    }
-//
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(this.mTopicTitle);
-//        dest.writeInt(this.mBackgroundImage);
-//        dest.writeParcelable(this.mPost, 0);
-//    }
-//
-//    protected Topic(Parcel in) {
-//        this.mTopicTitle = in.readString();
-//        this.mBackgroundImage = in.readInt();
-//        this.mPost = in.readParcelable(Post.class.getClassLoader());
-//    }
-//
-//    public static final Creator<Topic> CREATOR = new Creator<Topic>() {
-//        public Topic createFromParcel(Parcel source) {
-//            return new Topic(source);
-//        }
-//
-//        public Topic[] newArray(int size) {
-//            return new Topic[size];
-//        }
-//    };
 
 
     @Override
@@ -120,7 +57,7 @@ public class Topic implements Parcelable {
         dest.writeString(this.title);
         dest.writeInt(this.id);
         dest.writeString(this.image_url);
-        dest.writeParcelable(this.mPost, flags);
+        dest.writeParcelable((Parcelable) this.mPost, flags);
     }
 
     public Topic() {

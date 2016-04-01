@@ -86,4 +86,5 @@ public class Post extends Content implements Parcelable {
             return new Post[size];
         }
     };
+
 }

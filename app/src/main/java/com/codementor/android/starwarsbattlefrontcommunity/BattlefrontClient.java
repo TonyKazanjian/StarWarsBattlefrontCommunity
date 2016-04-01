@@ -1,11 +1,13 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
  * Created by tonyk_000 on 3/29/2016.
@@ -13,4 +15,10 @@ import retrofit2.http.GET;
 public interface BattlefrontClient {
     @GET("/topics")
     Call<List<Topic>> getTopics();
+
+    //getting all the posts that belong to {topic_id}
+    @GET("/{topic_id}/posts")
+    Call<PostResponse> getPosts(
+            @Path("topic_id") int topicId
+    );
 }

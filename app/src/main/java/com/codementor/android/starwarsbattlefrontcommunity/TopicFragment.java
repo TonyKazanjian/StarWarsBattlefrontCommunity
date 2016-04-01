@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by tonyk_000 on 12/18/2015.
@@ -27,7 +30,9 @@ public class TopicFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PostViewAdapter mViewAdapter;
 
-    private List<Post> mPosts;
+//    private List<Post> mPosts;
+
+    private List<PostResponse> mPostResponses;
 
     private Topic mTopic;
 
@@ -48,39 +53,41 @@ public class TopicFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        final View v = inflater.inflate(R.layout.fragment_topic,container,false);
+        final View v = inflater.inflate(R.layout.fragment_topic, container, false);
 
-        List<Post> posts = populateTopic();
+        populateTopic();
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        mViewAdapter = new PostViewAdapter(posts);
-
-        mRecyclerView.setAdapter(mViewAdapter);
-
-        //trying to reduce the lag when loading local files in the recyclerview. Doesn't work
-        if (mViewAdapter.isImageType()){
-            mViewAdapter.setHasStableIds(true);
-        }
 
         return v;
     }
 
-    public List<Post> populateTopic(){
+    public List<PostResponse> populateTopic(){
 
-        mPosts = new ArrayList<>();
+        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
+        Call<PostResponse> call = client.getPosts(mTopic.getId());
+        call.enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                if (response.isSuccessful()) {
+                    mViewAdapter = new PostViewAdapter(response.body().getPosts());
+                }
+                mRecyclerView.setAdapter(mViewAdapter);
+            }
 
-        for (int i = 0; i < 3; i++){
-            Post post = mTopic.getPost();
-            mPosts.add(post);
-//            mPost = mPosts.get(i); -- not sure why this returns out of bounds
-        }
-        return mPosts;
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+
+            }
+        });
+
+        return mPostResponses;
     }
 
-    public void addPostToList(Post post){
-        mViewAdapter.addPost(post);
-    }
+//    public void addPostToList(Post post){
+//        mViewAdapter.addPost(post);
+//    }
 
 
 }

@@ -2,22 +2,17 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.BitmapDecoderAsyncTask;
 import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
-import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -29,12 +24,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHolder> {
 
-    private List<Post> mPosts;
+    private List<PostObject> mPosts;
 
     private static final int IMAGE_TYPE = 0;
     private static final int NO_IMAGE_TYPE = 1;
 
-    public PostViewAdapter(@NonNull List<Post> posts){
+    public PostViewAdapter(@NonNull List<PostObject> posts){
         mPosts = posts;
     }
 
@@ -48,41 +43,46 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         }
     }
 
-    //TODO - need to cache bitmap before RecyclerView starts??
     @Override
     public void onBindViewHolder(final PostViewAdapter.PostHolder holder, final int position) {
 
-            final Post post = mPosts.get(position);
-            holder.mThreadTitle.setText(post.getTitle());
-            holder.mAuthorName.setText(post.getAuthor());
-            holder.mDatePosted.setText(DateFormat.format("EEE, MMM dd, h:mm a", post.getDate()));
-            holder.mPostContent.setText(post.getContent());
-            holder.mAuthorPhoto.setImageResource(post.getAuthorPhoto());
+        final PostObject post = mPosts.get(position);
+        PostObject.AuthorEntity author = post.getAuthor();
+        PostObject.ContentEntity content = post.getContent();
+        holder.mThreadTitle.setText(post.getTitle());
+        holder.mAuthorName.setText(author.getName());
+        holder.mDatePosted.setText(post.getCreated_at());
+        holder.mPostContent.setText(content.getBody());
+
+        Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+
+        //TODO - get image for the post
+
             //get bitmap
-            final Bitmap localBitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
+//            final Bitmap localBitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 
-            if (localBitmap != null) {
-                final ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
-                attachedImage.setVisibility(View.VISIBLE);
-                final int width = attachedImage.getWidth();
-                final int height = attachedImage.getHeight();
-
-                final Context context = holder.itemView.getContext();
-
-                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
-                    @Override
-                    public void onBitmapDecoded(Bitmap bitmap) {
-                        Picasso.with(context).load(post.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
-                                .placeholder(R.drawable.bb8).into(attachedImage);
-                    }
-                };
-
-                decoderListener.onBitmapDecoded(localBitmap);
-                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
-                bitmapDecoderAsyncTask.execute();
-            }
-
-            holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
+//            if (localBitmap != null) {
+//                final ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
+//                attachedImage.setVisibility(View.VISIBLE);
+//                final int width = attachedImage.getWidth();
+//                final int height = attachedImage.getHeight();
+//
+//                final Context context = holder.itemView.getContext();
+//
+//                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
+//                    @Override
+//                    public void onBitmapDecoded(Bitmap bitmap) {
+//                        Picasso.with(context).load(post.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
+//                                .placeholder(R.drawable.bb8).into(attachedImage);
+//                    }
+//                };
+//
+//                decoderListener.onBitmapDecoded(localBitmap);
+//                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
+//                bitmapDecoderAsyncTask.execute();
+//            }
+//
+//            holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,33 +94,33 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             });
     }
 
-    public Uri getScaledBitmapUri(Context context, Bitmap bitmap, int width, int height){
-
-        bitmap = PictureUtils.decodeBitmapFromFile(String.valueOf(mPosts.get(0).getContentImageUri()),width,height);
-
-        return PictureUtils.getImageUri(context, bitmap);
-    }
+//    public Uri getScaledBitmapUri(Context context, Bitmap bitmap, int width, int height){
+//
+//        bitmap = PictureUtils.decodeBitmapFromFile(String.valueOf(mPosts.get(0).getContentImageUri()),width,height);
+//
+//        return PictureUtils.getImageUri(context, bitmap);
+//    }
 
     @Override
     public int getItemCount() {
         return mPosts.size();
     }
 
-    public void addPost(Post post) {
-        if(post != null && mPosts != null) {
-            mPosts.add(0, post);
-            notifyItemInserted(0);
-        }
-    }
+//    public void addPost(Post post) {
+//        if(post != null && mPosts != null) {
+//            mPosts.add(0, post);
+//            notifyItemInserted(0);
+//        }
+//    }
 
-    @Override
-    public int getItemViewType(int position){ //this is called by onCreateViewHolder
-        if (mPosts.get(position).getContentImageUri() == null){
-            return NO_IMAGE_TYPE;
-        } else {
-            return IMAGE_TYPE;
-        }
-    }
+//    @Override
+//    public int getItemViewType(int position){ //this is called by onCreateViewHolder
+//        if (mPosts.get(position).getContentImageUri() == null){
+//            return NO_IMAGE_TYPE;
+//        } else {
+//            return IMAGE_TYPE;
+//        }
+//    }
 
     public class PostHolder extends RecyclerView.ViewHolder {
 

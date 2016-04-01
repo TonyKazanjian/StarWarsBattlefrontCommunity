@@ -37,7 +37,7 @@ public class CommunityFragment extends Fragment {
     private static final String TAG = "CommunityFragment";
 
     private Topic mTopic;
-    private List<Topic> mTopics = new ArrayList<>();
+    private TabLayout mTabLayout;
     private TopicFragment mTopicFragment;
 
     private ViewPager mViewPager;
@@ -76,59 +76,13 @@ public class CommunityFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mTopicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
 
-        final TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
 
         mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
 
         //creates a REST adaper which points to the Battlefront API endpoint
         BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
-        Call<List<Topic>> call = client.getTopics();
-
-        call.enqueue(new Callback<List<Topic>>() {
-            @Override
-            public void onResponse(Call<List<Topic>> call, final Response<List<Topic>> response) {
-                if (response.isSuccessful()) {
-                    Picasso.with(getActivity()).load(response.body().get(0).getImage_url()).into(mBackgroundImage);
-                    for (int i = 0; i < response.body().size(); i++) {
-                        mTopic = response.body().get(i);
-                        mTopicFragment = TopicFragment.newInstance(mTopic);
-                        mTopicPagerAdapter.addFragment(mTopicFragment, mTopic.getTitle(), mTopic.getImage_url());
-                        mImageUrl = mTopicPagerAdapter.getBackgroundImage(i);
-                        mTopic.setPost(populateWalkerAssault());
-
-                        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                            @Override
-                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                            }
-
-                            @Override
-                            public void onPageSelected(int position) {
-                                mBackgroundImage.setImageURI(Uri.parse(mImageUrl));
-                                Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(position)).into(mBackgroundImage);
-                                mTopicPage = mViewPager.getCurrentItem();
-                                Log.i(TAG, "new page was selected");
-                            }
-
-                            @Override
-                            public void onPageScrollStateChanged(int state) {
-
-                            }
-                        });
-
-                        mTopicPagerAdapter.notifyDataSetChanged();
-                    }
-                }
-
-                mViewPager.setAdapter(mTopicPagerAdapter);
-                tabLayout.setupWithViewPager(mViewPager);
-            }
-
-            @Override
-            public void onFailure(Call<List<Topic>> call, Throwable t) {
-                Log.i(TAG, t.getMessage());
-            }
-        });
+        getTopicsCallback(client);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -180,8 +134,60 @@ public class CommunityFragment extends Fragment {
 
             newPost.setAuthorPhoto(R.drawable.bb8);
             newPost.setAuthor("AndroidPadawan");
-            updatedFragment.addPostToList(newPost);
+//            updatedFragment.addPostToList(newPost);
         }
+    }
+
+    public void getTopicsCallback(BattlefrontClient client){
+        Call<List<Topic>> call = client.getTopics();
+
+        call.enqueue(new Callback<List<Topic>>() {
+            @Override
+            public void onResponse(Call<List<Topic>> call, final Response<List<Topic>> response) {
+                if (response.isSuccessful()) {
+                    Picasso.with(getContext()).load(response.body().get(0).getImage_url()).into(mBackgroundImage);
+                    for (int i = 0; i < response.body().size(); i++) {
+                        mTopic = response.body().get(i);
+                        mTopicFragment = TopicFragment.newInstance(mTopic);
+                        mTopicPagerAdapter.addFragment(mTopicFragment, mTopic.getTitle(), mTopic.getImage_url());
+                        mImageUrl = mTopicPagerAdapter.getBackgroundImage(i);
+//                        mTopic.setPost(populateWalkerAssault());
+//                        mTopicFragment.populateTopic();
+
+                        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                            }
+
+                            @Override
+                            public void onPageSelected(int position) {
+                                mBackgroundImage.setImageURI(Uri.parse(mImageUrl));
+                                Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(position)).into(mBackgroundImage);
+                                mTopicPage = mViewPager.getCurrentItem();
+                                Log.i(TAG, "new page was selected");
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
+
+                        mTopicPagerAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                mViewPager.setAdapter(mTopicPagerAdapter);
+                mTabLayout.setupWithViewPager(mViewPager);
+            }
+
+            @Override
+            public void onFailure(Call<List<Topic>> call, Throwable t) {
+                Log.i(TAG, t.getMessage());
+            }
+        });
+
     }
 
     public Post populateWalkerAssault(){

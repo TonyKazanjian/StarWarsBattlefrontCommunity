@@ -71,6 +71,7 @@ public class TopicFragment extends Fragment {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if (response.isSuccessful()) {
+
                     mViewAdapter = new PostViewAdapter(response.body().getPosts());
                 }
                 mRecyclerView.setAdapter(mViewAdapter);

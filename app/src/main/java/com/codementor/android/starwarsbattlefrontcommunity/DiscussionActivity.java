@@ -10,24 +10,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
-import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by tonyk_000 on 1/6/2016.
  */
 public class DiscussionActivity extends AppCompatActivity {
 
-    private PostObject post;
+    private PostObject mPost;
 
     private RecyclerView mCommentView;
     private CommentViewAdapter mCommentList;
 
-    private CommentObject mComment;
+    private List<CommentResponse> mCommentResponses;
 
     public static final String EXTRA_CONTENT_TYPE_COMMENT = "comment";
     private static final int REQUEST_CODE_COMMENT = 0;
@@ -37,15 +41,15 @@ public class DiscussionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discussion);
         Bundle b = getIntent().getExtras();
-        post = b.getParcelable(MainActivity.EXTRA_POST);
+        mPost = b.getParcelable(MainActivity.EXTRA_POST);
 
         List<PostObject> posts = new ArrayList<>();
-        posts.add(post);
+        posts.add(mPost);
+
+        populateDiscussion();
 
         mCommentView = (RecyclerView) findViewById(R.id.rv_comment_view);
         mCommentView.setLayoutManager(new LinearLayoutManager(this));
-        mCommentList = new CommentViewAdapter(post.getComments(),post);
-        mCommentView.setAdapter(mCommentList);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +58,28 @@ public class DiscussionActivity extends AppCompatActivity {
                 onContentAdd();
             }
         });
+    }
+
+    public List<CommentResponse> populateDiscussion(){
+        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
+        Call<CommentResponse> call = client.getComments(mPost.getId());
+        call.enqueue(new Callback<CommentResponse>() {
+            @Override
+            public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
+                if (response.isSuccessful()) {
+
+                    mCommentList = new CommentViewAdapter(response.body().getComments(), mPost);
+                }
+                mCommentView.setAdapter(mCommentList);
+            }
+
+            @Override
+            public void onFailure(Call<CommentResponse> call, Throwable t) {
+
+            }
+        });
+
+        return mCommentResponses;
     }
 
     public void onContentAdd(){

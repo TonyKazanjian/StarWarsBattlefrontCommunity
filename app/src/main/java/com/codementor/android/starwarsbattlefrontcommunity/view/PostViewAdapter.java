@@ -54,6 +54,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         holder.mAuthorName.setText(author.getName());
         holder.mDatePosted.setText(post.getCreated_at());
         holder.mPostContent.setText(content.getBody());
+        holder.mCommentCount.setText(String.valueOf(post.getComment_count()));
 
         Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 

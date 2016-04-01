@@ -13,7 +13,7 @@ public abstract class ContentResponse {
         return mContentObjects;
     }
 
-    public void setComments(List<ContentObject> contentObjects) {
+    public void setContentObjects(List<ContentObject> contentObjects) {
         mContentObjects = contentObjects;
     }
 

@@ -17,6 +17,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImageActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
+import com.codementor.android.starwarsbattlefrontcommunity.model.ContentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.squareup.picasso.Picasso;
 
@@ -60,7 +61,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
             PostObject.AuthorEntity author = mPost.getAuthor();
             PostObject.ContentEntity content = mPost.getContent();
-            PostObject.ContentEntity.Image image = content.getImages().get(position);
 
             ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(author.getName());
@@ -70,6 +70,18 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             ((PostHolder) holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
             ((PostHolder) holder).mCommentBubble.setVisibility(View.VISIBLE);
             ((PostHolder) holder).mCommentCount.setVisibility(View.VISIBLE);
+
+            List<ContentObject.ContentEntity.Image> images = content.getImages();
+
+            if (!images.isEmpty()){
+                ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
+                attachedImage.setVisibility(View.VISIBLE);
+                for (int i = 0; i < images.size(); i++){
+                    String imageUrl = images.get(i).getImage_url();
+                    Picasso.with(holder.itemView.getContext()).load(imageUrl)
+                            .into(attachedImage);
+                }
+            }
 
 //            final Bitmap localBitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 //            if (localBitmap != null) {
@@ -105,13 +117,24 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             final CommentObject comment = mComments.get(position-1);
             CommentObject.AuthorEntity author = comment.getAuthor();
             CommentObject.ContentEntity content = comment.getContent();
-            CommentObject.ContentEntity.Image image = content.getImages().get(position);
+
             holder.mAuthorName.setText(author.getName());
             holder.mDatePosted.setText(comment.getCreated_at());
             holder.mPostContent.setText(content.getBody());
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 
 
+            List<ContentObject.ContentEntity.Image> images = content.getImages();
+
+            if (!images.isEmpty()){
+                ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
+                attachedImage.setVisibility(View.VISIBLE);
+                for (int i = 0; i < images.size(); i++){
+                    String imageUrl = images.get(i).getImage_url();
+                    Picasso.with(holder.itemView.getContext()).load(imageUrl)
+                            .into(attachedImage);
+                }
+            }
 //            final Bitmap localBitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 //            if(localBitmap != null) {
 //                final ImageView attachCommentImage = ((ImageCommentHolder)holder).mAttachedImage;

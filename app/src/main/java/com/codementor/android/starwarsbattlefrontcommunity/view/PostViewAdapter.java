@@ -2,6 +2,7 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.MainActivity;
+import com.codementor.android.starwarsbattlefrontcommunity.DiscussionActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.ContentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
@@ -58,13 +59,13 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
         Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 
-        List<ContentObject.ContentEntity.Image> images = content.getImages();
+        ContentObject.ContentEntity.Image[] images = content.getImage_urls();
 
-        if (!images.isEmpty()){
+        if (images.length != 0){
             ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
             attachedImage.setVisibility(View.VISIBLE);
-            for (int i = 0; i < images.size(); i++){
-                String imageUrl = images.get(i).getImage_url();
+            for (int i = 0; i < images.length; i++){
+                String imageUrl = images[i].getImage_url();
                 Picasso.with(holder.itemView.getContext()).load(imageUrl)
                         .into(attachedImage);
             }
@@ -100,8 +101,13 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-                Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
-                context.startActivity(intent);
+//                Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
+//                context.startActivity(intent);
+                Intent discussionIntent =  new Intent(context, DiscussionActivity.class);
+                Bundle b = new Bundle();
+                b.putParcelable("post",mPosts.get(position));
+                discussionIntent.putExtras(b);
+                context.startActivity(discussionIntent);
             }
         });
     }

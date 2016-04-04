@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.CommunityContentHolder> {
 
     private List<CommentObject> mComments;
-    private PostObject mPost;
+    private final PostObject mPost;
 
     private static final int POST_TYPE = 0;
     private static final int COMMENT_TYPE = 1;
@@ -67,17 +67,17 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
             holder.mDatePosted.setText(mPost.getCreated_at());
             holder.mPostContent.setText(content.getBody());
-            ((PostHolder) holder).mCommentCount.setText(Integer.toString(mPost.getComments().size()));
+            ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getComment_count()));
             ((PostHolder) holder).mCommentBubble.setVisibility(View.VISIBLE);
             ((PostHolder) holder).mCommentCount.setVisibility(View.VISIBLE);
 
-            List<ContentObject.ContentEntity.Image> images = content.getImages();
+            ContentObject.ContentEntity.Image[] images = content.getImage_urls();
 
-            if (!images.isEmpty()){
+            if (images.length != 0){
                 ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
                 attachedImage.setVisibility(View.VISIBLE);
-                for (int i = 0; i < images.size(); i++){
-                    String imageUrl = images.get(i).getImage_url();
+                for (int i = 0; i < images.length; i++){
+                    String imageUrl = images[i].getImage_url();
                     Picasso.with(holder.itemView.getContext()).load(imageUrl)
                             .into(attachedImage);
                 }
@@ -114,7 +114,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         } else if (position > getPostPosition()){
 
-            final CommentObject comment = mComments.get(position-1);
+            final CommentObject comment = mComments.get(position - 1);
             CommentObject.AuthorEntity author = comment.getAuthor();
             CommentObject.ContentEntity content = comment.getContent();
 
@@ -124,7 +124,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 
 
-            List<ContentObject.ContentEntity.Image> images = content.getImages();
+            List<CommentObject.ContentEntity.Image> images = content.getImages();
 
             if (!images.isEmpty()){
                 ImageView attachedImage = ((PostHolder) holder).mAttachedImage;

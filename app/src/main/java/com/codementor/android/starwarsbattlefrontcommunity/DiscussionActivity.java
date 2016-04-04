@@ -41,7 +41,7 @@ public class DiscussionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discussion);
         Bundle b = getIntent().getExtras();
-        mPost = b.getParcelable(MainActivity.EXTRA_POST);
+        mPost = b.getParcelable("post");
 
         List<PostObject> posts = new ArrayList<>();
         posts.add(mPost);
@@ -62,7 +62,7 @@ public class DiscussionActivity extends AppCompatActivity {
 
     public List<CommentResponse> populateDiscussion(){
         BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
-        Call<CommentResponse> call = client.getComments(mPost.getId());
+        Call<CommentResponse> call = client.getComments(mPost.getPost_id());
         call.enqueue(new Callback<CommentResponse>() {
             @Override
             public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {

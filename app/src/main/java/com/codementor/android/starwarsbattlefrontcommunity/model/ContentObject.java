@@ -1,13 +1,12 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
+import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.List;
 
 /**
  * Created by tonyk_000 on 3/31/2016.
  */
-public abstract class ContentObject implements Parcelable {
+public class ContentObject implements Parcelable{
 
 
     /**
@@ -19,22 +18,24 @@ public abstract class ContentObject implements Parcelable {
      * author : {"name":"Greedo","profile_image_url":"https://pbs.twimg.com/profile_images/1233929440/greedo2.jpg"}
      */
 
-    private int id;
-    private int post_id;
-    private String created_at;
-    private String updated_at;
+    public int id;
+    public int post_id;
+    public String created_at;
+    public String updated_at;
     /**
      * body : Haha, nope. Sorry to break it to you, Han.
      * image : []
      */
 
-    private ContentEntity content;
+    public ContentEntity content;
     /**
      * name : Greedo
      * profile_image_url : https://pbs.twimg.com/profile_images/1233929440/greedo2.jpg
      */
 
-    private AuthorEntity author;
+    public AuthorEntity author;
+
+    public ContentEntity.Image[] image_urls;
 
 
     public int getId() {
@@ -85,9 +86,26 @@ public abstract class ContentObject implements Parcelable {
         this.author = author;
     }
 
-    public static class ContentEntity {
+    public static class ContentEntity implements Parcelable{
         private String body;
-        private List<Image> image_urls;
+        private Image[] image_urls;
+
+        protected ContentEntity(Parcel in) {
+            body = in.readString();
+            image_urls = in.createTypedArray(Image.CREATOR);
+        }
+
+        public static final Creator<ContentEntity> CREATOR = new Creator<ContentEntity>() {
+            @Override
+            public ContentEntity createFromParcel(Parcel in) {
+                return new ContentEntity(in);
+            }
+
+            @Override
+            public ContentEntity[] newArray(int size) {
+                return new ContentEntity[size];
+            }
+        };
 
         public String getBody() {
             return body;
@@ -97,16 +115,44 @@ public abstract class ContentObject implements Parcelable {
             this.body = body;
         }
 
-        public List<Image> getImages(){
+        public Image[] getImage_urls() {
             return image_urls;
         }
 
-        public void setImage_urls(List<Image> image_urls) {
+        public void setImage_urls(Image[] image_urls) {
             this.image_urls = image_urls;
         }
 
-        public static class Image{
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(body);
+            dest.writeTypedArray(image_urls, flags);
+        }
+
+
+        public static class Image implements Parcelable{
             String image_url;
+
+            protected Image(Parcel in) {
+                image_url = in.readString();
+            }
+
+            public static final Creator<Image> CREATOR = new Creator<Image>() {
+                @Override
+                public Image createFromParcel(Parcel in) {
+                    return new Image(in);
+                }
+
+                @Override
+                public Image[] newArray(int size) {
+                    return new Image[size];
+                }
+            };
 
             public String getImage_url(){
                 return image_url;
@@ -115,12 +161,40 @@ public abstract class ContentObject implements Parcelable {
             public void setImage_url(String url){
                 this.image_url = url;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(image_url);
+            }
         }
+
     }
 
-    public static class AuthorEntity {
+    public static class AuthorEntity implements Parcelable {
         private String name;
         private String profile_image_url;
+
+        protected AuthorEntity(Parcel in) {
+            name = in.readString();
+            profile_image_url = in.readString();
+        }
+
+        public static final Creator<AuthorEntity> CREATOR = new Creator<AuthorEntity>() {
+            @Override
+            public AuthorEntity createFromParcel(Parcel in) {
+                return new AuthorEntity(in);
+            }
+
+            @Override
+            public AuthorEntity[] newArray(int size) {
+                return new AuthorEntity[size];
+            }
+        };
 
         public String getName() {
             return name;
@@ -137,6 +211,59 @@ public abstract class ContentObject implements Parcelable {
         public void setProfile_image_url(String profile_image_url) {
             this.profile_image_url = profile_image_url;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(name);
+            dest.writeString(profile_image_url);
+        }
     }
 
+
+    public ContentObject() {
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.post_id);
+        dest.writeString(this.created_at);
+        dest.writeString(this.updated_at);
+        dest.writeParcelable(this.content, flags);
+        dest.writeParcelable(this.author, flags);
+//        dest.writeTypedArray(this.image_urls, flags);
+    }
+
+    protected ContentObject(Parcel in) {
+        this.id = in.readInt();
+        this.post_id = in.readInt();
+        this.created_at = in.readString();
+        this.updated_at = in.readString();
+        this.content = in.readParcelable(ContentEntity.class.getClassLoader());
+        this.author = in.readParcelable(AuthorEntity.class.getClassLoader());
+//        this.image_urls = in.createTypedArray(ContentEntity.Image.CREATOR);
+    }
+
+    public static final Creator<ContentObject> CREATOR = new Creator<ContentObject>() {
+        @Override
+        public ContentObject createFromParcel(Parcel source) {
+            return new ContentObject(source);
+        }
+
+        @Override
+        public ContentObject[] newArray(int size) {
+            return new ContentObject[size];
+        }
+    };
 }

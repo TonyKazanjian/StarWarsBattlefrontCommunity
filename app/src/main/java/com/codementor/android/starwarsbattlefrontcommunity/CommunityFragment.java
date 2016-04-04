@@ -142,7 +142,7 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Topic>> call, final Response<List<Topic>> response) {
                 if (response.isSuccessful()) {
-                    Picasso.with(getContext()).load(response.body().get(0).getImage_url()).into(mBackgroundImage);
+                    Picasso.with(getActivity()).load(response.body().get(0).getImage_url()).into(mBackgroundImage);
                     for (int i = 0; i < response.body().size(); i++) {
                         mTopic = response.body().get(i);
                         mTopicFragment = TopicFragment.newInstance(mTopic);

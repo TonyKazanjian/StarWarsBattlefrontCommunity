@@ -76,8 +76,8 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             if (images.length != 0){
                 ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
                 attachedImage.setVisibility(View.VISIBLE);
-                for (int i = 0; i < images.length; i++){
-                    String imageUrl = images[i].getImage_url();
+                for (ContentObject.ContentEntity.Image image : images) {
+                    String imageUrl = image.getImage_url();
                     Picasso.with(holder.itemView.getContext()).load(imageUrl)
                             .into(attachedImage);
                 }
@@ -122,8 +122,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mDatePosted.setText(comment.getCreated_at());
             holder.mPostContent.setText(content.getBody());
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
-
-
+            
             List<CommentObject.ContentEntity.Image> images = content.getImages();
 
             if (!images.isEmpty()){
@@ -135,6 +134,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                             .into(attachedImage);
                 }
             }
+
 //            final Bitmap localBitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
 //            if(localBitmap != null) {
 //                final ImageView attachCommentImage = ((ImageCommentHolder)holder).mAttachedImage;

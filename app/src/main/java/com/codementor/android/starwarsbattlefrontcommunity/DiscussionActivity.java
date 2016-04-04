@@ -46,10 +46,10 @@ public class DiscussionActivity extends AppCompatActivity {
         List<PostObject> posts = new ArrayList<>();
         posts.add(mPost);
 
-        populateDiscussion();
-
         mCommentView = (RecyclerView) findViewById(R.id.rv_comment_view);
         mCommentView.setLayoutManager(new LinearLayoutManager(this));
+
+        populateDiscussion();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,13 +62,15 @@ public class DiscussionActivity extends AppCompatActivity {
 
     public List<CommentResponse> populateDiscussion(){
         BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
-        Call<CommentResponse> call = client.getComments(mPost.getPost_id());
+        Call<CommentResponse> call = client.getComments(mPost.getId());
         call.enqueue(new Callback<CommentResponse>() {
             @Override
             public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
                 if (response.isSuccessful()) {
 
-                    mCommentList = new CommentViewAdapter(response.body().getComments(), mPost);
+                    mPost.setComments(response.body().getComments());
+
+                    mCommentList = new CommentViewAdapter(mPost.getComments(), mPost);
                 }
                 mCommentView.setAdapter(mCommentList);
             }

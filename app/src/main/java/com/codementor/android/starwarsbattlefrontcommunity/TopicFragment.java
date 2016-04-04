@@ -30,8 +30,6 @@ public class TopicFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PostViewAdapter mViewAdapter;
 
-//    private List<Post> mPosts;
-
     private List<PostResponse> mPostResponses;
 
     private Topic mTopic;

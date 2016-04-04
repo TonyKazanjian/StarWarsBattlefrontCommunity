@@ -35,9 +35,6 @@ public class ContentObject implements Parcelable{
 
     public AuthorEntity author;
 
-    public ContentEntity.Image[] image_urls;
-
-
     public int getId() {
         return id;
     }
@@ -255,15 +252,4 @@ public class ContentObject implements Parcelable{
 //        this.image_urls = in.createTypedArray(ContentEntity.Image.CREATOR);
     }
 
-    public static final Creator<ContentObject> CREATOR = new Creator<ContentObject>() {
-        @Override
-        public ContentObject createFromParcel(Parcel source) {
-            return new ContentObject(source);
-        }
-
-        @Override
-        public ContentObject[] newArray(int size) {
-            return new ContentObject[size];
-        }
-    };
 }

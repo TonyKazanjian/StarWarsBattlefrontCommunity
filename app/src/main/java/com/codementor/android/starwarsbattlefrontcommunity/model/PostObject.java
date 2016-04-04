@@ -15,6 +15,16 @@ public class PostObject extends ContentObject implements Parcelable {
 
     private List<CommentObject> mComments = new ArrayList<>();
 
+    public CommentResponse getCommentResponse() {
+        return mCommentResponse;
+    }
+
+    public void setCommentResponse(CommentResponse commentResponse) {
+        mCommentResponse = commentResponse;
+    }
+
+    private CommentResponse mCommentResponse;
+
     private String title;
     private int topic_id;
     private int comment_count;
@@ -58,14 +68,10 @@ public class PostObject extends ContentObject implements Parcelable {
 
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeTypedList(mComments);
+        dest.writeParcelable((Parcelable) this.mCommentResponse, flags);
         dest.writeString(this.title);
         dest.writeInt(this.topic_id);
         dest.writeInt(this.comment_count);
@@ -75,7 +81,7 @@ public class PostObject extends ContentObject implements Parcelable {
         dest.writeString(this.updated_at);
         dest.writeParcelable(this.content, flags);
         dest.writeParcelable(this.author, flags);
-//        dest.writeTypedArray(this.image_urls, flags);
+
     }
 
     public PostObject() {
@@ -84,6 +90,7 @@ public class PostObject extends ContentObject implements Parcelable {
     protected PostObject(Parcel in) {
         super(in);
         this.mComments = in.createTypedArrayList(CommentObject.CREATOR);
+        this.mCommentResponse = in.readParcelable(CommentResponse.class.getClassLoader());
         this.title = in.readString();
         this.topic_id = in.readInt();
         this.comment_count = in.readInt();
@@ -93,7 +100,13 @@ public class PostObject extends ContentObject implements Parcelable {
         this.updated_at = in.readString();
         this.content = in.readParcelable(ContentEntity.class.getClassLoader());
         this.author = in.readParcelable(AuthorEntity.class.getClassLoader());
-//        this.image_urls = in.createTypedArray(ContentEntity.Image.CREATOR);
+
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<PostObject> CREATOR = new Creator<PostObject>() {

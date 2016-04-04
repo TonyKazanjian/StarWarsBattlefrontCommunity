@@ -64,8 +64,8 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         if (images.length != 0){
             ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
             attachedImage.setVisibility(View.VISIBLE);
-            for (int i = 0; i < images.length; i++){
-                String imageUrl = images[i].getImage_url();
+            for (ContentObject.ContentEntity.Image image : images) {
+                String imageUrl = image.getImage_url();
                 Picasso.with(holder.itemView.getContext()).load(imageUrl)
                         .into(attachedImage);
             }

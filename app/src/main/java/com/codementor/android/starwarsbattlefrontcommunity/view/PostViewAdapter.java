@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -147,8 +148,9 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
-        private ImageView mCommentBubble;
+        private FrameLayout mCommentCountContainer;
         private TextView mCommentCount;
+
 
         public PostHolder(View v) {
             super(v);
@@ -158,11 +160,10 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             mDatePosted = (TextView) v.findViewById(R.id.post_date);
             mPostContent = (TextView) v.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) v.findViewById(R.id.author_photo);
-            mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
+            mCommentCountContainer = (FrameLayout) v.findViewById(R.id.comment_count_container);
             mCommentCount = (TextView) v.findViewById(R.id.comment_count);
 
-            mCommentBubble.setVisibility(View.VISIBLE);
-            mCommentCount.setVisibility(View.VISIBLE);
+            mCommentCountContainer.setVisibility(View.VISIBLE);
         }
     }
 

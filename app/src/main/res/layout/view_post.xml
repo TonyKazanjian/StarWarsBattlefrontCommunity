@@ -7,51 +7,98 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/thread_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/thread_title"
+        tools:text="Title of the post"
         android:layout_alignParentTop="true"
         android:textSize="24sp"
         android:layout_marginBottom="16dp"
         android:textColor="#b1b1b1"
         />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:id="@+id/author_photo"
+    <LinearLayout
+        android:id="@+id/content_metadata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/thread_title"
-        android:layout_marginRight="12dp"
-        />
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/author_photo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            tools:src="@drawable/bb8"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/author_name"
+                tools:text="Luke Skywalker"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#02c581"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_date"
+                tools:text="March 31st, 2016"
+                android:layout_below="@+id/author_name"
+                />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/comment_count_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thread_title"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_bubble"
+                android:src="@drawable/ic_chat_bubble"
+                android:tint="@color/materialIconGrey"/>
+
+            <TextView
+                android:id="@+id/comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="250"
+                android:layout_gravity="center"
+                android:paddingBottom="4dp"
+                android:textSize="15sp"
+                android:textColor="@color/white"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/author_name"
-        android:layout_toRightOf="@+id/author_photo"
-        android:layout_below="@+id/thread_title"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:textColor="#02c581"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/post_date"
-        android:layout_toRightOf="@+id/author_photo"
-        android:layout_below="@+id/author_name"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/post_content"
-        android:layout_below="@+id/post_date"
+        android:layout_below="@+id/content_metadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        tools:text=";lkjlkjlj"/>
 
     <ImageView
         android:layout_width="360dp"
@@ -61,33 +108,8 @@
         android:layout_below="@+id/post_content"
         android:scaleType="centerCrop"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/comment_bubble"
-        android:layout_below="@+id/thread_title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_chat_bubble"
-        android:tint="@color/materialIconGrey"
-        android:visibility="gone"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/comment_count"
-        android:layout_below="@+id/thread_title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="4dp"
-        android:gravity="center_horizontal"
-        android:visibility="invisible"/>
-
+        android:visibility="gone"
+        tools:src = "@drawable/droidrun"/>
 
 </RelativeLayout>
 

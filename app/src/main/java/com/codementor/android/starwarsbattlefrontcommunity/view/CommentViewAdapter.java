@@ -122,7 +122,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mDatePosted.setText(comment.getCreated_at());
             holder.mPostContent.setText(content.getBody());
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
-            
+
             List<CommentObject.ContentEntity.Image> images = content.getImages();
 
             if (!images.isEmpty()){

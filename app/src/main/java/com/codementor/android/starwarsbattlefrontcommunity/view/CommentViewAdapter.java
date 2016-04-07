@@ -3,8 +3,6 @@ package com.codementor.android.starwarsbattlefrontcommunity.view;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,7 +46,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         if (viewType == POST_TYPE){
             return new PostHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false));
         } else if (viewType == IMAGE_TYPE){
-            return new ImageCommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_comment, parent, false));
+            return new ImageCommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false));
         } else {
             return new CommentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_comment,parent,false));
         }
@@ -68,18 +66,23 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mDatePosted.setText(mPost.getCreated_at());
             holder.mPostContent.setText(content.getBody());
             ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getComment_count()));
-            ((PostHolder) holder).mCommentBubble.setVisibility(View.VISIBLE);
-            ((PostHolder) holder).mCommentCount.setVisibility(View.VISIBLE);
 
-            ContentObject.ContentEntity.Image[] images = content.getImage_urls();
+            PostObject.ContentEntity.Image[] images = content.getImage_urls();
 
-            if (images.length != 0){
-                ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
+            ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
+
+            if (images.length != 0) {
                 attachedImage.setVisibility(View.VISIBLE);
                 for (ContentObject.ContentEntity.Image image : images) {
-                    String imageUrl = image.getImage_url();
+                    final String imageUrl = image.getImage_url();
                     Picasso.with(holder.itemView.getContext()).load(imageUrl)
                             .into(attachedImage);
+                    attachedImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fullScreenIntent(v, imageUrl);
+                        }
+                    });
                 }
             }
 
@@ -122,16 +125,24 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             holder.mDatePosted.setText(comment.getCreated_at());
             holder.mPostContent.setText(content.getBody());
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+            holder.mDivider.setVisibility(View.VISIBLE);
 
             List<CommentObject.ContentEntity.Image> images = content.getImages();
 
             if (!images.isEmpty()){
-                ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
+                ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
                 attachedImage.setVisibility(View.VISIBLE);
                 for (int i = 0; i < images.size(); i++){
-                    String imageUrl = images.get(i).getImage_url();
+                    final String imageUrl = images.get(i).getImage_url();
                     Picasso.with(holder.itemView.getContext()).load(imageUrl)
                             .into(attachedImage);
+
+                    attachedImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fullScreenIntent(v, imageUrl);
+                        }
+                    });
                 }
             }
 
@@ -167,12 +178,12 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         }
     }
 
-    public void fullScreenIntent(View v, Uri photoUri){
+    public void fullScreenIntent(View v, String photoUrl){
         Context context = v.getContext();
-        Bundle b = new Bundle();
-        b.putParcelable(Content.FULLSCREEN_IMAGE_EXTRA, photoUri);
+//        Bundle b = new Bundle();
+//        b.putString(Content.FULLSCREEN_IMAGE_EXTRA, photoUrl);
         Intent intent = new Intent(context, FullScreenImageActivity.class);
-        intent.putExtras(b);
+        intent.putExtra(Content.FULLSCREEN_IMAGE_EXTRA, photoUrl);
         context.startActivity(intent);
     }
 
@@ -242,6 +253,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
         private TextView mDatePosted;
         private TextView mPostContent;
         private CircleImageView mAuthorPhoto;
+        private View mDivider;
 
         public CommunityContentHolder(View itemView) {
             super(itemView);
@@ -250,6 +262,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             mDatePosted = (TextView) itemView.findViewById(R.id.post_date);
             mPostContent = (TextView) itemView.findViewById(R.id.post_content);
             mAuthorPhoto = (CircleImageView) itemView.findViewById(R.id.author_photo);
+            mDivider = itemView.findViewById(R.id.view_divider);
         }
     }
 

@@ -102,8 +102,6 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-//                Intent intent = MainActivity.discussionIntent(context, mPosts.get(position));
-//                context.startActivity(intent);
                 Intent discussionIntent =  new Intent(context, DiscussionActivity.class);
                 Bundle b = new Bundle();
                 b.putParcelable("post",mPosts.get(position));

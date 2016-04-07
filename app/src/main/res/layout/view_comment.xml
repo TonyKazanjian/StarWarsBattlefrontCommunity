@@ -1,16 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <View
+        android:id="@+id/view_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#C2C2C2"/>
+        android:background="#C2C2C2"
+        android:visibility="gone"/>
 
-    <include layout = "@layout/view_post"
-             android:id="@+id/comment"/>
+    <LinearLayout
+        android:id="@+id/content_metadata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/view_divider"
+        android:padding="14dp"
+        android:orientation="horizontal">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/author_photo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            tools:src="@drawable/bb8"/>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/author_name"
+                tools:text="Luke Skywalker"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#02c581"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_date"
+                tools:text="March 31st, 2016"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/post_content"
+        android:layout_below="@+id/content_metadata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/content_metadata"
+        android:layout_alignLeft="@id/content_metadata"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        tools:text="This is a comment"/>
+
+    <ImageView
+        android:layout_width="360dp"
+        android:layout_height="240dp"
+        android:adjustViewBounds="true"
+        android:id="@+id/attached_image"
+        android:layout_below="@+id/post_content"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        tools:src = "@drawable/droidrun"/>
+
+</RelativeLayout>

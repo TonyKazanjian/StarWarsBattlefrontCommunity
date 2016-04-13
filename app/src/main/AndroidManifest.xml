@@ -29,7 +29,8 @@
         </activity>
         <activity
             android:name=".DiscussionActivity"
-            android:label="Discussion"/>
+            android:label="Discussion"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".NewContentActivity"
             android:label=""

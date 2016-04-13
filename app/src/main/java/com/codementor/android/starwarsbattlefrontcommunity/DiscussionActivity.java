@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
+import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
@@ -31,7 +32,7 @@ public class DiscussionActivity extends AppCompatActivity {
     private RecyclerView mCommentView;
     private CommentViewAdapter mCommentList;
 
-    private List<CommentResponse> mCommentResponses;
+    private List<CommentObject> mComments;
 
     public static final String EXTRA_CONTENT_TYPE_COMMENT = "comment";
     private static final int REQUEST_CODE_COMMENT = 0;
@@ -60,7 +61,7 @@ public class DiscussionActivity extends AppCompatActivity {
         });
     }
 
-    public List<CommentResponse> populateDiscussion(){
+    public void populateDiscussion(){
         BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
         Call<CommentResponse> call = client.getComments(mPost.getId());
         call.enqueue(new Callback<CommentResponse>() {
@@ -80,8 +81,6 @@ public class DiscussionActivity extends AppCompatActivity {
 
             }
         });
-
-        return mCommentResponses;
     }
 
     public void onContentAdd(){

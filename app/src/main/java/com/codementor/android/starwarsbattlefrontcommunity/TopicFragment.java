@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
@@ -29,8 +30,6 @@ public class TopicFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private PostViewAdapter mViewAdapter;
-
-    private List<PostResponse> mPostResponses;
 
     private Topic mTopic;
 
@@ -61,7 +60,7 @@ public class TopicFragment extends Fragment {
         return v;
     }
 
-    public List<PostResponse> populateTopic(){
+    public void populateTopic(){
 
         BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
         Call<PostResponse> call = client.getPosts(mTopic.getId());
@@ -81,7 +80,6 @@ public class TopicFragment extends Fragment {
             }
         });
 
-        return mPostResponses;
     }
 
 //    public void addPostToList(Post post){

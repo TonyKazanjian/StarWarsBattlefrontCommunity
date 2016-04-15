@@ -33,7 +33,11 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFr
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonToken;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -43,6 +47,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
 
 
 public class NewContentActivity extends AppCompatActivity implements PictureDialogFragment.InputListener {
@@ -122,6 +128,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
                 @Override
                 public void onClick(View view) {
                     if (mIsPost) {
+                        //TODO - API call here
                         Post post = new Post();
                         post.setTitle(mTitle.getText().toString());
                         post.setTopicSection(mSpinner.getSelectedItemPosition());
@@ -157,6 +164,20 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             });
         }
     }
+
+    //TODO - new callback method for posting
+
+    public JsonObject getJsonObject(PostObject post){
+
+        JsonObject jsonPostObject = new JsonObject();
+        jsonPostObject.addProperty("title",post.getTitle());
+
+    }
+
+    public void newPostCallback(BattlefrontClient client, PostObject post) {
+        Call<JsonObject> call = client.newPost(post);
+    }
+
 
     private void createPostElements(){
         mSpinner = (Spinner) findViewById(R.id.topic_dropdown);

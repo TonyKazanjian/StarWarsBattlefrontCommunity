@@ -1,91 +1,170 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
-import android.content.ContentResolver;
-import android.graphics.Bitmap;
-import android.net.Uri;
+import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.MediaStore;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
+import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
- * Created by tonyk_000 on 2/1/2016.
+ * Created by tonyk_000 on 3/31/2016.
  */
-public abstract class Content implements Parcelable {
-
-     String mTitle;
-     String mAuthor;
-     Date mDate;
-     String mContent;
-     int mAuthorPhoto;
-
-     Uri mContentImageUri;
+public class Content implements Parcelable{
 
     public static final String FULLSCREEN_IMAGE_EXTRA = "fullscreenImage";
 
-    public String getAuthor() {
-        return mAuthor;
+    public int id;
+    public int post_id;
+    public String created_at;
+    public String updated_at;
+
+
+    @SerializedName("content")
+    public ContentBody content;
+
+    public Author author;
+
+    public Content() {
     }
 
-    public void setAuthor(String author) {
-        mAuthor = author;
+    public int getId() {
+        return id;
     }
 
-    public int getAuthorPhoto() {
-        return mAuthorPhoto;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setAuthorPhoto(int authorPhoto) {
-        mAuthorPhoto = authorPhoto;
+    public int getPost_id() {
+        return post_id;
     }
 
-    public String getContent() {
-        return mContent;
+    public void setPost_id(int post_id) {
+        this.post_id = post_id;
     }
 
-    public void setContent(String content) {
-        mContent = content;
+    public String getCreated_at() {
+        return created_at;
     }
 
-    public Date getDate() {
-        return mDate;
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
-    public void setDate(Date date) {
-        mDate = date;
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+    public String getUpdated_at() {
+        return updated_at;
     }
 
-    public String getTitle() {
-        return mTitle;
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
 
-    public void setTitle(String title) {
-        mTitle = title;
+    public ContentBody getContent() {
+        return content;
     }
 
-    public Uri getContentImageUri() {
-        return mContentImageUri;
+    public void setContent(ContentBody content) {
+        this.content = content;
     }
 
-    public void setContentImageUri(Uri contentImageUri) {
-        this.mContentImageUri = contentImageUri;
+    public Author getAuthor() {
+        return author;
     }
 
-    //helper method that converts the mFileUri into a Bitmap
-    public Bitmap getContentImageFromFileSystem(ContentResolver contentResolver) {
-        Bitmap bitmap = null;
-        try {
-            if (mContentImageUri != null) {
-                bitmap = MediaStore.Images.Media.getBitmap(contentResolver,
-                        mContentImageUri);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public static class ContentBody implements Parcelable{
+        @SerializedName("body")
+        private String mBody;
+        @SerializedName("image_urls")
+        private List<Image> mImageUrls;
+
+        public String getBody() {
+            return mBody;
         }
-        return bitmap;
+
+        public void setBody(String body) {
+            this.mBody = body;
+        }
+
+        public List<Image> getImage_urls() {
+            return mImageUrls;
+        }
+
+        public void setImage_urls(List<Image> image_urls) {
+            this.mImageUrls = image_urls;
+        }
+
+
+        public ContentBody() {
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.mBody);
+            dest.writeTypedList(mImageUrls);
+        }
+
+        protected ContentBody(Parcel in) {
+            this.mBody = in.readString();
+            this.mImageUrls = in.createTypedArrayList(Image.CREATOR);
+        }
+
+        public static final Creator<ContentBody> CREATOR = new Creator<ContentBody>() {
+            @Override
+            public ContentBody createFromParcel(Parcel source) {
+                return new ContentBody(source);
+            }
+
+            @Override
+            public ContentBody[] newArray(int size) {
+                return new ContentBody[size];
+            }
+        };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.post_id);
+        dest.writeString(this.created_at);
+        dest.writeString(this.updated_at);
+        dest.writeParcelable(this.content, flags);
+        dest.writeParcelable(this.author, flags);
+    }
+
+    protected Content(Parcel in) {
+        this.id = in.readInt();
+        this.post_id = in.readInt();
+        this.created_at = in.readString();
+        this.updated_at = in.readString();
+        this.content = in.readParcelable(ContentBody.class.getClassLoader());
+        this.author = in.readParcelable(Author.class.getClassLoader());
+    }
+
+    public static final Creator<Content> CREATOR = new Creator<Content>() {
+        @Override
+        public Content createFromParcel(Parcel source) {
+            return new Content(source);
+        }
+
+        @Override
+        public Content[] newArray(int size) {
+            return new Content[size];
+        }
+    };
 }

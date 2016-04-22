@@ -30,25 +30,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFragment;
-import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonToken;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class NewContentActivity extends AppCompatActivity implements PictureDialogFragment.InputListener {
@@ -73,6 +72,8 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     public boolean showPictureDialog = false;
 
     PictureDialogFragment mPictureDialogFragment;
+
+    Post mPost = new Post();
 
 
     @Override
@@ -129,23 +130,17 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
                 public void onClick(View view) {
                     if (mIsPost) {
                         //TODO - API call here
-                        Post post = new Post();
-                        post.setTitle(mTitle.getText().toString());
-                        post.setTopicSection(mSpinner.getSelectedItemPosition());
-                        populateContent(post);
-                        Intent newPostData = new Intent();
-                        newPostData.putExtra(Post.EXTRA_NEW_POST, post);
-                        newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, mSpinner.getSelectedItemPosition());
-                        setResult(RESULT_OK, newPostData);
-                        finish();
-                    } else {
-                        Comment comment = new Comment();
-                        populateContent(comment);
-                        Intent newCommentData = new Intent();
-                        newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, comment);
-                        setResult(RESULT_OK, newCommentData);
-                        finish();
+                        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
+                        onPostSubmission(client);
                     }
+//                    else {
+//                        Comment comment = new Comment();
+//                        populateContent(comment);
+//                        Intent newCommentData = new Intent();
+//                        newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, comment);
+//                        setResult(RESULT_OK, newCommentData);
+//                        finish();
+  //                  }
                 }
             });
         }
@@ -167,15 +162,57 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 
     //TODO - new callback method for posting
 
-    public JsonObject getJsonObject(PostObject post){
+    public JsonObject getJsonObject(Post post){
 
         JsonObject jsonPostObject = new JsonObject();
         jsonPostObject.addProperty("title",post.getTitle());
 
+        JsonObject jsonContentInPost = new JsonObject();
+        jsonPostObject.add("content", jsonContentInPost);
+        jsonContentInPost.addProperty("body", post.getContent().getBody());
+
+        JsonArray imagesArray = new JsonArray();
+
+        for (int i= 0; i < imagesArray.size(); i++){
+            imagesArray.add(post.getContent().getImage_urls().get(i).getImage_url());
+        }
+
+        jsonContentInPost.add("images",imagesArray);
+
+        Log.d("JSON Object", jsonPostObject.toString());
+
+        return jsonPostObject;
     }
 
-    public void newPostCallback(BattlefrontClient client, PostObject post) {
-        Call<JsonObject> call = client.newPost(post);
+    public void onPostSubmission(BattlefrontClient client) {
+        mPost.setTitle(mTitle.getText().toString());
+        Content.ContentBody contentBody = new Content.ContentBody();
+        mPost.setContent(contentBody);
+        contentBody.setBody(mContent.getText().toString());
+
+        Call<JsonObject> call = client.newPost("");
+        call.enqueue(new Callback<JsonObject>(){
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    getJsonObject(mPost);
+                    //TODO - set topic selection for PostObjects
+                    mPost.setTopicSection(mSpinner.getSelectedItemPosition());
+                    Intent newPostData = new Intent();
+                    newPostData.putExtra(Post.EXTRA_NEW_POST, mPost);
+                    newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, mSpinner.getSelectedItemPosition());
+                    setResult(RESULT_OK, newPostData);
+                    finish();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
 
@@ -184,27 +221,36 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         mTitle = (EditText) findViewById(R.id.new_post_title);
 
         mSpinner.setVisibility(View.VISIBLE);
+
         mTitle.setVisibility(View.VISIBLE);
 
+        Bundle b = getIntent().getExtras();
+        Topic topic = b.getParcelable(CommunityFragment.EXTRA_TOPIC);
+        List<String> titles = new ArrayList<>();
+
+        if (topic != null) {
+
+            for (String title : titles) {
+                title = topic.getTitle();
+                titles.add(title);
+            }
+        }
+
+        mSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.topic_spinner_item, titles));
+
+        mSpinner.setSelection(getIntent().getExtras().getInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION));
+
         //For spinner
-        final List<String> topicList = new ArrayList<>();
-        topicList.add(0, "Droid Run");
-        topicList.add(1, "Hero Hunt");
-        topicList.add(2, "Walker Assault");
         // Specify the layout to use when the list of choices appears
 //            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        mSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.topic_spinner_item, topicList));
-        mSpinner.setSelection(getIntent().getExtras().getInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION));
     }
 
     private void populateContent(Content content) {
         if (mPhotoFile != null){
             mUri = Uri.fromFile(mPhotoFile);
-            content.setContentImageUri(mUri);
+//            content.setContentImageUri(mUri);
         }
-        content.setDate(new Date());
-        content.setContent(mContent.getText().toString());
     }
 
     private void setToolbar() {

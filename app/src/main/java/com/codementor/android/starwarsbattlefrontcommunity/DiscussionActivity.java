@@ -10,9 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
-import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
-import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
 
 import java.util.ArrayList;
@@ -27,12 +26,10 @@ import retrofit2.Response;
  */
 public class DiscussionActivity extends AppCompatActivity {
 
-    private PostObject mPost;
+    private Post mPost;
 
     private RecyclerView mCommentView;
     private CommentViewAdapter mCommentList;
-
-    private List<CommentObject> mComments;
 
     public static final String EXTRA_CONTENT_TYPE_COMMENT = "comment";
     private static final int REQUEST_CODE_COMMENT = 0;
@@ -44,7 +41,7 @@ public class DiscussionActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         mPost = b.getParcelable("post");
 
-        List<PostObject> posts = new ArrayList<>();
+        List<Post> posts = new ArrayList<>();
         posts.add(mPost);
 
         mCommentView = (RecyclerView) findViewById(R.id.rv_comment_view);
@@ -109,8 +106,8 @@ public class DiscussionActivity extends AppCompatActivity {
 
             Comment newComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
 
-            newComment.setAuthorPhoto(R.drawable.bb8);
-            newComment.setAuthor("AndroidPadawan");
+            newComment.author.setProfile_image_url(null);
+            newComment.author.setName("AndroidPadawan");
 //            mCommentList.addComment(newComment);
         }
     }

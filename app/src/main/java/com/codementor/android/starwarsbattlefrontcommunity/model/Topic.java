@@ -7,11 +7,6 @@ import android.os.Parcelable;
  * Created by tonyk_000 on 1/5/2016.
  */
 public class Topic implements Parcelable {
-    /**
-     * title : Walker Assault
-     * id : 1
-     * image_url : http://cdn.christianitydaily.com/data/images/full/3656/star-wars-battlefront.jpg
-     */
 
     private String title;
     private int id;

@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.DiscussionActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
-import com.codementor.android.starwarsbattlefrontcommunity.model.ContentObject;
-import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Author;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Image;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,12 +29,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHolder> {
 
-    private List<PostObject> mPosts;
+    private List<Post> mPosts;
 
     private static final int IMAGE_TYPE = 0;
     private static final int NO_IMAGE_TYPE = 1;
 
-    public PostViewAdapter(@NonNull List<PostObject> posts){
+    public PostViewAdapter(@NonNull List<Post> posts){
         mPosts = posts;
     }
 
@@ -49,23 +51,23 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
     @Override
     public void onBindViewHolder(final PostViewAdapter.PostHolder holder, final int position) {
 
-        final PostObject post = mPosts.get(position);
-        PostObject.AuthorEntity author = post.getAuthor();
-        PostObject.ContentEntity content = post.getContent();
+        final Post post = mPosts.get(position);
+        Author author = post.getAuthor();
+        Content.ContentBody content = post.getContent();
         holder.mThreadTitle.setText(post.getTitle());
         holder.mAuthorName.setText(author.getName());
         holder.mDatePosted.setText(post.getCreated_at());
         holder.mPostContent.setText(content.getBody());
-        holder.mCommentCount.setText(String.valueOf(post.getComment_count()));
+        holder.mCommentCount.setText(String.valueOf(post.getCommentCount()));
 
         Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
 
-        ContentObject.ContentEntity.Image[] images = content.getImage_urls();
+        List<Image> images = content.getImage_urls();
 
-        if (images.length != 0){
+        if (images.size() != 0){
             ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
             attachedImage.setVisibility(View.VISIBLE);
-            for (ContentObject.ContentEntity.Image image : images) {
+            for (Image image : images) {
                 String imageUrl = image.getImage_url();
                 Picasso.with(holder.itemView.getContext()).load(imageUrl)
                         .into(attachedImage);
@@ -123,12 +125,12 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         return mPosts.size();
     }
 
-//    public void addPost(Post post) {
-//        if(post != null && mPosts != null) {
-//            mPosts.add(0, post);
-//            notifyItemInserted(0);
-//        }
-//    }
+    public void addPost(Post post) {
+        if(post != null && mPosts != null) {
+            mPosts.add(0, post);
+            notifyItemInserted(0);
+        }
+    }
 
 //    @Override
 //    public int getItemViewType(int position){ //this is called by onCreateViewHolder

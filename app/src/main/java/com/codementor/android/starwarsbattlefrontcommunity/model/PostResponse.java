@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class PostResponse extends ContentResponse {
 
-    private List<PostObject> posts;
+    private List<Post> posts;
 
-    public List<PostObject> getPosts() {
+    public List<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<PostObject> posts) {
+    public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
 }

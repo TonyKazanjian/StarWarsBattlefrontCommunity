@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,9 +80,9 @@ public class TopicFragment extends Fragment {
 
     }
 
-//    public void addPostToList(Post post){
-//        mViewAdapter.addPost(post);
-//    }
+    public void addPostToList(Post post){
+        mViewAdapter.addPost(post);
+    }
 
 
 }

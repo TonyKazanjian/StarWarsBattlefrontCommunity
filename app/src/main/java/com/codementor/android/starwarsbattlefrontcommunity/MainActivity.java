@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.codementor.android.starwarsbattlefrontcommunity.model.ContentObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 
 /**
  * Created by tonyk_000 on 12/13/2015.
@@ -20,7 +20,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public static Intent discussionIntent(Context packageContext, ContentObject post){
+    public static Intent discussionIntent(Context packageContext, Content post){
         Bundle bundle = new Bundle();
         Intent intent = new Intent(packageContext, DiscussionActivity.class);
         bundle.putParcelable(EXTRA_POST, post);

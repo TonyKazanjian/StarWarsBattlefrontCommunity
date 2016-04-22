@@ -6,13 +6,13 @@ import java.util.List;
  * Created by tonyk_000 on 4/1/2016.
  */
 public class CommentResponse extends ContentResponse {
-    private List<CommentObject> comments;
+    private List<Comment> comments;
 
-    public List<CommentObject> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    private void setComments(List<CommentObject> comments) {
+    private void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 }

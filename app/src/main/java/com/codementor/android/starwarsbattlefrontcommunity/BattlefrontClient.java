@@ -1,6 +1,7 @@
 package com.codementor.android.starwarsbattlefrontcommunity;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.google.gson.JsonObject;
@@ -34,7 +35,7 @@ public interface BattlefrontClient {
 
     @POST("/{topic_id}/posts")
     Call<JsonObject> newPost(
-            @Body JsonObject newPostObject
+            @Body String newPostObject
     );
 
 }

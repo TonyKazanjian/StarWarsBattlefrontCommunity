@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.TopicPagerAdapter;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,6 +51,7 @@ public class CommunityFragment extends Fragment {
     public static final int REQUEST_CODE_POST = 0;
 
     public static final String EXTRA_TOPIC_PAGE_POSITION = "topic page";
+    public static final String EXTRA_TOPIC = "topics";
     public static final String EXTRA_CONTENT_TYPE_POST = "post";
 
     @Override
@@ -96,6 +99,7 @@ public class CommunityFragment extends Fragment {
         Bundle b = new Bundle();
         Intent i = new Intent(getActivity(), NewContentActivity.class);
         b.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
+        b.putParcelable(EXTRA_TOPIC, mTopic);
         b.putBoolean(EXTRA_CONTENT_TYPE_POST, true);
         i.putExtras(b);
         startActivityForResult(i, REQUEST_CODE_POST);
@@ -129,9 +133,9 @@ public class CommunityFragment extends Fragment {
             mViewPager.setCurrentItem(mTopicPage);
             TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
 
-            newPost.setAuthorPhoto(R.drawable.bb8);
-            newPost.setAuthor("AndroidPadawan");
-//            updatedFragment.addPostToList(newPost);
+            newPost.author.setProfile_image_url(null);
+            newPost.author.setName("AndroidPadawan");
+            updatedFragment.addPostToList(newPost);
         }
     }
 

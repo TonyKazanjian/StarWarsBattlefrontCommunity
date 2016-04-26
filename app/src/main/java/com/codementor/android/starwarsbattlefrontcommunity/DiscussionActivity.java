@@ -106,9 +106,7 @@ public class DiscussionActivity extends AppCompatActivity {
 
             Comment newComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
 
-            newComment.author.setProfile_image_url(null);
-            newComment.author.setName("AndroidPadawan");
-//            mCommentList.addComment(newComment);
+            mCommentList.addComment(newComment);
         }
     }
 

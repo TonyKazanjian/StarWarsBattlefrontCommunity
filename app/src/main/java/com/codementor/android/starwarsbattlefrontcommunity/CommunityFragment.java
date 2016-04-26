@@ -35,6 +35,8 @@ public class CommunityFragment extends Fragment {
 
     private static final String TAG = "CommunityFragment";
 
+    private Post mNewPost;
+
     private Topic mTopic;
     private TabLayout mTabLayout;
     private TopicFragment mTopicFragment;
@@ -44,7 +46,7 @@ public class CommunityFragment extends Fragment {
 
     private TopicPagerAdapter mTopicPagerAdapter;
 
-    private int mTopicPage;
+    private int mTopicPage = 0;
 
     private String mImageUrl;
 
@@ -57,17 +59,12 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // check to see if savedInstanceState exists, and if it does, then restore state
-
-        if (savedInstanceState != null){
-            mTopicPage = (int) savedInstanceState.get(EXTRA_TOPIC_PAGE_POSITION);
-        }
-
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         final View view = inflater.inflate(R.layout.fragment_community, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
@@ -108,12 +105,25 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        mTopicPage = mViewPager.getCurrentItem();
         // save custom state information to outState
         outState.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mTopicPage = (int) savedInstanceState.get(EXTRA_TOPIC_PAGE_POSITION);
+            mViewPager.setCurrentItem(mTopicPage);
+        }
+    }
+
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (resultCode != Activity.RESULT_OK){
             return;
         }
@@ -128,14 +138,8 @@ public class CommunityFragment extends Fragment {
                 return;
             }
 
-            Post newPost = extras.getParcelable(Post.EXTRA_NEW_POST);
+            mNewPost = extras.getParcelable(Post.EXTRA_NEW_POST);
             mTopicPage = extras.getInt(EXTRA_TOPIC_PAGE_POSITION);
-            mViewPager.setCurrentItem(mTopicPage);
-            TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
-
-            newPost.author.setProfile_image_url(null);
-            newPost.author.setName("AndroidPadawan");
-            updatedFragment.addPostToList(newPost);
         }
     }
 
@@ -179,6 +183,13 @@ public class CommunityFragment extends Fragment {
 
                 mViewPager.setAdapter(mTopicPagerAdapter);
                 mTabLayout.setupWithViewPager(mViewPager);
+
+                mViewPager.setCurrentItem(mTopicPage);
+                TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
+
+                if (mNewPost != null) {
+                    updatedFragment.addPostToList(mNewPost);
+                }
             }
 
             @Override

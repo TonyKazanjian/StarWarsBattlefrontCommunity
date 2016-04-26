@@ -197,12 +197,12 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             }
     }
 
-//    public void addComment(Comment comment) {
-//        if(comment != null && mComments != null) {
-//            mComments.add(comment);
-//            notifyItemInserted(mComments.size() - 1);
-//        }
-//    }
+    public void addComment(Comment comment) {
+        if(comment != null && mComments != null) {
+            mComments.add(comment);
+            notifyItemInserted(mComments.size() - 1);
+        }
+    }
 
     public class ImageCommentHolder extends CommunityContentHolder{
 

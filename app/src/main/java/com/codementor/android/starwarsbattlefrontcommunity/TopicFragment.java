@@ -27,7 +27,7 @@ public class TopicFragment extends Fragment {
     private static final String ARGS_TOPIC = "topic";
 
     private RecyclerView mRecyclerView;
-    private PostViewAdapter mViewAdapter;
+    private PostViewAdapter mViewAdapter = new PostViewAdapter();
 
     private Topic mTopic;
 
@@ -67,7 +67,7 @@ public class TopicFragment extends Fragment {
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if (response.isSuccessful()) {
 
-                    mViewAdapter = new PostViewAdapter(response.body().getPosts());
+                    mViewAdapter.addPostList(response.body().getPosts());
                 }
                 mRecyclerView.setAdapter(mViewAdapter);
             }

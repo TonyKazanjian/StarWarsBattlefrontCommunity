@@ -38,4 +38,9 @@ public interface BattlefrontClient {
             @Body String newPostObject
     );
 
+    @POST("/{post_id}/comments")
+    Call<JsonObject> newComment(
+            @Body String newCommentObject
+    );
+
 }

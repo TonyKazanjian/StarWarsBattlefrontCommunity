@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFragment;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
@@ -74,6 +75,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     PictureDialogFragment mPictureDialogFragment;
 
     Post mPost = new Post();
+    Comment mComment = new Comment();
 
 
     @Override
@@ -128,19 +130,14 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             createContentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
                     if (mIsPost) {
                         //TODO - API call here
-                        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
                         onPostSubmission(client);
                     }
-//                    else {
-//                        Comment comment = new Comment();
-//                        populateContent(comment);
-//                        Intent newCommentData = new Intent();
-//                        newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, comment);
-//                        setResult(RESULT_OK, newCommentData);
-//                        finish();
-  //                  }
+                    else {
+                        onCommentSubmission(client);
+                    }
                 }
             });
         }
@@ -162,26 +159,42 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 
     //TODO - new callback method for posting
 
-    public JsonObject getJsonObject(Post post){
+    public JsonObject getPostObject(Post post){
 
-        JsonObject jsonPostObject = new JsonObject();
-        jsonPostObject.addProperty("title",post.getTitle());
-
-        JsonObject jsonContentInPost = new JsonObject();
-        jsonPostObject.add("content", jsonContentInPost);
-        jsonContentInPost.addProperty("body", post.getContent().getBody());
+        JsonObject postObject = new JsonObject();
+        JsonObject postContent = new JsonObject();
+        postObject.addProperty("title",post.getTitle());
+        postObject.add("content", postContent);
+        postContent.addProperty("body", post.getContent().getBody());
 
         JsonArray imagesArray = new JsonArray();
-
         for (int i= 0; i < imagesArray.size(); i++){
             imagesArray.add(post.getContent().getImage_urls().get(i).getImage_url());
         }
 
-        jsonContentInPost.add("images",imagesArray);
+        postContent.add("images",imagesArray);
 
-        Log.d("JSON Object", jsonPostObject.toString());
+        Log.d("JSON Object", postObject.toString());
 
-        return jsonPostObject;
+        return postObject;
+    }
+
+    public JsonObject getCommentObject(Comment comment){
+        JsonObject commentObject = new JsonObject();
+        JsonObject commentContent = new JsonObject();
+        commentObject.add("content", commentContent);
+        commentContent.addProperty("body", comment.getContent().getBody());
+
+        JsonArray imagesArray = new JsonArray();
+        for (int i= 0; i < imagesArray.size(); i++){
+            imagesArray.add(comment.getContent().getImage_urls().get(i).getImage_url());
+        }
+
+        commentContent.add("images",imagesArray);
+
+        Log.d("JSON Object", commentObject.toString());
+
+        return commentObject;
     }
 
     public void onPostSubmission(BattlefrontClient client) {
@@ -196,12 +209,12 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()){
-                    getJsonObject(mPost);
+                    getPostObject(mPost);
                     //TODO - set topic selection for PostObjects
                     mPost.setTopicSection(mSpinner.getSelectedItemPosition());
                     Intent newPostData = new Intent();
                     newPostData.putExtra(Post.EXTRA_NEW_POST, mPost);
-                    newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, mSpinner.getSelectedItemPosition());
+                    newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, 3);
                     setResult(RESULT_OK, newPostData);
                     finish();
 
@@ -213,6 +226,32 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 
             }
         });
+    }
+
+    public void onCommentSubmission(BattlefrontClient client){
+        Content.ContentBody contentBody = new Content.ContentBody();
+        mComment.setContent(contentBody);
+        contentBody.setBody(mContent.getText().toString());
+
+        Call<JsonObject> call = client.newComment("");
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    getCommentObject(mComment);
+                    Intent newCommentData = new Intent();
+                    newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, mComment);
+                    setResult(RESULT_OK, newCommentData);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
     }
 
 

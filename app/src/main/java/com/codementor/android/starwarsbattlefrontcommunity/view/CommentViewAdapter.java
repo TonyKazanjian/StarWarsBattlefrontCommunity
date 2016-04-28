@@ -20,6 +20,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Image;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,17 +30,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.CommunityContentHolder> {
 
-    private List<Comment> mComments;
-    private final Post mPost;
+    private List<Comment> mComments = new ArrayList<>();
+    private Post mPost = new Post();
 
     private static final int POST_TYPE = 0;
     private static final int COMMENT_TYPE = 1;
     private static final int IMAGE_TYPE = 2;
 
-    public CommentViewAdapter(@NonNull List<Comment> comments, Post post) {
-        mComments = comments;
+    public CommentViewAdapter(Post post) {
         mPost = post;
     }
+
+    public CommentViewAdapter(){}
 
     @Override
     public CommunityContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {//viewType is the differentiator
@@ -62,17 +64,20 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             Content.ContentBody content = mPost.getContent();
 
             ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
-            holder.mAuthorName.setText(author.getName());
-            Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
-            holder.mDatePosted.setText(mPost.getCreated_at());
+            if (author != null) {
+                holder.mAuthorName.setText(author.getName());
+                Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+            }
+            if (mPost.getCreated_at()!=null) {
+                holder.mDatePosted.setText(mPost.getCreated_at());
+            }
             holder.mPostContent.setText(content.getBody());
             ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getCommentCount()));
 
             List<Image> images = content.getImage_urls();
 
-            ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
-
-            if (images.size() != 0) {
+            if (images != null && images.size() > 0) {
+                ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
                 attachedImage.setVisibility(View.VISIBLE);
                 for (Image image : images) {
                     final String imageUrl = image.getImage_url();
@@ -85,6 +90,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
                         }
                     });
                 }
+
             }
 
 //            final Bitmap localBitmap = mPost.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
@@ -118,19 +124,25 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         } else if (position > getPostPosition()){
 
+
             final Comment comment = mComments.get(position - 1);
             Author author = comment.getAuthor();
             Content.ContentBody content = comment.getContent();
 
-            holder.mAuthorName.setText(author.getName());
-            holder.mDatePosted.setText(comment.getCreated_at());
+            if (author!=null) {
+                holder.mAuthorName.setText(author.getName());
+                Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+            }
+            if (comment.getCreated_at()!= null) {
+                holder.mDatePosted.setText(comment.getCreated_at());
+            }
             holder.mPostContent.setText(content.getBody());
-            Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+
             holder.mDivider.setVisibility(View.VISIBLE);
 
             List<Image> images = content.getImage_urls();
 
-            if (images.size()!=0){
+            if (images != null && images.size() > 0){
                 ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
                 attachedImage.setVisibility(View.VISIBLE);
                 for (Image image : images) {
@@ -188,19 +200,26 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
     @Override
     public int getItemViewType(int position){ //this is called by onCreateViewHolder
-            if (position == 0){
-                return POST_TYPE;
-//            } else if (mComments.get(position-1).getContentImageUri()!= null){
-//                return IMAGE_TYPE;
-            } else {
-                return COMMENT_TYPE;
-            }
+        if (position == 0){
+            return POST_TYPE;
+        } else if (mComments.get(position-1).getContent().getImage_urls()!= null){
+            return IMAGE_TYPE;
+        } else {
+            return COMMENT_TYPE;
+        }
     }
 
     public void addComment(Comment comment) {
         if(comment != null && mComments != null) {
             mComments.add(comment);
             notifyItemInserted(mComments.size() - 1);
+        }
+    }
+
+    public void addCommentList(List<Comment> comments){
+        if (comments != null){
+            mComments.addAll(comments);
+            notifyItemRangeInserted(comments.size()-1,comments.size());
         }
     }
 
@@ -226,7 +245,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         //for PostHolder
         public TextView mThreadTitle;
-        public ImageView mCommentBubble;
         public TextView mCommentCount;
         public ImageView mAttachedImage;
 
@@ -235,7 +253,6 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             v.setBackgroundColor(Color.WHITE);
 
             mThreadTitle = (TextView) v.findViewById(R.id.thread_title);
-            mCommentBubble = (ImageView) v.findViewById(R.id.comment_bubble);
             mCommentCount = (TextView) v.findViewById(R.id.comment_count);
             mAttachedImage = (ImageView)v.findViewById(R.id.attached_image);
         }

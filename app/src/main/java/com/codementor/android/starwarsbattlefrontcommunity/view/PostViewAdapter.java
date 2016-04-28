@@ -136,7 +136,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
 
     public void addPost(Post post) {
         if(post != null && mPosts != null) {
-            mPosts.add(0, post);
+            mPosts.add(post);
             notifyItemInserted(0);
         }
     }
@@ -148,14 +148,14 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         }
     }
 
-//    @Override
-//    public int getItemViewType(int position){ //this is called by onCreateViewHolder
-//        if (mPosts.get(position).getContentImageUri() == null){
-//            return NO_IMAGE_TYPE;
-//        } else {
-//            return IMAGE_TYPE;
-//        }
-//    }
+    @Override
+    public int getItemViewType(int position){ //this is called by onCreateViewHolder
+        if (mPosts.get(position).getContent().getImage_urls() == null){
+            return NO_IMAGE_TYPE;
+        } else {
+            return IMAGE_TYPE;
+        }
+    }
 
     public class PostHolder extends RecyclerView.ViewHolder {
 

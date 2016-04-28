@@ -214,6 +214,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
                     mPost.setTopicSection(mSpinner.getSelectedItemPosition());
                     Intent newPostData = new Intent();
                     newPostData.putExtra(Post.EXTRA_NEW_POST, mPost);
+                    //TODO - set up the spinner properly
                     newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, 3);
                     setResult(RESULT_OK, newPostData);
                     finish();

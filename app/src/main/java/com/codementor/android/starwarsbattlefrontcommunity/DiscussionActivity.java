@@ -27,9 +27,10 @@ import retrofit2.Response;
 public class DiscussionActivity extends AppCompatActivity {
 
     private Post mPost;
+    private Comment mNewComment;
 
     private RecyclerView mCommentView;
-    private CommentViewAdapter mCommentList;
+    private CommentViewAdapter mCommentViewAdapter;
 
     public static final String EXTRA_CONTENT_TYPE_COMMENT = "comment";
     private static final int REQUEST_CODE_COMMENT = 0;
@@ -67,10 +68,12 @@ public class DiscussionActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     mPost.setComments(response.body().getComments());
+                    mCommentViewAdapter = new CommentViewAdapter(mPost);
 
-                    mCommentList = new CommentViewAdapter(mPost.getComments(), mPost);
+                    mCommentViewAdapter.addCommentList(mPost.getComments());
                 }
-                mCommentView.setAdapter(mCommentList);
+
+                mCommentView.setAdapter(mCommentViewAdapter);
             }
 
             @Override
@@ -104,11 +107,9 @@ public class DiscussionActivity extends AppCompatActivity {
                 return;
             }
 
-            Comment newComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
-
-            mCommentList.addComment(newComment);
+            mNewComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
+            mCommentViewAdapter.addComment(mNewComment);
         }
     }
-
 }
 

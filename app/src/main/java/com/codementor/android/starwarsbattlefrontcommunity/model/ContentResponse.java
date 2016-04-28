@@ -7,28 +7,20 @@ import java.util.List;
  */
 public abstract class ContentResponse {
 
-    private List<ContentObject> mContentObjects;
-
-    public List<ContentObject> getContentObjects() {
-        return mContentObjects;
-    }
-
-    public void setContentObjects(List<ContentObject> contentObjects) {
-        mContentObjects = contentObjects;
-    }
-
-    /**
-     * current_page : 0
-     * total_pages : 1
-     * total_count : 2
-     * per_page : 20
-     * posts : [{"title":"Check out this crazy action shot!","id":2,"topic_id":1,"created_at":"2016-03-28T23:33:31.013Z","updated_at":"2016-03-28T23:33:31.013Z","comment_count":3,"content":{"body":"This is seriously insane. Check this out!","image_urls":["http://images.eurogamer.net/2013/articles/1/7/7/1/4/1/4/star-wars-battlefront-details-team-based-blast-mode-1438302156234.jpg/EG11/thumbnail/900x450/format/jpg/1771414.jpg"]},"author":{"name":"Luke Skywalker","profile_image_url":"http://vignette1.wikia.nocookie.net/starwars/images/d/d9/Luke-rotjpromo.jpg/revision/latest?cb=20091030151422"}},{"title":"I feel bad for my son...","id":1,"topic_id":1,"created_at":"2016-03-27T23:33:31.013Z","updated_at":"2016-03-27T23:33:31.013Z","comment_count":25,"content":{"body":"I just don't know what to tell him. Should I let him know I'm his father?","image_urls":[]},"author":{"name":"Darth Vader","profile_image_url":"http://coolspotters.com/files/photos/227336/darth-vader-profile.jpg"}}]
-     */
+    private List<Content> mContents;
 
     private int current_page;
     private int total_pages;
     private int total_count;
     private int per_page;
+
+    public List<Content> getContentObjects() {
+        return mContents;
+    }
+
+    public void setContentObjects(List<Content> contents) {
+        mContents = contents;
+    }
 
     public int getCurrent_page() {
         return current_page;

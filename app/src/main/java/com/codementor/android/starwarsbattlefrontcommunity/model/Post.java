@@ -1,34 +1,61 @@
 package com.codementor.android.starwarsbattlefrontcommunity.model;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
- * Created by tonyk_000 on 12/14/2015.
+ * Created by tonyk_000 on 3/31/2016.
  */
 public class Post extends Content implements Parcelable {
 
     public static final String EXTRA_NEW_POST = "new post";
     private int mTopicSection;
 
-
     private List<Comment> mComments = new ArrayList<>();
 
-    public Post(){
+    @SerializedName("title")
+    private String mTitle;
+
+    @SerializedName("topic_id")
+    private int mTopicId;
+
+    @SerializedName("comment_count")
+    private int mCommentCount;
+
+    public String getTitle() {
+        return mTitle;
     }
 
-    public Post(String title, String author, Date date, String content, int authorPhoto, Uri uri, List<Comment> comments) {
-        mTitle = title;
-        mAuthor = author;
-        mDate = date;
-        mContent = content;
-        mAuthorPhoto = authorPhoto;
-        mContentImageUri = uri;
+    public void setTitle(String title) {
+        this.mTitle = title;
+    }
+
+    public int getTopicId() {
+        return mTopicId;
+    }
+
+    public void setTopicId(int mTopicId) {
+        this.mTopicId = mTopicId;
+    }
+
+    public int getCommentCount() {
+        return mCommentCount;
+    }
+
+    public void setCommentCount(int mCommentCount) {
+        this.mCommentCount = mCommentCount;
+    }
+
+    public List<Comment> getComments() {
+        return mComments;
+    }
+
+    public void setComments(List<Comment> comments) {
         mComments = comments;
     }
 
@@ -40,13 +67,10 @@ public class Post extends Content implements Parcelable {
         this.mTopicSection = topicSection;
     }
 
-    public List<Comment> getComments() {
-        return mComments;
+
+    public Post() {
     }
 
-    public void setComments(List<Comment> comments) {
-        mComments = comments;
-    }
 
     @Override
     public int describeContents() {
@@ -55,36 +79,31 @@ public class Post extends Content implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mTitle);
-        dest.writeString(this.mAuthor);
-        dest.writeLong(mDate != null ? mDate.getTime() : -1);
-        dest.writeString(this.mContent);
-        dest.writeInt(this.mAuthorPhoto);
-        dest.writeInt(this.mTopicSection);
-        dest.writeParcelable(this.mContentImageUri, 0);
+        super.writeToParcel(dest, flags);
         dest.writeTypedList(mComments);
+        dest.writeString(this.mTitle);
+        dest.writeInt(this.mTopicId);
+        dest.writeInt(this.mCommentCount);
     }
 
     protected Post(Parcel in) {
-        this.mTitle = in.readString();
-        this.mAuthor = in.readString();
-        long tmpMDate = in.readLong();
-        this.mDate = tmpMDate == -1 ? null : new Date(tmpMDate);
-        this.mContent = in.readString();
-        this.mAuthorPhoto = in.readInt();
-        this.mTopicSection = in.readInt();
-        this.mContentImageUri = in.readParcelable(Uri.class.getClassLoader());
+        super(in);
         this.mComments = in.createTypedArrayList(Comment.CREATOR);
+        this.mTitle = in.readString();
+        this.mTopicId = in.readInt();
+        this.mCommentCount = in.readInt();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
         public Post createFromParcel(Parcel source) {
             return new Post(source);
         }
 
+        @Override
         public Post[] newArray(int size) {
             return new Post[size];
         }
     };
-
 }
+

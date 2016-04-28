@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,7 +27,7 @@ public class TopicFragment extends Fragment {
     private static final String ARGS_TOPIC = "topic";
 
     private RecyclerView mRecyclerView;
-    private PostViewAdapter mViewAdapter;
+    private PostViewAdapter mViewAdapter = new PostViewAdapter();
 
     private Topic mTopic;
 
@@ -69,7 +67,7 @@ public class TopicFragment extends Fragment {
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if (response.isSuccessful()) {
 
-                    mViewAdapter = new PostViewAdapter(response.body().getPosts());
+                    mViewAdapter.addPostList(response.body().getPosts());
                 }
                 mRecyclerView.setAdapter(mViewAdapter);
             }
@@ -82,10 +80,9 @@ public class TopicFragment extends Fragment {
 
     }
 
-//    public void addPostToList(Post post){
-//        mViewAdapter.addPost(post);
-//    }
+    public void addPostToList(Post post){
+        mViewAdapter.addPost(post);
+    }
 
 
 }
-

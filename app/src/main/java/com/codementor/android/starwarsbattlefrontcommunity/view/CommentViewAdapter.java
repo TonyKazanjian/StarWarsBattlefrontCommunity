@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImageActivity;
-import com.codementor.android.starwarsbattlefrontcommunity.model.CommentObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Author;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
-import com.codementor.android.starwarsbattlefrontcommunity.model.ContentObject;
-import com.codementor.android.starwarsbattlefrontcommunity.model.PostObject;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Image;
+import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,14 +29,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.CommunityContentHolder> {
 
-    private List<CommentObject> mComments;
-    private final PostObject mPost;
+    private List<Comment> mComments;
+    private final Post mPost;
 
     private static final int POST_TYPE = 0;
     private static final int COMMENT_TYPE = 1;
     private static final int IMAGE_TYPE = 2;
 
-    public CommentViewAdapter(@NonNull List<CommentObject> comments, PostObject post) {
+    public CommentViewAdapter(@NonNull List<Comment> comments, Post post) {
         mComments = comments;
         mPost = post;
     }
@@ -57,23 +58,23 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         if (position == getPostPosition()) {
 
-            PostObject.AuthorEntity author = mPost.getAuthor();
-            PostObject.ContentEntity content = mPost.getContent();
+            Author author = mPost.getAuthor();
+            Content.ContentBody content = mPost.getContent();
 
             ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(author.getName());
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
             holder.mDatePosted.setText(mPost.getCreated_at());
             holder.mPostContent.setText(content.getBody());
-            ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getComment_count()));
+            ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getCommentCount()));
 
-            PostObject.ContentEntity.Image[] images = content.getImage_urls();
+            List<Image> images = content.getImage_urls();
 
             ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
 
-            if (images.length != 0) {
+            if (images.size() != 0) {
                 attachedImage.setVisibility(View.VISIBLE);
-                for (ContentObject.ContentEntity.Image image : images) {
+                for (Image image : images) {
                     final String imageUrl = image.getImage_url();
                     Picasso.with(holder.itemView.getContext()).load(imageUrl)
                             .into(attachedImage);
@@ -117,9 +118,9 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         } else if (position > getPostPosition()){
 
-            final CommentObject comment = mComments.get(position - 1);
-            CommentObject.AuthorEntity author = comment.getAuthor();
-            CommentObject.ContentEntity content = comment.getContent();
+            final Comment comment = mComments.get(position - 1);
+            Author author = comment.getAuthor();
+            Content.ContentBody content = comment.getContent();
 
             holder.mAuthorName.setText(author.getName());
             holder.mDatePosted.setText(comment.getCreated_at());
@@ -127,22 +128,15 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
             holder.mDivider.setVisibility(View.VISIBLE);
 
-            List<CommentObject.ContentEntity.Image> images = content.getImages();
+            List<Image> images = content.getImage_urls();
 
-            if (!images.isEmpty()){
+            if (images.size()!=0){
                 ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
                 attachedImage.setVisibility(View.VISIBLE);
-                for (int i = 0; i < images.size(); i++){
-                    final String imageUrl = images.get(i).getImage_url();
+                for (Image image : images) {
+                    String imageUrl = image.getImage_url();
                     Picasso.with(holder.itemView.getContext()).load(imageUrl)
                             .into(attachedImage);
-
-                    attachedImage.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            fullScreenIntent(v, imageUrl);
-                        }
-                    });
                 }
             }
 
@@ -194,21 +188,21 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
     @Override
     public int getItemViewType(int position){ //this is called by onCreateViewHolder
-            if (position == 0){
-                return POST_TYPE;
+        if (position == 0){
+            return POST_TYPE;
 //            } else if (mComments.get(position-1).getContentImageUri()!= null){
 //                return IMAGE_TYPE;
-            } else {
-                return COMMENT_TYPE;
-            }
+        } else {
+            return COMMENT_TYPE;
+        }
     }
 
-//    public void addComment(Comment comment) {
-//        if(comment != null && mComments != null) {
-//            mComments.add(comment);
-//            notifyItemInserted(mComments.size() - 1);
-//        }
-//    }
+    public void addComment(Comment comment) {
+        if(comment != null && mComments != null) {
+            mComments.add(comment);
+            notifyItemInserted(mComments.size() - 1);
+        }
+    }
 
     public class ImageCommentHolder extends CommunityContentHolder{
 

@@ -20,7 +20,7 @@
              android:id="@+id/comment"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
-        android:layout_below="@+id/thread_title"/>
+             android:layout_below="@+id/thread_title"/>
 
     <FrameLayout
         android:id="@+id/comment_count_container"
@@ -30,8 +30,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
-        android:visibility="visible">
+        android:layout_marginRight="14dp">
 
         <ImageView
             android:layout_width="wrap_content"

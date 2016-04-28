@@ -3,11 +3,14 @@ package com.codementor.android.starwarsbattlefrontcommunity;
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -27,5 +30,15 @@ public interface BattlefrontClient {
     @GET("/{post_id}/comments")
     Call<CommentResponse> getComments(
             @Path("post_id") int postId
+    );
+
+    @POST("/{topic_id}/posts")
+    Call<JsonObject> newPost(
+            @Body String newPostObject
+    );
+
+    @POST("/{post_id}/comments")
+    Call<JsonObject> newComment(
+            @Body String newCommentObject
     );
 }

@@ -27,6 +27,7 @@ import retrofit2.Response;
 public class DiscussionActivity extends AppCompatActivity {
 
     private Post mPost;
+    private Comment mNewComment;
 
     private RecyclerView mCommentView;
     private CommentViewAdapter mCommentList;
@@ -73,6 +74,8 @@ public class DiscussionActivity extends AppCompatActivity {
                     mCommentList = new CommentViewAdapter(mPost.getComments(), mPost);
                 }
                 mCommentView.setAdapter(mCommentList);
+                mCommentList.addComment(mNewComment);
+
             }
 
             @Override
@@ -106,7 +109,7 @@ public class DiscussionActivity extends AppCompatActivity {
                 return;
             }
 
-            Comment newComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
+            mNewComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
 
 //            newComment.setAuthorPhoto(R.drawable.bb8);
 //            newComment.setAuthor("AndroidPadawan");

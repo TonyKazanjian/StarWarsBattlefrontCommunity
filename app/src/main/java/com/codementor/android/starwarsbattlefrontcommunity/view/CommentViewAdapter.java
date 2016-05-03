@@ -122,21 +122,29 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             Author author = comment.getAuthor();
             Content.ContentBody content = comment.getContent();
 
-            holder.mAuthorName.setText(author.getName());
-            holder.mDatePosted.setText(comment.getCreated_at());
+            if (author!=null){
+                holder.mAuthorName.setText(author.getName());
+                Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+            }
+
+            if (comment.getCreated_at()!= null){
+                holder.mDatePosted.setText(comment.getCreated_at());
+            }
             holder.mPostContent.setText(content.getBody());
-            Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+
             holder.mDivider.setVisibility(View.VISIBLE);
 
-            List<Image> images = content.getImage_urls();
+            if (content.getImage_urls()!= null) {
+                List<Image> images = content.getImage_urls();
 
-            if (images.size()!=0){
-                ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
-                attachedImage.setVisibility(View.VISIBLE);
-                for (Image image : images) {
-                    String imageUrl = image.getImage_url();
-                    Picasso.with(holder.itemView.getContext()).load(imageUrl)
-                            .into(attachedImage);
+                if (images.size() != 0) {
+                    ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
+                    attachedImage.setVisibility(View.VISIBLE);
+                    for (Image image : images) {
+                        String imageUrl = image.getImage_url();
+                        Picasso.with(holder.itemView.getContext()).load(imageUrl)
+                                .into(attachedImage);
+                    }
                 }
             }
 

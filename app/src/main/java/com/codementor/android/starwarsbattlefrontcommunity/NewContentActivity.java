@@ -33,7 +33,6 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFr
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -54,7 +53,7 @@ import retrofit2.Response;
 public class NewContentActivity extends AppCompatActivity implements PictureDialogFragment.InputListener {
 
     private EditText mContent;
-    private Spinner mSpinner;
+    private Spinner mTopicSpinner;
     private EditText mTitle;
     private ImageView mAttachedImage;
 
@@ -72,17 +71,17 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     public boolean showPictureDialog = false;
 
-    PictureDialogFragment mPictureDialogFragment;
+    private PictureDialogFragment mPictureDialogFragment;
 
-    Post mPost = new Post();
-    Comment mComment = new Comment();
+    private Post mNewPost = new Post();
+    private Comment mNewComment = new Comment();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_content);
-        //getting position of currently selected topic fragment
+
         Bundle b = getIntent().getExtras();
 
         setToolbar();
@@ -198,10 +197,11 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     }
 
     public void onPostSubmission(BattlefrontClient client) {
-        mPost.setTitle(mTitle.getText().toString());
+        mNewPost.setTitle(mTitle.getText().toString());
         Content.ContentBody contentBody = new Content.ContentBody();
-        mPost.setContent(contentBody);
+        mNewPost.setContent(contentBody);
         contentBody.setBody(mContent.getText().toString());
+//        mNewPost.setTopicSection(mTopicSpinner.getSelectedItemPosition());
 
         Call<JsonObject> call = client.newPost("");
         call.enqueue(new Callback<JsonObject>(){
@@ -209,15 +209,16 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()){
-                    getPostObject(mPost);
-                    //TODO - set topic selection for PostObjects
-                    mPost.setTopicSection(mSpinner.getSelectedItemPosition());
+                    getPostObject(mNewPost);
+//                    mNewPost.setTopicSection(mTopicSpinner.getSelectedItemPosition());
+//                    mNewPost.setTopicId(mTopicSpinner.getSelectedItemPosition()+1);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(Post.EXTRA_NEW_POST,mNewPost);
+                    bundle.putInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, mTopicSpinner.getSelectedItemPosition());
                     Intent newPostData = new Intent();
-                    newPostData.putExtra(Post.EXTRA_NEW_POST, mPost);
-                    newPostData.putExtra(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, 3);
+                    newPostData.putExtras(bundle);
                     setResult(RESULT_OK, newPostData);
                     finish();
-
                 }
             }
 
@@ -230,7 +231,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 
     public void onCommentSubmission(BattlefrontClient client){
         Content.ContentBody contentBody = new Content.ContentBody();
-        mComment.setContent(contentBody);
+        mNewComment.setContent(contentBody);
         contentBody.setBody(mContent.getText().toString());
 
         Call<JsonObject> call = client.newComment("");
@@ -238,9 +239,9 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()){
-                    getCommentObject(mComment);
+                    getCommentObject(mNewComment);
                     Intent newCommentData = new Intent();
-                    newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, mComment);
+                    newCommentData.putExtra(Comment.EXTRA_NEW_COMMENT, mNewComment);
                     setResult(RESULT_OK, newCommentData);
                     finish();
                 }
@@ -256,33 +257,22 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
 
 
     private void createPostElements(){
-        mSpinner = (Spinner) findViewById(R.id.topic_dropdown);
+        mTopicSpinner = (Spinner) findViewById(R.id.topic_dropdown);
         mTitle = (EditText) findViewById(R.id.new_post_title);
 
-        mSpinner.setVisibility(View.VISIBLE);
+        mTopicSpinner.setVisibility(View.VISIBLE);
 
         mTitle.setVisibility(View.VISIBLE);
 
         Bundle b = getIntent().getExtras();
-        Topic topic = b.getParcelable(CommunityFragment.EXTRA_TOPIC);
-        List<String> titles = new ArrayList<>();
+        List<String> mTopicTitles = b.getStringArrayList(CommunityFragment.EXTRA_TOPIC_LIST);
 
-        if (topic != null) {
-
-            for (String title : titles) {
-                title = topic.getTitle();
-                titles.add(title);
-            }
+        if (mTopicTitles != null) {
+            mTopicSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.topic_spinner_item, mTopicTitles));
         }
 
-        mSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.topic_spinner_item, titles));
+        mTopicSpinner.setSelection(getIntent().getExtras().getInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION));
 
-        mSpinner.setSelection(getIntent().getExtras().getInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION));
-
-        //For spinner
-        // Specify the layout to use when the list of choices appears
-//            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
     }
 
     private void populateContent(Content content) {

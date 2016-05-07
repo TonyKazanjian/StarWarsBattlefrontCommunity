@@ -46,14 +46,16 @@ public class CommunityFragment extends Fragment {
 
     private TopicPagerAdapter mTopicPagerAdapter;
 
-    private int mTopicPage = 0;
+    private int mTopicPage;
+    private List<String> mTopicTitles = new ArrayList<>();
 
     private String mImageUrl;
 
     public static final int REQUEST_CODE_POST = 0;
 
     public static final String EXTRA_TOPIC_PAGE_POSITION = "topic page";
-    public static final String EXTRA_TOPIC = "topics";
+    public static final String EXTRA_TOPIC_LIST = "topics";
+    public static final String EXTRA_TOPIC_ID = "topic";
     public static final String EXTRA_CONTENT_TYPE_POST = "post";
 
     @Override
@@ -93,10 +95,12 @@ public class CommunityFragment extends Fragment {
     }
 
     public void onContentAdd(){
+        int topicId = mTopic.getId();
         Bundle b = new Bundle();
         Intent i = new Intent(getActivity(), NewContentActivity.class);
         b.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
-        b.putParcelable(EXTRA_TOPIC, mTopic);
+        b.putInt(EXTRA_TOPIC_ID, topicId);
+        b.putStringArrayList(EXTRA_TOPIC_LIST, (ArrayList<String>) mTopicTitles);
         b.putBoolean(EXTRA_CONTENT_TYPE_POST, true);
         i.putExtras(b);
         startActivityForResult(i, REQUEST_CODE_POST);
@@ -157,6 +161,9 @@ public class CommunityFragment extends Fragment {
                         mTopicPagerAdapter.addFragment(mTopicFragment, mTopic.getTitle(), mTopic.getImage_url());
                         mImageUrl = mTopicPagerAdapter.getBackgroundImage(i);
 
+                        //needed to pass titles to NewContentActivity's spinner
+                        mTopicTitles.add(response.body().get(i).getTitle());
+
                         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                             @Override
                             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -183,7 +190,6 @@ public class CommunityFragment extends Fragment {
 
                 mViewPager.setAdapter(mTopicPagerAdapter);
                 mTabLayout.setupWithViewPager(mViewPager);
-
                 mViewPager.setCurrentItem(mTopicPage);
                 TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
 

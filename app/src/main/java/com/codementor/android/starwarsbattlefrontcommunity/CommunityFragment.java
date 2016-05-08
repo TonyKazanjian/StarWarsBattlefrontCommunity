@@ -99,7 +99,6 @@ public class CommunityFragment extends Fragment {
         Bundle b = new Bundle();
         Intent i = new Intent(getActivity(), NewContentActivity.class);
         b.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
-        b.putInt(EXTRA_TOPIC_ID, topicId);
         b.putStringArrayList(EXTRA_TOPIC_LIST, (ArrayList<String>) mTopicTitles);
         b.putBoolean(EXTRA_CONTENT_TYPE_POST, true);
         i.putExtras(b);
@@ -143,7 +142,7 @@ public class CommunityFragment extends Fragment {
             }
 
             mNewPost = extras.getParcelable(Post.EXTRA_NEW_POST);
-            mTopicPage = extras.getInt(EXTRA_TOPIC_PAGE_POSITION);
+//            mTopicPage = extras.getInt(EXTRA_TOPIC_PAGE_POSITION);
         }
     }
 
@@ -191,9 +190,9 @@ public class CommunityFragment extends Fragment {
                 mViewPager.setAdapter(mTopicPagerAdapter);
                 mTabLayout.setupWithViewPager(mViewPager);
                 mViewPager.setCurrentItem(mTopicPage);
-                TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
 
                 if (mNewPost != null) {
+                    TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
                     updatedFragment.addPostToList(mNewPost);
                 }
             }

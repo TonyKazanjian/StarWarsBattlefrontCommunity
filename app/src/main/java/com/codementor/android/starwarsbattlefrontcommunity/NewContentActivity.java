@@ -67,6 +67,8 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_SELECT_PHOTO = 0;
 
+    public static final String EXTRA_SPINNER_POSITION = "topic spinner position";
+
     //for permissions
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     public boolean showPictureDialog = false;
@@ -201,7 +203,6 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         Content.ContentBody contentBody = new Content.ContentBody();
         mNewPost.setContent(contentBody);
         contentBody.setBody(mContent.getText().toString());
-//        mNewPost.setTopicSection(mTopicSpinner.getSelectedItemPosition());
 
         Call<JsonObject> call = client.newPost("");
         call.enqueue(new Callback<JsonObject>(){
@@ -210,11 +211,10 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()){
                     getPostObject(mNewPost);
-//                    mNewPost.setTopicSection(mTopicSpinner.getSelectedItemPosition());
-//                    mNewPost.setTopicId(mTopicSpinner.getSelectedItemPosition()+1);
+                    mNewPost.setTopicSection(mTopicSpinner.getSelectedItemPosition());
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Post.EXTRA_NEW_POST,mNewPost);
-                    bundle.putInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION, mTopicSpinner.getSelectedItemPosition());
+                    bundle.putInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION,0);
                     Intent newPostData = new Intent();
                     newPostData.putExtras(bundle);
                     setResult(RESULT_OK, newPostData);

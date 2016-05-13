@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity;
+package com.codementor.android.starwarsbattlefrontcommunity.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.codementor.android.starwarsbattlefrontcommunity.network.APIServiceGenerator;
+import com.codementor.android.starwarsbattlefrontcommunity.network.BattlefrontClient;
+import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;

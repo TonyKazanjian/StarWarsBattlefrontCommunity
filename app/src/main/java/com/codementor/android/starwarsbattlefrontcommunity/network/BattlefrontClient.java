@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity;
+package com.codementor.android.starwarsbattlefrontcommunity.network;
 
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;

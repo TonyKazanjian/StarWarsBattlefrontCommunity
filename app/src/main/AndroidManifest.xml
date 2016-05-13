@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,16 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DiscussionActivity"
+            android:name=".activities.DiscussionActivity"
             android:label="Discussion"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".activities.MainActivity"/>
         <activity
-            android:name=".NewContentActivity"
+            android:name=".activities.NewContentActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
-        <activity android:name=".image.FullScreenImageActivity"/>
+        <activity android:name=".activities.FullScreenImageActivity"/>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

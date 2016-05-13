@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity;
+package com.codementor.android.starwarsbattlefrontcommunity.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.codementor.android.starwarsbattlefrontcommunity.network.APIServiceGenerator;
+import com.codementor.android.starwarsbattlefrontcommunity.network.BattlefrontClient;
+import com.codementor.android.starwarsbattlefrontcommunity.R;
+import com.codementor.android.starwarsbattlefrontcommunity.activities.NewContentActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
 import com.codementor.android.starwarsbattlefrontcommunity.adapters.TopicPagerAdapter;

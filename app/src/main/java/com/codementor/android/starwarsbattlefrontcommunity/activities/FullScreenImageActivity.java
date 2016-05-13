@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity.image;
+package com.codementor.android.starwarsbattlefrontcommunity.activities;
 
 import android.content.Intent;
 import android.database.Cursor;

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
-import com.codementor.android.starwarsbattlefrontcommunity.image.FullScreenImageActivity;
+import com.codementor.android.starwarsbattlefrontcommunity.activities.FullScreenImageActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Author;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
@@ -59,32 +59,37 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         if (position == getPostPosition()) {
 
-            Author author = mPost.getAuthor();
+            if (mPost.getAuthor()!= null){
+                Author author = mPost.getAuthor();
+                holder.mAuthorName.setText(author.getName());
+                if (author.getProfile_image_url()!= null){
+                    Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+                }
+            }
             Content.ContentBody content = mPost.getContent();
 
             ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
-            holder.mAuthorName.setText(author.getName());
-            Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+
             holder.mDatePosted.setText(DateAndTimeFormatUtils.getDatePattern(mPost.getCreated_at()));
             holder.mPostContent.setText(content.getBody());
             ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getCommentCount()));
 
-            List<Image> images = content.getImage_urls();
-
-            ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
-
-            if (images.size() != 0) {
-                attachedImage.setVisibility(View.VISIBLE);
-                for (Image image : images) {
-                    final String imageUrl = image.getImage_url();
-                    Picasso.with(holder.itemView.getContext()).load(imageUrl)
-                            .into(attachedImage);
-                    attachedImage.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            fullScreenIntent(v, imageUrl);
-                        }
-                    });
+            if (content.getImage_urls()!= null){
+                List<Image> images = content.getImage_urls();
+                if (images.size() != 0) {
+                    ImageView attachedImage = ((PostHolder) holder).mAttachedImage;
+                    attachedImage.setVisibility(View.VISIBLE);
+                    for (Image image : images) {
+                        final String imageUrl = image.getImage_url();
+                        Picasso.with(holder.itemView.getContext()).load(imageUrl)
+                                .into(attachedImage);
+                        attachedImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                fullScreenIntent(v, imageUrl);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -119,34 +124,39 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
 
         } else if (position > getPostPosition()){
 
-            final Comment comment = mComments.get(position - 1);
-            Author author = comment.getAuthor();
-            Content.ContentBody content = comment.getContent();
+            if (mComments.size()!= 0) {
 
-            if (author!=null){
-                holder.mAuthorName.setText(author.getName());
-                Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
-            }
+                final Comment comment = mComments.get(position - 1);
+                Author author = comment.getAuthor();
+                Content.ContentBody content = comment.getContent();
 
-            if (comment.getCreated_at()!= null){
-                holder.mDatePosted.setText(DateAndTimeFormatUtils.getDatePattern(comment.getCreated_at()));
-            }
-            holder.mPostContent.setText(content.getBody());
+                if (author != null) {
+                    holder.mAuthorName.setText(author.getName());
+                    Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
+                }
 
-            holder.mDivider.setVisibility(View.VISIBLE);
+                if (comment.getCreated_at() != null) {
+                    holder.mDatePosted.setText(DateAndTimeFormatUtils.getDatePattern(comment.getCreated_at()));
+                }
+                holder.mPostContent.setText(content.getBody());
 
-            if (content.getImage_urls()!= null) {
-                List<Image> images = content.getImage_urls();
+                holder.mDivider.setVisibility(View.VISIBLE);
 
-                if (images.size() != 0) {
-                    ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
-                    attachedImage.setVisibility(View.VISIBLE);
-                    for (Image image : images) {
-                        String imageUrl = image.getImage_url();
-                        Picasso.with(holder.itemView.getContext()).load(imageUrl)
-                                .into(attachedImage);
+                if (content.getImage_urls() != null) {
+                    List<Image> images = content.getImage_urls();
+
+                    if (images.size() != 0) {
+                        ImageView attachedImage = ((ImageCommentHolder) holder).mAttachedImage;
+                        attachedImage.setVisibility(View.VISIBLE);
+                        for (Image image : images) {
+                            String imageUrl = image.getImage_url();
+                            Picasso.with(holder.itemView.getContext()).load(imageUrl)
+                                    .into(attachedImage);
+                        }
                     }
                 }
+            } else {
+                //TODO - add textview for no comments message
             }
 
 //            final Bitmap localBitmap = comment.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());

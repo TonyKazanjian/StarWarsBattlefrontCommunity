@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity;
+package com.codementor.android.starwarsbattlefrontcommunity.network;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

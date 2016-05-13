@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codementor.android.starwarsbattlefrontcommunity.DiscussionActivity;
+import com.codementor.android.starwarsbattlefrontcommunity.activities.DiscussionActivity;
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Author;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;

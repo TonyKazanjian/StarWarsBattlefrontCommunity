@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity.image;
+package com.codementor.android.starwarsbattlefrontcommunity.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -6,7 +6,7 @@
              android:layout_height="match_parent">
 
     <fragment
-        android:name = "com.codementor.android.starwarsbattlefrontcommunity.CommunityFragment"
+        android:name = "com.codementor.android.starwarsbattlefrontcommunity.fragments.CommunityFragment"
         android:id="@+id/community_host"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

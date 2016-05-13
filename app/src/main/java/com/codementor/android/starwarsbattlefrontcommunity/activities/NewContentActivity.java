@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity;
+package com.codementor.android.starwarsbattlefrontcommunity.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -29,7 +29,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFragment;
+import com.codementor.android.starwarsbattlefrontcommunity.network.APIServiceGenerator;
+import com.codementor.android.starwarsbattlefrontcommunity.network.BattlefrontClient;
+import com.codementor.android.starwarsbattlefrontcommunity.fragments.CommunityFragment;
+import com.codementor.android.starwarsbattlefrontcommunity.R;
+import com.codementor.android.starwarsbattlefrontcommunity.fragments.PictureDialogFragment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;

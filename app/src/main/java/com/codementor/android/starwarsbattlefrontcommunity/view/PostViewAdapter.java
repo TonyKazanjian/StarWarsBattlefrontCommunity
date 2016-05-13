@@ -206,4 +206,10 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         return false;
     }
 
+    public void clearPostList() {
+        if (mPosts.size()!= 0){
+            mPosts.clear();
+        }
+    }
+
 }

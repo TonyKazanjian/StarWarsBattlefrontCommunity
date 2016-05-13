@@ -50,10 +50,10 @@ public class TopicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View v = inflater.inflate(R.layout.fragment_topic, container, false);
 
-        populateTopic();
-
         mRecyclerView = (RecyclerView) v.findViewById(R.id.rv_thread_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+        populateTopic();
 
         return v;
     }
@@ -66,7 +66,8 @@ public class TopicFragment extends Fragment {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if (response.isSuccessful()) {
-
+                    // Post lists needs to be cleared because we're getting a fresh server response each time we go to a new tab
+                    mViewAdapter.clearPostList();
                     mViewAdapter.addPostList(response.body().getPosts());
                 }
                 mRecyclerView.setAdapter(mViewAdapter);
@@ -83,6 +84,5 @@ public class TopicFragment extends Fragment {
     public void addPostToList(Post post){
         mViewAdapter.addPost(post);
     }
-
 
 }

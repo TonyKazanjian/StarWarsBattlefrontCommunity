@@ -95,7 +95,6 @@ public class CommunityFragment extends Fragment {
     }
 
     public void onContentAdd(){
-        int topicId = mTopic.getId();
         Bundle b = new Bundle();
         Intent i = new Intent(getActivity(), NewContentActivity.class);
         b.putInt(EXTRA_TOPIC_PAGE_POSITION, mTopicPage);
@@ -202,6 +201,5 @@ public class CommunityFragment extends Fragment {
                 Log.i(TAG, t.getMessage());
             }
         });
-
     }
 }

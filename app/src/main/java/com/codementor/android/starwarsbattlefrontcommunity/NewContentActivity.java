@@ -214,7 +214,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
                     mNewPost.setTopicSection(mTopicSpinner.getSelectedItemPosition());
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Post.EXTRA_NEW_POST,mNewPost);
-                    bundle.putInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION,0);
+                    bundle.putInt(CommunityFragment.EXTRA_TOPIC_PAGE_POSITION,mTopicSpinner.getSelectedItemPosition());
                     Intent newPostData = new Intent();
                     newPostData.putExtras(bundle);
                     setResult(RESULT_OK, newPostData);

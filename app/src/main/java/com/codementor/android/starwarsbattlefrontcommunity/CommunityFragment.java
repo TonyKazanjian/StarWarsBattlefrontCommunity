@@ -46,7 +46,7 @@ public class CommunityFragment extends Fragment {
 
     private TopicPagerAdapter mTopicPagerAdapter;
 
-    private int mTopicPage;
+    private int mTopicPage = 0;
     private List<String> mTopicTitles = new ArrayList<>();
 
     private String mImageUrl;
@@ -55,7 +55,6 @@ public class CommunityFragment extends Fragment {
 
     public static final String EXTRA_TOPIC_PAGE_POSITION = "topic page";
     public static final String EXTRA_TOPIC_LIST = "topics";
-    public static final String EXTRA_TOPIC_ID = "topic";
     public static final String EXTRA_CONTENT_TYPE_POST = "post";
 
     @Override
@@ -73,6 +72,8 @@ public class CommunityFragment extends Fragment {
         toolbar.setVisibility(View.INVISIBLE);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        //TODO - remove this once the API is in place
+        mViewPager.setOffscreenPageLimit(5);
         mTopicPagerAdapter = new TopicPagerAdapter(getActivity().getSupportFragmentManager());
 
         mTabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -90,6 +91,28 @@ public class CommunityFragment extends Fragment {
                 onContentAdd();
             }
         });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mBackgroundImage.setImageURI(Uri.parse(mImageUrl));
+                Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(position)).into(mBackgroundImage);
+                mTopicPage = mViewPager.getCurrentItem();
+                Log.i(TAG, "new page was selected");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mViewPager.setAdapter(mTopicPagerAdapter);
 
         return view;
     }
@@ -141,8 +164,20 @@ public class CommunityFragment extends Fragment {
             }
 
             mNewPost = extras.getParcelable(Post.EXTRA_NEW_POST);
-//            mTopicPage = extras.getInt(EXTRA_TOPIC_PAGE_POSITION);
+            mTopicPage = extras.getInt(EXTRA_TOPIC_PAGE_POSITION);
+
+            if (mNewPost != null) {
+                TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
+                updatedFragment.addPostToList(mNewPost);
+                mViewPager.setCurrentItem(mTopicPage);
+            }
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mViewPager.setCurrentItem(mTopicPage);
     }
 
     public void getTopicsCallback(BattlefrontClient client){
@@ -161,38 +196,9 @@ public class CommunityFragment extends Fragment {
 
                         //needed to pass titles to NewContentActivity's spinner
                         mTopicTitles.add(response.body().get(i).getTitle());
-
-                        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                            @Override
-                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                            }
-
-                            @Override
-                            public void onPageSelected(int position) {
-                                mBackgroundImage.setImageURI(Uri.parse(mImageUrl));
-                                Picasso.with(getActivity()).load(mTopicPagerAdapter.getBackgroundImage(position)).into(mBackgroundImage);
-                                mTopicPage = mViewPager.getCurrentItem();
-                                Log.i(TAG, "new page was selected");
-                            }
-
-                            @Override
-                            public void onPageScrollStateChanged(int state) {
-
-                            }
-                        });
-
                         mTopicPagerAdapter.notifyDataSetChanged();
                     }
-                }
-
-                mViewPager.setAdapter(mTopicPagerAdapter);
-                mTabLayout.setupWithViewPager(mViewPager);
-                mViewPager.setCurrentItem(mTopicPage);
-
-                if (mNewPost != null) {
-                    TopicFragment updatedFragment = (TopicFragment)mTopicPagerAdapter.getItem(mTopicPage);
-                    updatedFragment.addPostToList(mNewPost);
+                    mTabLayout.setupWithViewPager(mViewPager);
                 }
             }
 

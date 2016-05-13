@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity.view;
+package com.codementor.android.starwarsbattlefrontcommunity.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

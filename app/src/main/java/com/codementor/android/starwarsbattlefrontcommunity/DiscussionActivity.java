@@ -12,7 +12,7 @@ import android.view.View;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.CommentResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
-import com.codementor.android.starwarsbattlefrontcommunity.view.CommentViewAdapter;
+import com.codementor.android.starwarsbattlefrontcommunity.adapters.CommentViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +74,6 @@ public class DiscussionActivity extends AppCompatActivity {
                     mCommentList = new CommentViewAdapter(mPost.getComments(), mPost);
                 }
                 mCommentView.setAdapter(mCommentList);
-                mCommentList.addComment(mNewComment);
-
             }
 
             @Override
@@ -110,10 +108,7 @@ public class DiscussionActivity extends AppCompatActivity {
             }
 
             mNewComment = extras.getParcelable(Comment.EXTRA_NEW_COMMENT);
-
-//            newComment.setAuthorPhoto(R.drawable.bb8);
-//            newComment.setAuthor("AndroidPadawan");
-//            mCommentList.addComment(newComment);
+            mCommentList.addComment(mNewComment);
         }
     }
 

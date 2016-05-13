@@ -12,6 +12,9 @@ public class Comment extends Content implements Parcelable {
     public static final String EXTRA_NEW_COMMENT = "new comment";
 
 
+    public Comment() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -20,25 +23,10 @@ public class Comment extends Content implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeInt(this.id);
-        dest.writeInt(this.post_id);
-        dest.writeString(this.created_at);
-        dest.writeString(this.updated_at);
-        dest.writeParcelable(this.content, flags);
-        dest.writeParcelable(this.author, flags);
-    }
-
-    public Comment() {
     }
 
     protected Comment(Parcel in) {
         super(in);
-        this.id = in.readInt();
-        this.post_id = in.readInt();
-        this.created_at = in.readString();
-        this.updated_at = in.readString();
-        this.content = in.readParcelable(ContentBody.class.getClassLoader());
-        this.author = in.readParcelable(Author.class.getClassLoader());
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {

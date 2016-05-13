@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,8 +18,8 @@ public class Content implements Parcelable{
 
     public int id;
     public int post_id;
-    public String created_at;
-    public String updated_at;
+    public Date created_at;
+    public Date updated_at;
 
 
     @SerializedName("content")
@@ -45,19 +46,19 @@ public class Content implements Parcelable{
         this.post_id = post_id;
     }
 
-    public String getCreated_at() {
+    public Date getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(String created_at) {
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
-    public String getUpdated_at() {
+    public Date getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(String updated_at) {
+    public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
 
@@ -141,8 +142,8 @@ public class Content implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeInt(this.post_id);
-        dest.writeString(this.created_at);
-        dest.writeString(this.updated_at);
+        dest.writeLong(this.created_at != null ? this.created_at.getTime() : -1);
+        dest.writeLong(this.updated_at != null ? this.updated_at.getTime() : -1);
         dest.writeParcelable(this.content, flags);
         dest.writeParcelable(this.author, flags);
     }
@@ -150,21 +151,12 @@ public class Content implements Parcelable{
     protected Content(Parcel in) {
         this.id = in.readInt();
         this.post_id = in.readInt();
-        this.created_at = in.readString();
-        this.updated_at = in.readString();
+        long tmpCreated_at = in.readLong();
+        this.created_at = tmpCreated_at == -1 ? null : new Date(tmpCreated_at);
+        long tmpUpdated_at = in.readLong();
+        this.updated_at = tmpUpdated_at == -1 ? null : new Date(tmpUpdated_at);
         this.content = in.readParcelable(ContentBody.class.getClassLoader());
         this.author = in.readParcelable(Author.class.getClassLoader());
     }
 
-    public static final Creator<Content> CREATOR = new Creator<Content>() {
-        @Override
-        public Content createFromParcel(Parcel source) {
-            return new Content(source);
-        }
-
-        @Override
-        public Content[] newArray(int size) {
-            return new Content[size];
-        }
-    };
 }

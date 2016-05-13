@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity.view;
+package com.codementor.android.starwarsbattlefrontcommunity.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Image;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.DateAndTimeFormatUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -64,7 +65,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             ((PostHolder) holder).mThreadTitle.setText(mPost.getTitle());
             holder.mAuthorName.setText(author.getName());
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
-            holder.mDatePosted.setText(mPost.getCreated_at());
+            holder.mDatePosted.setText(DateAndTimeFormatUtils.getDatePattern(mPost.getCreated_at()));
             holder.mPostContent.setText(content.getBody());
             ((PostHolder) holder).mCommentCount.setText(String.valueOf(mPost.getCommentCount()));
 
@@ -128,7 +129,7 @@ public class CommentViewAdapter extends RecyclerView.Adapter<CommentViewAdapter.
             }
 
             if (comment.getCreated_at()!= null){
-                holder.mDatePosted.setText(comment.getCreated_at());
+                holder.mDatePosted.setText(DateAndTimeFormatUtils.getDatePattern(comment.getCreated_at()));
             }
             holder.mPostContent.setText(content.getBody());
 

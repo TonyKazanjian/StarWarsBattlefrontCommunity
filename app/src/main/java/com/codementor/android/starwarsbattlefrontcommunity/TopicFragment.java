@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
 import com.codementor.android.starwarsbattlefrontcommunity.model.PostResponse;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Topic;
-import com.codementor.android.starwarsbattlefrontcommunity.view.PostViewAdapter;
+import com.codementor.android.starwarsbattlefrontcommunity.adapters.PostViewAdapter;
 
 import retrofit2.Call;
 import retrofit2.Callback;

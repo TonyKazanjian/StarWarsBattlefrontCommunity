@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity.view;
+package com.codementor.android.starwarsbattlefrontcommunity.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.model.Author;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Image;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.DateAndTimeFormatUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             Picasso.with(holder.itemView.getContext()).load(author.getProfile_image_url()).into(holder.mAuthorPhoto);
         }
         if (post.getCreated_at()!=null) {
-            holder.mDatePosted.setText(post.getCreated_at());
+            holder.mDatePosted.setText(DateAndTimeFormatUtils.getDatePattern(post.getCreated_at()));
         }
         holder.mPostContent.setText(content.getBody());
         if(post.getComments()!= null) {

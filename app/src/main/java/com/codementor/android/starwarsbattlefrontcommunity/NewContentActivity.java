@@ -41,6 +41,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -201,6 +202,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     public void onPostSubmission(BattlefrontClient client) {
         mNewPost.setTitle(mTitle.getText().toString());
         Content.ContentBody contentBody = new Content.ContentBody();
+        mNewPost.setCreated_at(new Date());
         mNewPost.setContent(contentBody);
         contentBody.setBody(mContent.getText().toString());
 
@@ -232,6 +234,7 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
     public void onCommentSubmission(BattlefrontClient client){
         Content.ContentBody contentBody = new Content.ContentBody();
         mNewComment.setContent(contentBody);
+        mNewComment.setCreated_at(new Date());
         contentBody.setBody(mContent.getText().toString());
 
         Call<JsonObject> call = client.newComment("");

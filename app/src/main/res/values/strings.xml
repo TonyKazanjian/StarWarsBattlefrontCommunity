@@ -27,4 +27,6 @@
     <string name="contentHint">What\'s on your mind?</string>
     <string name="titleHint">Post Title</string>
 
+    <string name="facebook_app_id">1396362450380923</string>
+
 </resources>

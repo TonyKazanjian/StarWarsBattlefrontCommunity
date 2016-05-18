@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -33,6 +34,7 @@ import com.codementor.android.starwarsbattlefrontcommunity.image.PictureDialogFr
 import com.codementor.android.starwarsbattlefrontcommunity.model.Comment;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Post;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.BitmapEncoderUtil;
 import com.codementor.android.starwarsbattlefrontcommunity.utils.PictureUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -53,32 +55,30 @@ import retrofit2.Response;
 
 public class NewContentActivity extends AppCompatActivity implements PictureDialogFragment.InputListener {
 
+    /** Layout vars **/
     private EditText mContent;
     private Spinner mTopicSpinner;
     private EditText mTitle;
     private ImageView mAttachedImage;
-
     private TextView mTextCounter;
 
+    /** Logic vars **/
     private File mPhotoFile;
-
     private Uri mUri;
-
+    private Post mNewPost = new Post();
+    private Comment mNewComment = new Comment();
     boolean mIsPost = false;
+    private Bitmap mBitmap;
+
+    /** Other vars **/
     private static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_SELECT_PHOTO = 0;
-
-    public static final String EXTRA_SPINNER_POSITION = "topic spinner position";
 
     //for permissions
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     public boolean showPictureDialog = false;
 
     private PictureDialogFragment mPictureDialogFragment;
-
-    private Post mNewPost = new Post();
-    private Comment mNewComment = new Comment();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,6 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
                 public void onClick(View view) {
                     BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
                     if (mIsPost) {
-                        //TODO - API call here
                         onPostSubmission(client);
                     }
                     else {
@@ -158,8 +157,6 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
             });
         }
     }
-
-    //TODO - new callback method for posting
 
     public JsonObject getPostObject(Post post){
 
@@ -316,7 +313,8 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         } else  if (requestCode == REQUEST_SELECT_PHOTO && resultCode == Activity.RESULT_OK) {
             mUri = data.getData();
 
-            mPhotoFile = new File(PictureUtils.getRealPathFromURI(mUri, this));
+//            mPhotoFile = new File(PictureUtils.getRealPathFromURI(mUri, this));
+            mBitmap = PictureUtils.decodeBitmapFromFile(mPhotoFile.getPath(), this);
 
             if (mPhotoFile.exists()){
                 updatePhotoView();
@@ -331,11 +329,13 @@ public class NewContentActivity extends AppCompatActivity implements PictureDial
         if(mPhotoFile == null || !mPhotoFile.exists()){
             mAttachedImage.setImageDrawable(null);
         } else {
+
+            BitmapEncoderUtil.bitmapToBase64(mBitmap);
             mAttachedImage.setVisibility(View.VISIBLE);
             Picasso.with(this).load(mPhotoFile)
                     .into(mAttachedImage);
         }
-//        mPictureDialogFragment.isDetached();
+        mPictureDialogFragment.isDetached();
     }
 
     @Override

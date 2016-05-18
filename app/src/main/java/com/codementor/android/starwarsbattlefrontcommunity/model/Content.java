@@ -81,6 +81,7 @@ public class Content implements Parcelable{
     public static class ContentBody implements Parcelable{
         @SerializedName("body")
         private String mBody;
+        //TODO - don't we need the serialized name for content images to be the same for Get and Post??
         @SerializedName("image_urls")
         private List<Image> mImageUrls;
 

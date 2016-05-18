@@ -83,32 +83,7 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
             }
         }
 
-
-        //get bitmap
-//            final Bitmap localBitmap = post.getContentImageFromFileSystem(holder.itemView.getContext().getContentResolver());
-
-//            if (localBitmap != null) {
-//                final ImageView attachedImage = ((ImagePostHolder) holder).mAttachedImage;
-//                attachedImage.setVisibility(View.VISIBLE);
-//                final int width = attachedImage.getWidth();
-//                final int height = attachedImage.getHeight();
-//
-//                final Context context = holder.itemView.getContext();
-//
-//                BitmapDecoderAsyncTask.BitmapDecoderListener decoderListener = new BitmapDecoderAsyncTask.BitmapDecoderListener() {
-//                    @Override
-//                    public void onBitmapDecoded(Bitmap bitmap) {
-//                        Picasso.with(context).load(post.getContentImageUri()).fit().config(Bitmap.Config.RGB_565).centerCrop()
-//                                .placeholder(R.drawable.bb8).into(attachedImage);
-//                    }
-//                };
-//
-//                decoderListener.onBitmapDecoded(localBitmap);
-//                BitmapDecoderAsyncTask bitmapDecoderAsyncTask = new BitmapDecoderAsyncTask(localBitmap, width, height, decoderListener);
-//                bitmapDecoderAsyncTask.execute();
-//            }
-//
-//            holder.mCommentCount.setText(Integer.toString(mPosts.get(position).getComments().size()));
+        holder.mCommentCount.setText(String.valueOf(mPosts.get(position).getComments().size()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,12 +98,6 @@ public class PostViewAdapter extends RecyclerView.Adapter<PostViewAdapter.PostHo
         });
     }
 
-//    public Uri getScaledBitmapUri(Context context, Bitmap bitmap, int width, int height){
-//
-//        bitmap = PictureUtils.decodeBitmapFromFile(String.valueOf(mPosts.get(0).getContentImageUri()),width,height);
-//
-//        return PictureUtils.getImageUri(context, bitmap);
-//    }
 
     @Override
     public int getItemCount() {

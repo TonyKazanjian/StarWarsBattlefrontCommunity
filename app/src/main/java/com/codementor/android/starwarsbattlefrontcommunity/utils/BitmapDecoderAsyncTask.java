@@ -1,4 +1,4 @@
-package com.codementor.android.starwarsbattlefrontcommunity;
+package com.codementor.android.starwarsbattlefrontcommunity.utils;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

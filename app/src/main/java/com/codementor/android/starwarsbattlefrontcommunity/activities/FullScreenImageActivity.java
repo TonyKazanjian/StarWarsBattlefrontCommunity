@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
 import com.codementor.android.starwarsbattlefrontcommunity.model.Content;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.OSUtils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -23,6 +24,8 @@ public class FullScreenImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        OSUtils.setWindowNotificationBleed(getWindow());
         setContentView(R.layout.activity_image_full_screen);
 
         //get the extra for the fullscreen image

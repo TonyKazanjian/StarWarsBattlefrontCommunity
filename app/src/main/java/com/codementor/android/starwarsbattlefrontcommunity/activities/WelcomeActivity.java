@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.codementor.android.starwarsbattlefrontcommunity.R;
+import com.codementor.android.starwarsbattlefrontcommunity.utils.OSUtils;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -38,6 +39,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
+
+        OSUtils.setWindowNotificationBleed(getWindow());
         setContentView(R.layout.activity_welcome_screen);
 
         facebookLogin = (LoginButton) findViewById(R.id.facebook_login_button);

@@ -54,4 +54,34 @@ public class APIServiceGenerator {
         Retrofit retrofit = builder.client(client).build();
         return retrofit.create(serviceClass);
     }
+
+    public static APIServiceGenerator createLoginService(final String email, final String password) {
+        OkHttpClient.Builder loginClientBuilder = new OkHttpClient.Builder();
+
+        if (email != null && password != null) {
+            String credentials = email + ":" + password;
+            final String basic =
+                    "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+
+            loginClientBuilder.addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Interceptor.Chain chain) throws IOException {
+                    Request original = chain.request();
+
+                    Request.Builder requestBuilder = original.newBuilder()
+                            .header("Authorization", basic)
+                            .header("Accept", "application/json")
+                            .method(original.method(), original.body());
+
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                }
+            });
+        }
+
+        OkHttpClient client = loginClientBuilder.build();
+        Retrofit retrofit = builder.client(client).build();
+
+        return retrofit.create(APIServiceGenerator.class);
+    }
 }

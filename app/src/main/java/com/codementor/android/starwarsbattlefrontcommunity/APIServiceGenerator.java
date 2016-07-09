@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class APIServiceGenerator {
 
-    public static final String API_BASE_URL = "http://private-anon-b89e9fd3b-battlefront.apiary-mock.com";
+    public static final String API_BASE_URL = "http://private-anon-502873768-battlefront.apiary-mock.com";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

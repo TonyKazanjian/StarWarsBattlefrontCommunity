@@ -80,9 +80,7 @@ public class CommunityFragment extends Fragment {
 
         mBackgroundImage = (ImageView) view.findViewById(R.id.htab_header);
 
-        //creates a REST adaper which points to the Battlefront API endpoint
-        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
-        getTopicsCallback(client);
+        getTopicsCallback();
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +178,9 @@ public class CommunityFragment extends Fragment {
         mViewPager.setCurrentItem(mTopicPage);
     }
 
-    public void getTopicsCallback(BattlefrontClient client){
+    public void getTopicsCallback(){
+        //creates a REST adaper which points to the Battlefront API endpoint
+        BattlefrontClient client = APIServiceGenerator.createService(BattlefrontClient.class);
         Call<List<Topic>> call = client.getTopics();
 
         call.enqueue(new Callback<List<Topic>>() {
